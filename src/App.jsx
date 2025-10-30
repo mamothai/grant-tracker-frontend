@@ -1,4 +1,4 @@
-import { Link, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
 
 const Home = () => {
   const [id, setId] = useState('')
-  const navigate = useNavigate()
+  const navigate = useNavigate()  // ← NOW WORKS!
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6">
@@ -62,5 +62,3 @@ const Home = () => {
     </div>
   )
 }
-
-// ... (Keep CreatorLogin, CreatorDashboard, GovLogin, GovDashboard, PublicView from previous version)
