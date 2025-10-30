@@ -1,37 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-  font-family: 'Poppins', sans-serif; 
-  background: linear-gradient(135deg, #003399 0%, #ffffff 50%, #138808 100%);
-  color: #333;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0a0a1a;
+  color: #e0e7ff;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
-.govt-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+/* AURORA BACKGROUND */
+.aurora-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at top, #1e3a8a 0%, transparent 50%),
+              radial-gradient(ellipse at bottom left, #7c3aed 0%, transparent 60%),
+              radial-gradient(ellipse at bottom right, #06b6d4 0%, transparent 60%);
+  opacity: 0.3;
+  z-index: -1;
+  animation: aurora 20s ease infinite;
+}
+
+@keyframes aurora {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* GLASS CARD */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
   padding: 2rem;
-  border-left: 5px solid #ff9933;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
-.btn-saffron { 
-  background: linear-gradient(to right, #ff9933, #ff6600); 
-  color: white; 
-  border: none; 
-  padding: 1rem 2rem; 
-  border-radius: 8px; 
-  font-weight: 600; 
-  cursor: pointer; 
-  transition: all 0.3s; 
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
 }
-.btn-saffron:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,153,51,0.4); }
-.btn-green { background: #138808; color: white; }
-.btn-navy { background: #003399; color: white; }
-.text-hero {
-  font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(to right, #ff6600, #138808);
+
+/* GRADIENT TEXT */
+.text-aurora {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;   /* ← ADDED THIS */
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
 }
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* BUTTONS */
+.btn-gradient {
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
+}
+
+.btn-gradient:hover::before {
+  left: 100%;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #e0e7ff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #06b6d4;
+}
+
+/* INPUT */
+.input-glow {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.input-glow:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+}
+
+/* LAYOUT */
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.max-w-6xl { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
