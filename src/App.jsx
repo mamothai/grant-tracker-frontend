@@ -1,7 +1,7 @@
-import { Link, Routes, Route, useParams, useNavigate, Navigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { Link, Routes, Route, useParams, useNavigate, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-// ==================== APP ROOT ====================
+// ROOT APP
 const App = () => {
   return (
     <div>
@@ -12,294 +12,213 @@ const App = () => {
         <Route path="/gov-login" element={<GovLogin />} />
         <Route path="/gov-dashboard" element={<GovDashboard />} />
         <Route path="/view/:id" element={<PublicView />} />
-        {/* fallback route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
-  )
-}
+  );
+};
 
-// ==================== HOME PAGE ====================
+// 🏠 HOME PAGE
 const Home = () => (
-  <div className="min-h-screen flex flex-col justify-center items-center p-6">
-    <div className="text-center mb-12">
-      <div className="logo mb-4 text-2xl font-bold">🇮🇳 GrantTracker Portal</div>
-      <h1 className="text-4xl font-bold mb-4 text-navy">Digital Grant Tracking</h1>
-      <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-        Transparent monitoring of government grants for public accountability
+  <div className="flex-center">
+    <div className="glass max-w-4xl w-full space-y-6 text-center">
+      <h1 className="text-gradient text-4xl font-bold">🇮🇳 GrantTracker Portal</h1>
+      <p className="text-lg text-gray">
+        Transparent monitoring of government grants for public accountability.
       </p>
-    </div>
 
-    <div className="grid md:grid-cols-3 gap-6 max-w-4xl w-full">
-      <Link to="/creator-login" className="govt-card p-8 text-center border rounded-lg shadow">
-        <h3 className="text-2xl font-bold mb-4 text-navy">Grant Creator</h3>
-        <p>Generate grant IDs with custom details</p>
-      </Link>
+      <div className="space-y-4">
+        <Link to="/creator-login" className="btn-primary">Grant Creator</Link>
+        <Link to="/gov-login" className="btn-glass">Government Official</Link>
 
-      <Link to="/gov-login" className="govt-card p-8 text-center border rounded-lg shadow">
-        <h3 className="text-2xl font-bold mb-4 text-green-700">Govt Official</h3>
-        <p>Upload updates & proofs</p>
-      </Link>
-
-      <div className="govt-card p-8 text-center border rounded-lg shadow">
-        <h3 className="text-2xl font-bold mb-4 text-orange-600">Public View</h3>
-        <p>Enter ID to see live updates</p>
-        <input
-          placeholder="GT-2025-XXXX"
-          className="mt-4 w-full p-3 border rounded"
-          id="public-id"
-        />
-        <button
-          className="mt-4 btn-saffron w-full bg-orange-500 text-white p-3 rounded"
-          onClick={() => {
-            const id = document.getElementById('public-id').value || 'GT-2025-1001'
-            window.location.href = `/view/${id}`
-          }}
-        >
-          View Grant
-        </button>
+        <div className="glass space-y-4">
+          <h3 className="text-cyan text-lg font-semibold">Public View</h3>
+          <input
+            placeholder="GT-2025-XXXX"
+            id="public-id"
+            className="w-full p-3 rounded border-none outline-none"
+          />
+          <button
+            className="btn-primary"
+            onClick={() => {
+              const id = document.getElementById("public-id").value || "GT-2025-1001";
+              window.location.href = `/view/${id}`;
+            }}
+          >
+            View Grant
+          </button>
+        </div>
       </div>
     </div>
   </div>
-)
+);
 
-// ==================== CREATOR LOGIN ====================
+// 👤 CREATOR LOGIN
 const CreatorLogin = () => {
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const navigate = useNavigate();
 
   const login = () => {
-    if (email === 'arm.official168@gmail.com' && pass === 'Grant123!') {
-      localStorage.setItem('creatorAuth', 'true')
-      navigate('/creator-dashboard')
+    if (email === "arm.official168@gmail.com" && pass === "Grant123!") {
+      localStorage.setItem("creatorAuth", "true");
+      navigate("/creator-dashboard");
     } else {
-      alert('Invalid: arm.official168@gmail.com / Grant123!')
+      alert("Invalid credentials. Try arm.official168@gmail.com / Grant123!");
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="govt-card w-full max-w-md border rounded-lg p-8 shadow">
-        <h2 className="text-3xl font-bold mb-8 text-center text-navy">Creator Login</h2>
+    <div className="flex-center">
+      <div className="glass max-w-md w-full text-center">
+        <h2 className="text-2xl font-bold text-gradient mb-6">Creator Login</h2>
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 border rounded-lg"
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-3 mb-4 rounded border-none outline-none"
         />
         <input
           type="password"
           placeholder="Password"
           value={pass}
-          onChange={e => setPass(e.target.value)}
-          className="w-full p-3 mb-6 border rounded-lg"
+          onChange={(e) => setPass(e.target.value)}
+          className="w-full p-3 mb-6 rounded border-none outline-none"
         />
-        <button className="btn-navy w-full bg-blue-800 text-white p-3 rounded" onClick={login}>
-          Login
-        </button>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          arm.official168@gmail.com / Grant123!
+        <button className="btn-primary" onClick={login}>Login</button>
+        <p className="text-sm text-gray mt-4">
+          Use: <b>arm.official168@gmail.com / Grant123!</b>
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-// ==================== CREATOR DASHBOARD ====================
+// 🏗️ CREATOR DASHBOARD
 const CreatorDashboard = () => {
-  const [title, setTitle] = useState('')
-  const [amount, setAmount] = useState('')
-  const [field, setField] = useState('')
-  const navigate = useNavigate()
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [field, setField] = useState("");
+  const navigate = useNavigate();
+
+  if (localStorage.getItem("creatorAuth") !== "true") {
+    return <Navigate to="/creator-login" replace />;
+  }
 
   const createGrant = () => {
-    const id = `GT-2025-${Math.floor(1000 + Math.random() * 9000)}`
+    if (!title || !amount || !field) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const id = `GT-2025-${Math.floor(1000 + Math.random() * 9000)}`;
     const grant = {
       id,
       title,
       amount: parseInt(amount),
       field,
       updates: [],
-      creator: 'arm.official168@gmail.com',
-    }
-    const grants = JSON.parse(localStorage.getItem('grants') || '[]')
-    grants.push(grant)
-    localStorage.setItem('grants', JSON.stringify(grants))
-    navigate(`/view/${id}`)
-  }
+      creator: "arm.official168@gmail.com",
+    };
 
-  if (localStorage.getItem('creatorAuth') !== 'true') return <Navigate to="/creator-login" />
+    const grants = JSON.parse(localStorage.getItem("grants") || "[]");
+    grants.push(grant);
+    localStorage.setItem("grants", JSON.stringify(grants));
 
-  return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="govt-card mb-8 border rounded-lg p-8 shadow">
-          <h2 className="text-3xl font-bold text-navy mb-6">Create New Grant</h2>
-          <input
-            placeholder="Grant Title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            className="w-full p-3 mb-4 border rounded-lg"
-          />
-          <input
-            type="number"
-            placeholder="Amount (₹)"
-            value={amount}
-            onChange={e => setAmount(e.target.value)}
-            className="w-full p-3 mb-4 border rounded-lg"
-          />
-          <input
-            placeholder="Field/Area (e.g. Education, Health)"
-            value={field}
-            onChange={e => setField(e.target.value)}
-            className="w-full p-3 mb-6 border rounded-lg"
-          />
-          <button className="btn-saffron w-full bg-orange-500 text-white p-3 rounded" onClick={createGrant}>
-            Generate Grant ID
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ==================== GOV LOGIN ====================
-const GovLogin = () => {
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const navigate = useNavigate()
-
-  const login = () => {
-    if (email === 'gov.admin@india.gov' && pass === 'GovtSecure!') {
-      localStorage.setItem('govAuth', 'true')
-      navigate('/gov-dashboard')
-    } else alert('Invalid: gov.admin@india.gov / GovtSecure!')
-  }
+    navigate(`/view/${id}`);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="govt-card w-full max-w-md border rounded-lg p-8 shadow">
-        <h2 className="text-3xl font-bold mb-8 text-center text-green-700">Govt Login</h2>
+    <div className="flex-center">
+      <div className="glass max-w-2xl w-full">
+        <h2 className="text-3xl font-bold text-gradient mb-6 text-center">Create New Grant</h2>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 border rounded-lg"
+          placeholder="Grant Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-3 mb-4 rounded border-none outline-none"
         />
         <input
-          type="password"
-          placeholder="Password"
-          value={pass}
-          onChange={e => setPass(e.target.value)}
-          className="w-full p-3 mb-6 border rounded-lg"
+          type="number"
+          placeholder="Amount (₹)"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full p-3 mb-4 rounded border-none outline-none"
         />
-        <button className="btn-green w-full bg-green-700 text-white p-3 rounded" onClick={login}>
-          Login
-        </button>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          gov.admin@india.gov / GovtSecure!
-        </p>
+        <input
+          placeholder="Field (e.g. Education, Health)"
+          value={field}
+          onChange={(e) => setField(e.target.value)}
+          className="w-full p-3 mb-6 rounded border-none outline-none"
+        />
+        <button className="btn-primary" onClick={createGrant}>Generate Grant ID</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-// ==================== GOV DASHBOARD ====================
-const GovDashboard = () => {
-  const navigate = useNavigate()
-
-  if (localStorage.getItem('govAuth') !== 'true') return <Navigate to="/gov-login" />
-
-  const grants = JSON.parse(localStorage.getItem('grants') || '[]')
-
-  const addUpdate = (id) => {
-    const title = prompt('Update Title:')
-    const date = new Date().toLocaleDateString()
-    const newUpdate = { title, date }
-    const updated = grants.map(g => g.id === id ? { ...g, updates: [...g.updates, newUpdate] } : g)
-    localStorage.setItem('grants', JSON.stringify(updated))
-    alert('Update added!')
-  }
-
-  return (
-    <div className="min-h-screen p-6">
-      <h1 className="text-3xl font-bold mb-6 text-green-700">Government Dashboard</h1>
-      {grants.length ? (
-        <div className="grid gap-6">
-          {grants.map(g => (
-            <div key={g.id} className="govt-card border rounded-lg p-6 shadow">
-              <h3 className="text-2xl font-bold text-navy">{g.title}</h3>
-              <p>ID: {g.id}</p>
-              <p>Amount: ₹{g.amount.toLocaleString()}</p>
-              <p>Field: {g.field}</p>
-              <button
-                className="mt-4 bg-green-700 text-white px-4 py-2 rounded"
-                onClick={() => addUpdate(g.id)}
-              >
-                Add Update
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>No grants found.</p>
-      )}
-      <button
-        className="mt-8 bg-red-600 text-white px-4 py-2 rounded"
-        onClick={() => {
-          localStorage.removeItem('govAuth')
-          navigate('/')
-        }}
-      >
-        Logout
-      </button>
+// 🏛️ GOV LOGIN (Placeholder)
+const GovLogin = () => (
+  <div className="flex-center">
+    <div className="glass max-w-md w-full text-center">
+      <h2 className="text-2xl font-bold text-gradient mb-6">Government Login</h2>
+      <p>Coming soon — only verified govt officers will be able to update grant progress.</p>
     </div>
-  )
-}
+  </div>
+);
 
-// ==================== PUBLIC VIEW ====================
+// 🗂️ GOV DASHBOARD (Placeholder)
+const GovDashboard = () => (
+  <div className="flex-center">
+    <div className="glass max-w-md w-full text-center">
+      <h2 className="text-2xl font-bold text-gradient mb-6">Gov Dashboard</h2>
+      <p>Under development...</p>
+    </div>
+  </div>
+);
+
+// 🌍 PUBLIC VIEW
 const PublicView = () => {
-  const { id } = useParams()
-  const [grant, setGrant] = useState(null)
+  const { id } = useParams();
+  const [grant, setGrant] = useState(null);
 
   useEffect(() => {
-    const grants = JSON.parse(localStorage.getItem('grants') || '[]')
-    const found = grants.find(g => g.id === id)
-    setGrant(found || { error: true })
-  }, [id])
+    const grants = JSON.parse(localStorage.getItem("grants") || "[]");
+    const found = grants.find((g) => g.id === id);
+    setGrant(found || { error: true });
+  }, [id]);
 
-  if (!grant) return <div>Loading...</div>
-  if (grant.error) return <div className="p-6 text-center text-red-600 text-xl">Grant not found</div>
+  if (!grant) return <div className="flex-center"><p>Loading...</p></div>;
+  if (grant.error) return <div className="flex-center"><p>Grant not found.</p></div>;
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="govt-card mb-8 text-center border rounded-lg p-8 shadow">
-          <h1 className="text-4xl font-bold mb-2 text-navy">Grant ID: {grant.id}</h1>
-          <p className="text-3xl text-green-600">₹{grant.amount?.toLocaleString()}</p>
-          <p className="text-xl text-gray-700 mt-2">Field: {grant.field}</p>
-          <p className="text-sm text-gray-500">Created by: {grant.creator}</p>
-        </div>
+    <div className="flex-center">
+      <div className="glass max-w-3xl w-full space-y-6">
+        <h1 className="text-3xl font-bold text-gradient text-center">
+          Grant ID: {grant.id}
+        </h1>
+        <p className="text-lg text-center">💰 ₹{grant.amount?.toLocaleString()}</p>
+        <p className="text-center text-gray">Field: {grant.field}</p>
+        <p className="text-center text-gray">Created by: {grant.creator}</p>
 
-        <div className="govt-card border rounded-lg p-8 shadow">
-          <h2 className="text-2xl font-bold mb-6 text-navy">Updates</h2>
+        <div className="glass">
+          <h2 className="text-xl font-semibold text-cyan mb-4">Updates</h2>
           {grant.updates.length ? (
             grant.updates.map((u, i) => (
-              <div key={i} className="border-t pt-4 mt-4">
+              <div key={i} className="space-y-2 border-t border-white/20 pt-3">
                 <p className="font-bold">{u.title}</p>
-                <p className="text-sm text-gray-600">{u.date}</p>
+                <p className="text-sm text-gray">{u.date}</p>
+                {u.image && <img src={u.image} alt="update" className="rounded mt-2 max-w-md" />}
               </div>
             ))
           ) : (
-            <p>No updates yet</p>
+            <p className="text-gray">No updates yet.</p>
           )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
