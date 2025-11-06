@@ -1,7 +1,8 @@
 import { Link, Routes, Route, useParams, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import GrantSectorChart from "./components/GrantSectorChart";
+import SectorDetails from "./pages/SectorDetails";
 
-// ROOT APP
 const App = () => {
   return (
     <div>
@@ -9,9 +10,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/creator-login" element={<CreatorLogin />} />
         <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-        <Route path="/gov-login" element={<GovLogin />} />
-        <Route path="/gov-dashboard" element={<GovDashboard />} />
-        <Route path="/view/:id" element={<PublicView />} />
+        <Route path="/chart" element={<GrantSectorChart />} />
+        <Route path="/sectors/:sectorName" element={<SectorDetails />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
@@ -23,31 +23,11 @@ const Home = () => (
   <div className="flex-center">
     <div className="glass max-w-4xl w-full space-y-6 text-center">
       <h1 className="text-gradient text-4xl font-bold">🇮🇳 GrantTracker Portal</h1>
-      <p className="text-lg text-gray">
-        Transparent monitoring of government grants for public accountability.
-      </p>
+      <p className="text-lg text-gray">Transparent monitoring of government grants.</p>
 
       <div className="space-y-4">
         <Link to="/creator-login" className="btn-primary">Grant Creator</Link>
-        <Link to="/gov-login" className="btn-glass">Government Official</Link>
-
-        <div className="glass space-y-4">
-          <h3 className="text-cyan text-lg font-semibold">Public View</h3>
-          <input
-            placeholder="GT-2025-XXXX"
-            id="public-id"
-            className="w-full p-3 rounded border-none outline-none"
-          />
-          <button
-            className="btn-primary"
-            onClick={() => {
-              const id = document.getElementById("public-id").value || "GT-2025-1001";
-              window.location.href = `/view/${id}`;
-            }}
-          >
-            View Grant
-          </button>
-        </div>
+        <Link to="/chart" className="btn-glass">Public Dashboard</Link>
       </div>
     </div>
   </div>
@@ -71,7 +51,7 @@ const CreatorLogin = () => {
   return (
     <div className="flex-center">
       <div className="glass max-w-md w-full text-center">
-        <h2 className="text-2xl font-bold text-gradient mb-6">Creator Login</h2>
+        <h2 className="text-gradient text-2xl font-bold mb-6">Creator Login</h2>
         <input
           type="email"
           placeholder="Email"
@@ -126,7 +106,7 @@ const CreatorDashboard = () => {
     grants.push(grant);
     localStorage.setItem("grants", JSON.stringify(grants));
 
-    navigate(`/view/${id}`);
+    navigate(`/chart`);
   };
 
   return (
@@ -152,70 +132,7 @@ const CreatorDashboard = () => {
           onChange={(e) => setField(e.target.value)}
           className="w-full p-3 mb-6 rounded border-none outline-none"
         />
-        <button className="btn-primary" onClick={createGrant}>Generate Grant ID</button>
-      </div>
-    </div>
-  );
-};
-
-// 🏛️ GOV LOGIN (Placeholder)
-const GovLogin = () => (
-  <div className="flex-center">
-    <div className="glass max-w-md w-full text-center">
-      <h2 className="text-2xl font-bold text-gradient mb-6">Government Login</h2>
-      <p>Coming soon — only verified govt officers will be able to update grant progress.</p>
-    </div>
-  </div>
-);
-
-// 🗂️ GOV DASHBOARD (Placeholder)
-const GovDashboard = () => (
-  <div className="flex-center">
-    <div className="glass max-w-md w-full text-center">
-      <h2 className="text-2xl font-bold text-gradient mb-6">Gov Dashboard</h2>
-      <p>Under development...</p>
-    </div>
-  </div>
-);
-
-// 🌍 PUBLIC VIEW
-const PublicView = () => {
-  const { id } = useParams();
-  const [grant, setGrant] = useState(null);
-
-  useEffect(() => {
-    const grants = JSON.parse(localStorage.getItem("grants") || "[]");
-    const found = grants.find((g) => g.id === id);
-    setGrant(found || { error: true });
-  }, [id]);
-
-  if (!grant) return <div className="flex-center"><p>Loading...</p></div>;
-  if (grant.error) return <div className="flex-center"><p>Grant not found.</p></div>;
-
-  return (
-    <div className="flex-center">
-      <div className="glass max-w-3xl w-full space-y-6">
-        <h1 className="text-3xl font-bold text-gradient text-center">
-          Grant ID: {grant.id}
-        </h1>
-        <p className="text-lg text-center">💰 ₹{grant.amount?.toLocaleString()}</p>
-        <p className="text-center text-gray">Field: {grant.field}</p>
-        <p className="text-center text-gray">Created by: {grant.creator}</p>
-
-        <div className="glass">
-          <h2 className="text-xl font-semibold text-cyan mb-4">Updates</h2>
-          {grant.updates.length ? (
-            grant.updates.map((u, i) => (
-              <div key={i} className="space-y-2 border-t border-white/20 pt-3">
-                <p className="font-bold">{u.title}</p>
-                <p className="text-sm text-gray">{u.date}</p>
-                {u.image && <img src={u.image} alt="update" className="rounded mt-2 max-w-md" />}
-              </div>
-            ))
-          ) : (
-            <p className="text-gray">No updates yet.</p>
-          )}
-        </div>
+        <button className="btn-primary" onClick={createGrant}>Generate Grant</button>
       </div>
     </div>
   );
