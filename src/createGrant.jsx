@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 export default function CreateGrant() {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [field, setField] = useState("");
   const navigate = useNavigate();
+
+  // 🔒 Check if logged in
+  if (localStorage.getItem("creatorAuth") !== "true") {
+    return <Navigate to="/creator-login" replace />;
+  }
 
   const createGrant = () => {
     if (!title || !amount || !field)
@@ -65,10 +70,6 @@ export default function CreateGrant() {
         >
           Generate Grant
         </button>
-
-        <div className="mt-4 text-sm muted center">
-          Example: “Education Grant for Rural Schools” or “Healthcare Support Fund”
-        </div>
       </div>
     </main>
   );
