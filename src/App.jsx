@@ -1,5 +1,5 @@
-import { Link, Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, Routes, Route, useNavigate, useParams, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import GrantSectorChart from "./components/GrantSectorChart";
 import SectorDetails from "./pages/SectorDetails";
 
@@ -12,13 +12,14 @@ const App = () => {
         <Route path="/creator-dashboard" element={<CreatorDashboard />} />
         <Route path="/chart" element={<GrantSectorChart />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
+        <Route path="/view/:id" element={<PublicView />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
 };
 
-// 🏠 HOME PAGE — clean professional landing
+// 🏠 HOME PAGE (clean + search bar + dashboard link)
 const Home = () => (
   <div className="flex-center">
     <div className="glass max-w-4xl w-full text-center animate-fadeInUp">
@@ -30,13 +31,29 @@ const Home = () => (
         Transparent monitoring of government grants.
       </p>
 
-      <div className="space-y-4">
-        <Link to="/creator-login" className="btn-primary">
-          Grant Creator
-        </Link>
-        <Link to="/chart" className="btn-glass">
-          Public Dashboard
-        </Link>
+      <div className="space-y-4 mb-8">
+        <Link to="/creator-login" className="btn-primary">Grant Creator</Link>
+        <Link to="/chart" className="btn-glass">Public Dashboard</Link>
+      </div>
+
+      {/* 🔍 Search Grant ID section */}
+      <div className="glass p-6 max-w-md mx-auto">
+        <h3 className="text-gradient text-xl font-bold mb-3">Search Grant by ID</h3>
+        <input
+          placeholder="Enter Grant ID (e.g. GT-2025-1001)"
+          id="public-id"
+          className="w-full p-3 rounded border-none outline-none mb-4 text-black"
+        />
+        <button
+          className="btn-primary w-full"
+          onClick={() => {
+            const id = document.getElementById("public-id").value.trim();
+            if (!id) return alert("Please enter a valid Grant ID!");
+            window.location.href = `/view/${id}`;
+          }}
+        >
+          View Grant
+        </button>
       </div>
     </div>
   </div>
@@ -97,7 +114,7 @@ const CreatorDashboard = () => {
 
   const createGrant = () => {
     if (!title || !amount || !field) {
-      alert("Please fill in all fields");
+      alert("Please fill all fields");
       return;
     }
 
@@ -114,7 +131,7 @@ const CreatorDashboard = () => {
     const grants = JSON.parse(localStorage.getItem("grants") || "[]");
     grants.push(grant);
     localStorage.setItem("grants", JSON.stringify(grants));
-    navigate("/chart");
+    navigate(`/view/${id}`);
   };
 
   return (
@@ -135,12 +152,41 @@ const CreatorDashboard = () => {
           className="w-full p-3 mb-4 rounded border-none outline-none"
         />
         <input
-          placeholder="Field/Area (e.g. Education, Health)"
+          placeholder="Field / Sector (e.g. Education, Health)"
           value={field}
           onChange={(e) => setField(e.target.value)}
           className="w-full p-3 mb-6 rounded border-none outline-none"
         />
         <button className="btn-primary" onClick={createGrant}>Generate Grant</button>
+      </div>
+    </div>
+  );
+};
+
+// 👁️ PUBLIC VIEW (View Grant by ID)
+const PublicView = () => {
+  const { id } = useParams();
+  const [grant, setGrant] = useState(null);
+
+  useEffect(() => {
+    const grants = JSON.parse(localStorage.getItem("grants") || "[]");
+    const found = grants.find((g) => g.id === id);
+    setGrant(found || { error: true });
+  }, [id]);
+
+  if (!grant) return <div className="flex-center"><p>Loading...</p></div>;
+  if (grant.error) return <div className="flex-center"><p>Grant not found.</p></div>;
+
+  return (
+    <div className="flex-center">
+      <div className="glass max-w-3xl w-full">
+        <h1 className="text-gradient text-3xl font-bold text-center mb-4">
+          Grant ID: {grant.id}
+        </h1>
+        <p className="text-xl text-gray text-center mb-2">{grant.title}</p>
+        <p className="text-center text-cyan mb-2">Field: {grant.field}</p>
+        <p className="text-center">Amount: ₹{grant.amount.toLocaleString()}</p>
+        <p className="text-center text-sm text-gray mt-4">Created by: {grant.creator}</p>
       </div>
     </div>
   );
