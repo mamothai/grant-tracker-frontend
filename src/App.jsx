@@ -1,4 +1,4 @@
-import { Link, Routes, Route, useParams, useNavigate, Navigate } from "react-router-dom";
+import { Link, Routes, Route, useNavigate, useParams, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import GrantSectorChart from "./components/GrantSectorChart";
 import SectorDetails from "./pages/SectorDetails";
@@ -10,7 +10,6 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/creator-login" element={<CreatorLogin />} />
         <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-        <Route path="/chart" element={<GrantSectorChart />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
@@ -18,17 +17,24 @@ const App = () => {
   );
 };
 
-// 🏠 HOME PAGE
+// 🏠 HOME PAGE (with chart)
 const Home = () => (
   <div className="flex-center">
-    <div className="glass max-w-4xl w-full space-y-6 text-center">
-      <h1 className="text-gradient text-4xl font-bold">🇮🇳 GrantTracker Portal</h1>
-      <p className="text-lg text-gray">Transparent monitoring of government grants.</p>
+    <div className="glass max-w-4xl w-full text-center animate-fadeInUp">
+      <h1 className="text-5xl font-extrabold mb-3">
+        <span className="text-gray" style={{ letterSpacing: "4px" }}>IN</span>{" "}
+        <span className="text-gradient">GrantTracker Portal</span>
+      </h1>
+      <p className="text-lg text-gray mb-8">
+        Transparent monitoring of government grants.
+      </p>
 
-      <div className="space-y-4">
+      <div className="space-y-4 mb-12">
         <Link to="/creator-login" className="btn-primary">Grant Creator</Link>
-        <Link to="/chart" className="btn-glass">Public Dashboard</Link>
       </div>
+
+      {/* 🥧 PIE CHART SECTION */}
+      <GrantSectorChart />
     </div>
   </div>
 );
@@ -88,7 +94,7 @@ const CreatorDashboard = () => {
 
   const createGrant = () => {
     if (!title || !amount || !field) {
-      alert("Please fill in all fields");
+      alert("Please fill all fields");
       return;
     }
 
@@ -98,15 +104,15 @@ const CreatorDashboard = () => {
       title,
       amount: parseInt(amount),
       field,
-      updates: [],
       creator: "arm.official168@gmail.com",
+      updates: [],
     };
 
     const grants = JSON.parse(localStorage.getItem("grants") || "[]");
     grants.push(grant);
     localStorage.setItem("grants", JSON.stringify(grants));
 
-    navigate(`/chart`);
+    navigate("/");
   };
 
   return (
@@ -127,7 +133,7 @@ const CreatorDashboard = () => {
           className="w-full p-3 mb-4 rounded border-none outline-none"
         />
         <input
-          placeholder="Field (e.g. Education, Health)"
+          placeholder="Field / Sector (e.g. Education, Health)"
           value={field}
           onChange={(e) => setField(e.target.value)}
           className="w-full p-3 mb-6 rounded border-none outline-none"
