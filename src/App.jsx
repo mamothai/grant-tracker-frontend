@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
-import createGrant from "./pages/createGrant.jsx";
-import GovLogin from "./pages/GovLogin.jsx";
-import GovDashboard from "./pages/GovDashboard.jsx";
-import PublicView from "./pages/PublicView.jsx";
+import CreateGrant from "./createGrant.jsx";
+import GovLogin from "./GovLogin.jsx";
+import GovDashboard from "./GovDashboard.jsx";
+import PublicView from "./PublicView.jsx";
 import SectorDetails from "./pages/SectorDetails.jsx";
 import "./App.css";
 
@@ -14,11 +14,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chart" element={<GrantSectorChart />} />
-        <Route path="/create-grant" element={<createGrant />} />
+        <Route path="/create-grant" element={<CreateGrant />} />
         <Route path="/gov-login" element={<GovLogin />} />
         <Route path="/gov-dashboard" element={<GovDashboard />} />
-        <Route path="/sectors/:sectorName" element={<SectorDetails />} />
         <Route path="/view/:id" element={<PublicView />} />
+        <Route path="/sectors/:sectorName" element={<SectorDetails />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
@@ -43,7 +43,8 @@ const Home = () => (
   <main className="container hero fade-up">
     <div className="glassy hero-card float-up">
       <h1 className="hero-title">
-        <span className="muted">IN</span> <span className="gradient">GrantTracker Portal</span>
+        <span className="muted">IN</span>{" "}
+        <span className="gradient">GrantTracker Portal</span>
       </h1>
       <p className="hero-sub">
         Transparent monitoring of government grants for accountability.
@@ -64,7 +65,7 @@ const Home = () => (
           onClick={() => {
             const id = document.getElementById("public-id").value.trim();
             if (!id) return alert("Please enter a grant ID");
-            window.location.href = `/view/${id}`;
+            window.location.href = `/view/${encodeURIComponent(id)}`;
           }}
         >
           View
