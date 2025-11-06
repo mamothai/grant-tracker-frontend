@@ -31,7 +31,7 @@ export default function App() {
   );
 }
 
-/* ---------- NAVBAR (reads auth safely) ---------- */
+/* ---------- NAVBAR ---------- */
 function Navbar() {
   const [isCreator, setIsCreator] = useState(false);
 
@@ -63,14 +63,9 @@ function Navbar() {
         </Link>
 
         {isCreator ? (
-          <>
-            <Link to="/create-grant" className="btn btn-primary">
-              Create Grant
-            </Link>
-            <button className="btn btn-ghost" style={{ marginLeft: 8 }} onClick={logout}>
-              Logout
-            </button>
-          </>
+          <button className="btn btn-ghost" onClick={logout}>
+            Logout
+          </button>
         ) : (
           <Link to="/creator-login" className="btn btn-primary">
             Creator Login
@@ -81,7 +76,7 @@ function Navbar() {
   );
 }
 
-/* ---------- HOME ---------- */
+/* ---------- HOME PAGE ---------- */
 function Home() {
   return (
     <main className="container hero fade-up">
@@ -91,9 +86,10 @@ function Home() {
           <span className="gradient">GrantTracker Portal</span>
         </h1>
         <p className="hero-sub">
-          Transparent monitoring of government grants for accountability and public visibility.
+          Transparent monitoring of government grants for accountability and
+          public visibility.
         </p>
-        <div className="cta-row" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <div className="cta-row" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <Link to="/creator-login" className="btn btn-primary">
             Creator Login
           </Link>
