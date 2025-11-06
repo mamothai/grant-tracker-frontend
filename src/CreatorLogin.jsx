@@ -7,27 +7,33 @@ export default function CreatorLogin() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
+    // Hidden but enforced creator credentials
     if (email === "arm.official168@gmail.com" && password === "Grant123!") {
       localStorage.setItem("creatorAuth", "true");
-      alert("✅ Logged in successfully!");
       navigate("/create-grant");
     } else {
-      alert("❌ Invalid credentials.\nUse arm.official168@gmail.com / Grant123!");
+      alert("❌ Invalid credentials");
     }
   };
 
   return (
     <main className="container fade-up">
       <div className="glassy" style={{ maxWidth: 480, margin: "40px auto" }}>
-        <h1 className="gradient" style={{ fontWeight: 800, fontSize: "2rem", marginBottom: 8 }}>
+        <h1
+          className="gradient"
+          style={{ fontWeight: 800, fontSize: "2rem", marginBottom: 8 }}
+        >
           Creator Login
         </h1>
-        <p className="muted mb-4">Only verified creators can add or edit grants.</p>
+        <p className="muted mb-4">
+          Authorized personnel only — please log in to access the creator
+          dashboard.
+        </p>
 
         <input
           className="input mb-3"
           type="email"
-          placeholder="Email"
+          placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -39,13 +45,13 @@ export default function CreatorLogin() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="btn btn-primary w-full" style={{ width: "100%" }} onClick={handleLogin}>
+        <button
+          className="btn btn-primary w-full"
+          style={{ width: "100%" }}
+          onClick={handleLogin}
+        >
           Login
         </button>
-
-        <p className="muted center mt-4 text-sm">
-          Creator access only • arm.official168@gmail.com / Grant123!
-        </p>
       </div>
     </main>
   );
