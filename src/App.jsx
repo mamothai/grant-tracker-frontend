@@ -1,80 +1,142 @@
-import { Routes, Route, Navigate, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-import Home from "./Home.jsx";                          
-import GrantSectorChart from "./components/GrantSectorChart.jsx";
-import SuggestionBox from "./SuggestionBox.jsx";
-import CreateGrant from "./createGrant.jsx";
-import GovLogin from "./GovLogin.jsx";
-import GovDashboard from "./GovDashboard.jsx";
-import PublicView from "./PublicView.jsx";
-import SectorDetails from "./pages/SectorDetails.jsx";
-import CreatorLogin from "./CreatorLogin.jsx";
-
+import { Link } from "react-router-dom";
+import "./scrollAnimations.css";
 import "./App.css";
 
-export default function App() {
+export default function Home() {
   return (
-    <div>
-      <Navbar />
+    <div className="home-wrapper">
 
-      <Routes>
-        <Route path="/" element={<Home />} />  
-        <Route path="/chart" element={<GrantSectorChart />} />
-        <Route path="/suggestions" element={<SuggestionBox />} /> 
-        <Route path="/creator-login" element={<CreatorLogin />} />
-        <Route path="/create-grant" element={<CreateGrant />} />
-        <Route path="/gov-login" element={<GovLogin />} />
-        <Route path="/gov-dashboard" element={<GovDashboard />} />
-        <Route path="/view/:id" element={<PublicView />} />
-        <Route path="/sectors/:sectorName" element={<SectorDetails />} />
+      {/* ================= HERO AREA ================= */}
+      <section className="hero-section premium-hero">
+        <div className="floating-sphere sphere-1"></div>
+        <div className="floating-sphere sphere-2"></div>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        <div className="hero-inner fade-up">
+          <h1 className="hero-title">
+            <span className="muted">IN</span>{" "}
+            <span className="gradient">GrantTracker Portal</span>
+          </h1>
 
-      <Footer />
+          <p className="hero-sub">
+            Monitor India’s government grants with real-time transparency, 
+            powerful analytics, and public engagement.
+          </p>
+
+          <div className="hero-buttons">
+            <Link to="/chart" className="btn btn-primary">Explore Dashboard</Link>
+            <Link to="/suggestions" className="btn btn-ghost">Suggestion Box</Link>
+          </div>
+        </div>
+
+        <svg className="wave-svg" viewBox="0 0 1440 320">
+          <path 
+            fill="#4f46e5" 
+            fillOpacity="0.3"
+            d="M0,160L48,165.3C96,171,192,181,288,192C384,203,480,213,576,197.3C672,181,768,139,864,117.3C960,96,1056,96,1152,122.7C1248,149,1344,203,1392,229.3L1440,256V0H0Z"
+          ></path>
+        </svg>
+      </section>
+
+
+
+      {/* ================= SECTOR PREVIEW ================= */}
+      <section className="section fade-in">
+        <h2 className="section-title gradient">Explore Key Sectors</h2>
+
+        <div className="preview-grid">
+          <div className="preview-card glassy float-up">
+            <div className="icon">🏥</div>
+            <h3>Health</h3>
+            <p>Track medical infrastructure grants, public health missions, and funding trends.</p>
+          </div>
+
+          <div className="preview-card glassy float-up delay-1">
+            <div className="icon">📚</div>
+            <h3>Education</h3>
+            <p>View allocations for schools, digital learning, and youth empowerment.</p>
+          </div>
+
+          <div className="preview-card glassy float-up delay-2">
+            <div className="icon">🌾</div>
+            <h3>Agriculture</h3>
+            <p>Check crop subsidies, farmer schemes, irrigation projects and more.</p>
+          </div>
+        </div>
+
+        <Link to="/chart" className="btn btn-primary center-btn">View All Sectors</Link>
+      </section>
+
+
+
+      {/* ================= HOW IT WORKS ================= */}
+      <section className="section fade-in">
+        <h2 className="section-title gradient">How GrantTracker Works</h2>
+
+        <div className="timeline">
+          <div className="timeline-item glassy float-up">
+            <span className="step-number">1</span>
+            <h3>Grant Created</h3>
+            <p>The creator registers a new grant with budget, sectors and details.</p>
+          </div>
+
+          <div className="timeline-item glassy float-up delay-1">
+            <span className="step-number">2</span>
+            <h3>Gov Official Updates</h3>
+            <p>Authorized officers upload progress, documents and milestone proofs.</p>
+          </div>
+
+          <div className="timeline-item glassy float-up delay-2">
+            <span className="step-number">3</span>
+            <h3>Public Transparency</h3>
+            <p>Citizens can view updates and provide suggestions for improvements.</p>
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* ================= SEARCH ================= */}
+      <section className="section fade-in">
+        <h2 className="section-title gradient">Quick Grant Lookup</h2>
+
+        <p className="muted">Enter a grant ID to instantly view its details.</p>
+
+        <div className="search-row">
+          <input 
+            id="public-id"
+            placeholder="e.g. GT-2025-1024"
+            className="input"
+          />
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              const id = document.getElementById("public-id").value.trim();
+              if (!id) return alert("Please enter a Grant ID");
+              window.location.href = `/view/${encodeURIComponent(id)}`;
+            }}
+          >
+            View
+          </button>
+        </div>
+      </section>
+
+
+
+      {/* ================= CALL TO ACTION ================= */}
+      <section className="cta-section fade-in">
+        <div className="cta-card glassy float-up">
+          <h2 className="gradient">Help Build Transparency</h2>
+          <p>
+            Contribute by exploring grants or sending suggestions to improve 
+            public projects.
+          </p>
+
+          <div className="cta-buttons">
+            <Link to="/chart" className="btn btn-primary">Open Dashboard</Link>
+            <Link to="/suggestions" className="btn btn-ghost">Submit Suggestion</Link>
+          </div>
+        </div>
+      </section>
     </div>
-  );
-}
-
-function Navbar() {
-  const [isCreator, setIsCreator] = useState(false);
-
-  useEffect(() => {
-    setIsCreator(localStorage.getItem("creatorAuth") === "true");
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("creatorAuth");
-    window.location.href = "/";
-  };
-
-  return (
-    <header className="nav glassy fade-in">
-      <Link to="/" className="brand">
-        <span className="flag">🇮🇳</span>
-        <span className="brand-text">GrantTracker</span>
-      </Link>
-
-      <nav className="nav-links">
-        <Link to="/chart" className="nav-link">Dashboard</Link>
-        <Link to="/suggestions" className="nav-link">Suggestions</Link>
-        {isCreator ? (
-          <button className="btn btn-ghost" onClick={logout}>Logout</button>
-        ) : (
-          <Link to="/creator-login" className="btn btn-primary">Creator Login</Link>
-        )}
-      </nav>
-    </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer fade-in">
-      <p>
-        Built with ❤️ by <span className="gradient-ink">GrantTracker Portal</span>
-      </p>
-    </footer>
   );
 }
