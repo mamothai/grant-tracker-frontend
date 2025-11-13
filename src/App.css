@@ -412,3 +412,34 @@ html, body {
   border-radius: 20px;
   text-align: center;
 }
+.hero-btn {
+  width: 250px;
+  text-align: center;
+}
+
+.cta-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-card {
+  padding: 50px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.features-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.search-row {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
