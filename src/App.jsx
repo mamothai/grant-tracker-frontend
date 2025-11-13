@@ -3,7 +3,6 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import "./scrollAnimations.css";
 
-
 import Home from "./Home.jsx";
 import SuggestionBox from "./SuggestionBox.jsx";
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
@@ -18,7 +17,7 @@ import "./App.css";
 
 export default function App() {
   useEffect(() => {
-    initScrollAnimations();
+    // No initScrollAnimations needed
   }, []);
 
   return (
