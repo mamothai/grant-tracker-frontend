@@ -301,3 +301,37 @@ html, body {
     text-align: center;
   }
 }
+/* Make Explore Dashboard wide like your screenshot */
+.wide-btn {
+  width: 100%;
+  max-width: 650px;
+  text-align: center;
+}
+
+/* New Creator Login button */
+.cta-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.25s ease;
+}
+
+.cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+}
+
+/* small glowing dot inside Creator Login */
+.creator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #06b6d4, #a855f7);
+  box-shadow: 0 0 8px #06b6d4;
+}

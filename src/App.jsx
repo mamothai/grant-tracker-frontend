@@ -1,6 +1,8 @@
 // src/App.jsx
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
+
+import "./App.css";
 import "./scrollAnimations.css";
 
 import Home from "./Home.jsx";
@@ -13,16 +15,15 @@ import GovDashboard from "./GovDashboard.jsx";
 import PublicView from "./PublicView.jsx";
 import SectorDetails from "./pages/SectorDetails.jsx";
 
-import "./App.css";
-
 export default function App() {
   useEffect(() => {
-    // No initScrollAnimations needed
+    if (window.initScrollAnimations) window.initScrollAnimations();
   }, []);
 
   return (
     <div className="app-root">
       <Navbar />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chart" element={<GrantSectorChart />} />
@@ -39,6 +40,7 @@ export default function App() {
   );
 }
 
+/* ---------------- NAVBAR ---------------- */
 function Navbar() {
   return (
     <header className="nav glassy">
