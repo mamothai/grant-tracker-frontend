@@ -1,254 +1,185 @@
-/* =========================================================
-   GLOBAL
-========================================================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-:root {
-  --cyan: #06b6d4;
-  --purple: #8b5cf6;
-  --muted: #94a3b8;
-  --white: #ffffff;
-
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --shadow: 0 12px 35px rgba(0,0,0,0.35);
-}
-
+/* ====================== GLOBAL ====================== */
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: Inter, sans-serif;
   background: linear-gradient(to bottom right, #0f172a, #1e293b);
   color: white;
   overflow-x: hidden;
 }
 
-/* CONTAINER WRAPPER */
-.home-wrapper {
-  width: min(1100px, 90%);
-  margin: 0 auto;
-  padding-bottom: 60px;
+a { text-decoration: none; }
+
+/* ====================== NAVBAR ====================== */
+.nav {
+  width: min(1200px, 95%);
+  margin: 16px auto;
+  padding: 14px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  backdrop-filter: blur(12px);
 }
 
-
-/* =========================================================
-   GLASSY CARD
-========================================================= */
-
-.glassy {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(18px);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: var(--shadow);
-  transition: 0.25s ease-out;
+.brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  gap: 6px;
+  color: white;
 }
 
-.glassy:hover {
-  transform: translateY(-3px);
-}
-
-
-/* =========================================================
-   HERO SECTION
-========================================================= */
-
-.hero-section {
-  padding: 120px 10px 60px;
-  text-align: center;
-}
-
-.hero-content {
-  max-width: 900px;
-  margin: auto;
-}
-
-.hero-title {
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 800;
-}
-
-.hero-sub {
-  font-size: 18px;
-  margin: 12px auto 30px;
-  color: var(--muted);
-  max-width: 650px;
-}
-
-.gradient {
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
+.brand-gradient {
+  background: linear-gradient(90deg, #06b6d4, #a855f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.muted {
-  color: var(--muted);
+.nav-links {
+  display: flex;
+  gap: 15px;
+  align-items: center;
 }
 
+.nav-link {
+  font-weight: 600;
+  color: white;
+  opacity: 0.85;
+}
 
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.btn {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  padding: 14px 18px;
+.nav-btn {
+  padding: 10px 18px;
   border-radius: 12px;
   font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  transition: 0.25s;
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, var(--cyan), var(--purple));
-  color: white;
-  box-shadow: 0 10px 24px rgba(6, 182, 212, 0.35);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-}
-
-.btn-ghost {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.25);
+  background: linear-gradient(90deg, #06b6d4, #a855f7);
   color: white;
 }
-.btn-ghost:hover {
-  background: rgba(255,255,255,0.15);
-  transform: translateY(-2px);
+
+/* ====================== HERO ====================== */
+.hero-wrapper {
+  width: min(1200px, 95%);
+  margin: 100px auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.hero-left {
+  width: 55%;
+}
+
+.hero-title {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800;
+}
+
+.hero-sub {
+  color: #cbd5e1;
+  font-size: 18px;
+  margin: 10px 0 25px;
+  max-width: 480px;
+}
+
+.big-btn {
+  padding: 16px 18px;
+  font-size: 18px;
+  width: 280px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #06b6d4, #a855f7);
+  color: white;
+  font-weight: 700;
+}
+
+.small-btn {
+  padding: 12px 18px;
+  width: 140px;
+  margin-left: 12px;
+  border: 1px solid white;
+  color: white;
+  border-radius: 12px;
 }
 
 .hero-buttons {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
 }
 
+/* Right Side Icon */
+.hero-right {
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-/* =========================================================
-   SECTIONS
-========================================================= */
+.hero-icon {
+  width: 340px;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.4));
+}
 
-.section {
-  margin-top: 80px;
+/* ====================== GLASS & CARDS ====================== */
+.glassy {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 30px;
+}
+
+/* ====================== CHART PAGE ====================== */
+.chart-wrapper {
+  width: min(1200px, 95%);
+  margin: 60px auto;
   text-align: center;
 }
 
-.section-title {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 10px;
+.chart-card {
+  margin-top: 25px;
+  padding: 30px;
 }
 
-
-/* =========================================================
-   FEATURES GRID
-========================================================= */
-
-.features-grid {
-  margin-top: 28px;
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* ====================== SUGGESTION BOX ====================== */
+.suggest-wrapper {
+  width: min(600px, 90%);
+  margin: 100px auto;
 }
 
-.feature-card {
-  padding: 24px;
+.suggest-card {
+  margin-top: 20px;
 }
 
-.feature-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.feature-text {
-  color: var(--muted);
-  font-size: 15px;
-}
-
-
-/* =========================================================
-   SEARCH SECTION
-========================================================= */
-
-.search-row {
-  margin-top: 18px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.input {
-  width: 280px;
+/* ====================== INPUT STYLES ====================== */
+.input, .textarea {
+  width: 100%;
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: rgba(255,255,255,0.9);
-  color: #111;
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(6,182,212,0.3);
-}
-
-
-/* =========================================================
-   ABOUT SECTION
-========================================================= */
-
-.about-text {
-  max-width: 750px;
-  margin: 0 auto;
-  color: var(--muted);
+  margin-bottom: 12px;
   font-size: 16px;
-  line-height: 1.6;
 }
 
+.textarea { resize: vertical; }
 
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 0.8s forwards ease-out;
-}
-
+/* ====================== ANIMATIONS ====================== */
 .fade-up {
   opacity: 0;
-  transform: translateY(24px);
-  animation: fadeUp 0.8s forwards ease-out;
+  transform: translateY(20px);
+  animation: fadeUp 0.7s forwards ease-out;
 }
 
 .float-up {
   opacity: 0;
   transform: translateY(30px);
-  animation: floatUp 1s forwards cubic-bezier(.25,.75,.15,1);
+  animation: floatUp 0.9s forwards ease-out;
 }
 
-.delay-1 { animation-delay: 0.15s; }
-.delay-2 { animation-delay: 0.30s; }
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+.delay-1 { animation-delay: 0.2s; }
 
 @keyframes fadeUp {
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes floatUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }

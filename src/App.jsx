@@ -1,16 +1,13 @@
 import { Routes, Route, Navigate, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-import Home from "./Home.jsx";                          // New scroll homepage
+import Home from "./Home.jsx";
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
-import SuggestionBox from "./SuggestionBox.jsx";        // NEW page
+import SuggestionBox from "./SuggestionBox.jsx";
 import CreateGrant from "./createGrant.jsx";
 import GovLogin from "./GovLogin.jsx";
 import GovDashboard from "./GovDashboard.jsx";
 import PublicView from "./PublicView.jsx";
 import SectorDetails from "./pages/SectorDetails.jsx";
 import CreatorLogin from "./CreatorLogin.jsx";
-
 import "./App.css";
 
 export default function App() {
@@ -21,7 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chart" element={<GrantSectorChart />} />
-        <Route path="/suggestions" element={<SuggestionBox />} /> 
+        <Route path="/suggestions" element={<SuggestionBox />} />
         <Route path="/creator-login" element={<CreatorLogin />} />
         <Route path="/create-grant" element={<CreateGrant />} />
         <Route path="/gov-login" element={<GovLogin />} />
@@ -29,64 +26,24 @@ export default function App() {
         <Route path="/view/:id" element={<PublicView />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
 
-        {/* Redirect unknown URLs back to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
-      <Footer />
     </div>
   );
 }
 
-/* ===========================================================
-   NAVBAR
-=========================================================== */
 function Navbar() {
-  const [isCreator, setIsCreator] = useState(false);
-
-  useEffect(() => {
-    setIsCreator(localStorage.getItem("creatorAuth") === "true");
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("creatorAuth");
-    window.location.href = "/";
-  };
-
   return (
-    <header className="nav glassy fade-in">
+    <header className="nav fade-in">
       <Link to="/" className="brand">
-        <span className="flag">🇮🇳</span>
-        <span className="brand-text">GrantTracker</span>
+        <span className="brand-flag">IN</span>
+        <span className="brand-gradient">GrantTracker</span>
       </Link>
 
       <nav className="nav-links">
-        <Link to="/chart" className="nav-link">Dashboard</Link>
-        <Link to="/suggestions" className="nav-link">Suggestions</Link>
-
-        {isCreator ? (
-          <button className="btn btn-ghost" onClick={logout}>
-            Logout
-          </button>
-        ) : (
-          <Link to="/creator-login" className="btn btn-primary">
-            Creator Login
-          </Link>
-        )}
+        <Link className="nav-link" to="/chart">Dashboard</Link>
+        <Link className="nav-btn" to="/creator-login">Creator Login</Link>
       </nav>
     </header>
-  );
-}
-
-/* ===========================================================
-   FOOTER
-=========================================================== */
-function Footer() {
-  return (
-    <footer className="footer fade-in">
-      <p>
-        Built with ❤️ by <span className="gradient-ink">GrantTracker Portal</span>
-      </p>
-    </footer>
   );
 }
