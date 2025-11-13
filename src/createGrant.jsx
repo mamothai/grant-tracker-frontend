@@ -1,76 +1,146 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import "./App.css";
 
 export default function CreateGrant() {
+  // simple auth check (creator must be logged in)
+  const isCreator = (localStorage.getItem("creatorAuth") === "true");
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [field, setField] = useState("");
-  const navigate = useNavigate();
+  const [beneficiary, setBeneficiary] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // 🔒 Check if logged in
-  if (localStorage.getItem("creatorAuth") !== "true") {
-    return <Navigate to="/creator-login" replace />;
-  }
+  // if not logged in as creator, redirect to login
+  if (!isCreator) return <Navigate to="/creator-login" replace />;
+
+  const generateId = () => {
+    // GT-2025-XXXX
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `GT-2025-${rand}`;
+  };
 
   const createGrant = () => {
-    if (!title || !amount || !field)
-      return alert("Please fill all fields before submitting.");
+    // basic validation
+    if (!title.trim()) return alert("Please enter a grant title.");
+    if (!amount || Number(amount) <= 0) return alert("Please enter a valid amount.");
+    if (!field.trim()) return alert("Please enter the field/area.");
+    setLoading(true);
 
-    const id = `GT-2025-${Math.floor(1000 + Math.random() * 9000)}`;
-    const grant = {
-      id,
-      title,
-      amount: parseInt(amount),
-      field,
-      updates: [],
-      creator: "arm.official168@gmail.com",
-    };
+    try {
+      const id = generateId();
+      const grant = {
+        id,
+        title: title.trim(),
+        amount: Number(amount),
+        field: field.trim(),
+        beneficiary: beneficiary.trim() || "Not specified",
+        description: description.trim(),
+        updates: [],
+        creator: "arm.official168@gmail.com", // default creator email
+        createdAt: new Date().toISOString()
+      };
 
-    const grants = JSON.parse(localStorage.getItem("grants") || "[]");
-    grants.push(grant);
-    localStorage.setItem("grants", JSON.stringify(grants));
-    alert(`✅ Grant Created Successfully! Grant ID: ${id}`);
-    navigate(`/view/${encodeURIComponent(id)}`);
+      const existing = JSON.parse(localStorage.getItem("grants") || "[]");
+      existing.push(grant);
+      localStorage.setItem("grants", JSON.stringify(existing));
+
+      // small UX delay to show a spinner (if you later add one)
+      setTimeout(() => {
+        setLoading(false);
+        // navigate to public view page for the created grant
+        navigate(`/view/${encodeURIComponent(id)}`);
+      }, 400);
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      alert("Could not create grant — check console for details.");
+    }
   };
 
   return (
-    <main className="container fade-up">
-      <div className="glassy" style={{ maxWidth: 720, margin: "30px auto" }}>
-        <h1 className="gradient" style={{ fontWeight: 800, fontSize: "2rem", marginBottom: "10px" }}>
-          Create New Grant
-        </h1>
-        <p className="muted mb-4">
-          Generate and register a new grant with its sector and funding details.
+    <div style={{ padding: 40, minHeight: "80vh" }}>
+      <div className="glassy" style={{ maxWidth: 800, margin: "0 auto" }}>
+        <h2 style={{ marginBottom: 8 }}>Create New Grant</h2>
+        <p className="muted" style={{ marginBottom: 20 }}>
+          Fill in the details below and generate a Grant ID. Only logged-in creators can create grants.
         </p>
 
+        <label className="text-sm">Grant Title</label>
         <input
-          className="input mb-4"
-          placeholder="Grant Title (e.g. Smart City Development)"
+          className="input"
+          placeholder="e.g. Rural School Sanitation Initiative"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+
+        <label className="text-sm">Amount (₹)</label>
         <input
-          className="input mb-4"
+          className="input"
           type="number"
-          placeholder="Grant Amount (₹)"
+          placeholder="e.g. 1500000"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
+
+        <label className="text-sm">Field / Sector</label>
         <input
-          className="input mb-4"
-          placeholder="Sector / Field (e.g. Education, Health)"
+          className="input"
+          placeholder="e.g. Education, Health, Agriculture"
           value={field}
           onChange={(e) => setField(e.target.value)}
         />
 
-        <button
-          className="btn btn-primary w-full"
-          style={{ width: "100%", marginTop: "1rem" }}
-          onClick={createGrant}
-        >
-          Generate Grant
-        </button>
+        <label className="text-sm">Beneficiary (optional)</label>
+        <input
+          className="input"
+          placeholder="Organization or person (optional)"
+          value={beneficiary}
+          onChange={(e) => setBeneficiary(e.target.value)}
+        />
+
+        <label className="text-sm">Short Description (optional)</label>
+        <textarea
+          className="input textarea"
+          rows={4}
+          placeholder="Short summary of the grant purpose..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <div style={{ marginTop: 16, display: "flex", gap: 12, alignItems: "center" }}>
+          <button
+            className="btn-primary"
+            onClick={createGrant}
+            disabled={loading}
+            style={{ minWidth: 160 }}
+          >
+            {loading ? "Creating…" : "Generate Grant ID"}
+          </button>
+
+          <button
+            className="btn-ghost"
+            onClick={() => {
+              // quick reset
+              setTitle("");
+              setAmount("");
+              setField("");
+              setBeneficiary("");
+              setDescription("");
+            }}
+            style={{ minWidth: 120 }}
+          >
+            Reset
+          </button>
+        </div>
+
+        <p className="mt-4 text-sm muted">
+          Note: Grants are stored in your browser's localStorage (for demo). To persist server-side, integrate an API.
+        </p>
       </div>
-    </main>
+    </div>
   );
 }
