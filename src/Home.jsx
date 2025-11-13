@@ -2,16 +2,19 @@
 import { Link } from "react-router-dom";
 import "./App.css";
 
+/* ---------------- ICONS ---------------- */
+
 function IconNetwork() {
   return (
-    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1">
+          <stop offset="0" stopColor="#06b6d4" />
+          <stop offset="1" stopColor="#a855f7" />
+        </linearGradient>
+      </defs>
+
       <g stroke="url(#g1)" strokeWidth="4" fill="none" strokeLinecap="round">
-        <defs>
-          <linearGradient id="g1" x1="0" x2="1">
-            <stop offset="0" stopColor="#06b6d4" />
-            <stop offset="1" stopColor="#a855f7" />
-          </linearGradient>
-        </defs>
         <circle cx="60" cy="20" r="8" />
         <circle cx="20" cy="60" r="8" />
         <circle cx="60" cy="100" r="8" />
@@ -27,13 +30,14 @@ function IconNetwork() {
 
 function IconLight() {
   return (
-    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="g2" x1="0" x2="1">
           <stop offset="0" stopColor="#06b6d4" />
           <stop offset="1" stopColor="#a855f7" />
         </linearGradient>
       </defs>
+
       <g stroke="url(#g2)" strokeWidth="4" fill="none" strokeLinecap="round">
         <path d="M60 20 a18 18 0 0 1 18 18 18 18 0 0 1 -18 18 18 18 0 0 1 -18 -18 18 18 0 0 1 18 -18z" />
         <path d="M50 56 L70 56" />
@@ -48,13 +52,14 @@ function IconLight() {
 
 function IconCloud() {
   return (
-    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="g3" x1="0" x2="1">
           <stop offset="0" stopColor="#06b6d4" />
           <stop offset="1" stopColor="#a855f7" />
         </linearGradient>
       </defs>
+
       <g stroke="url(#g3)" strokeWidth="4" fill="none" strokeLinecap="round">
         <path d="M30 70 Q20 50 40 44 Q45 30 62 32 Q78 22 92 38 Q106 45 100 62 Q110 66 102 76 Q70 92 30 70 Z" />
       </g>
@@ -64,13 +69,14 @@ function IconCloud() {
 
 function IconBell() {
   return (
-    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="g4" x1="0" x2="1">
           <stop offset="0" stopColor="#06b6d4" />
           <stop offset="1" stopColor="#a855f7" />
         </linearGradient>
       </defs>
+
       <g stroke="url(#g4)" strokeWidth="4" fill="none" strokeLinecap="round">
         <path d="M60 26 a20 20 0 0 0 -20 20 v12 a8 8 0 0 1 -4 6 l-4 4 72 0 -4 -4 a8 8 0 0 1 -4 -6 V46 a20 20 0 0 0 -20 -20z"/>
         <circle cx="60" cy="92" r="6" fill="url(#g4)" />
@@ -81,14 +87,15 @@ function IconBell() {
 
 function IconRobot() {
   return (
-    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <svg className="big-icon" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="g5" x1="0" x2="1">
           <stop offset="0" stopColor="#06b6d4" />
           <stop offset="1" stopColor="#a855f7" />
         </linearGradient>
       </defs>
-      <g stroke="url(#g5)" strokeWidth="4" fill="none" strokeLinecap="round" >
+
+      <g stroke="url(#g5)" strokeWidth="4" fill="none" strokeLinecap="round">
         <rect x="36" y="30" width="48" height="44" rx="8" />
         <circle cx="52" cy="50" r="4" fill="url(#g5)"/>
         <circle cx="68" cy="50" r="4" fill="url(#g5)"/>
@@ -101,11 +108,13 @@ function IconRobot() {
   );
 }
 
+/* ---------------- HOME PAGE ---------------- */
+
 export default function Home() {
   return (
     <main className="page-scroll">
 
-      {/* Section 1 - Hero */}
+      {/* HERO */}
       <section className="panel panel-hero reveal" id="panel-hero">
         <div className="panel-left">
           <h1 className="big-title gradient">GrantTracker Portal</h1>
@@ -124,7 +133,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 2 - Public Suggestions */}
+      {/* SUGGESTIONS */}
       <section className="panel panel-suggest reveal">
         <div className="panel-left">
           <h2 className="panel-title gradient">Public Suggestions</h2>
@@ -137,7 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 3 - Government Dashboard */}
+      {/* GOV DASHBOARD */}
       <section className="panel panel-gov reveal">
         <div className="panel-left">
           <h2 className="panel-title gradient">Government Dashboard</h2>
@@ -150,7 +159,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 4 - Public Dashboard */}
+      {/* PUBLIC DASHBOARD */}
       <section className="panel panel-public reveal">
         <div className="panel-left">
           <h2 className="panel-title gradient">Public Dashboard</h2>
@@ -163,7 +172,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 5 - Creator Portal */}
+      {/* CREATOR PORTAL */}
       <section className="panel panel-creator reveal">
         <div className="panel-left">
           <h2 className="panel-title gradient">Creator Portal</h2>
