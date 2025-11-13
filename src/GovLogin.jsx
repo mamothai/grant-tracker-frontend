@@ -1,55 +1,54 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
 
 export default function GovLogin() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault()
-    if (email === 'gov@grant.in' && password === 'Secure123!') {
-      localStorage.setItem('govAuth', 'true')
-      navigate('/gov-dashboard')
+  const handleLogin = () => {
+    if (email === "gov@grant.in" && pass === "Secure123!") {
+      localStorage.setItem("govAuth", "true");
+      navigate("/gov-dashboard");
     } else {
-      setError('Invalid credentials')
+      alert("❌ Invalid credentials");
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-slate-800">
-      <div className="glass p-10 max-w-md w-full">
-        <h2 className="text-3xl font-bold mb-6 text-center text-white">Govt Official Login</h2>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            required
-          />
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold py-3 rounded-xl hover:scale-105 transition"
-          >
-            Login
-          </button>
-        </form>
-        <p className="mt-4 text-xs text-gray-400 text-center">
-          Use: <span className="text-cyan-400">gov@grant.in</span> / <span className="text-cyan-400">Secure123!</span>
+    <main className="login-container fade-in">
+      <div className="glassy login-card float-up">
+
+        <h1 className="gradient" style={{ fontWeight: 800, fontSize: "2rem", marginBottom: "10px" }}>
+          Govt Official Login
+        </h1>
+
+        <p className="muted" style={{ marginBottom: "25px" }}>
+          Authorized personnel only
         </p>
+
+        <input
+          className="input mb-3"
+          type="email"
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          className="input mb-4"
+          type="password"
+          placeholder="Password"
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
+        />
+
+        <button className="btn btn-primary w-full" style={{ width: "100%" }} onClick={handleLogin}>
+          Login
+        </button>
+
       </div>
-    </div>
-  )
+    </main>
+  );
 }

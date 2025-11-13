@@ -289,3 +289,22 @@ html, body {
     text-align: center;
   }
 }
+/* Login Page Layout */
+.login-container {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.mb-3 { margin-bottom: 15px; }
+.mb-4 { margin-bottom: 20px; }
