@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import Home from "./Home.jsx";                          // New scroll homepage
+import Home from "./Home.jsx";                          
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
-import SuggestionBox from "./SuggestionBox.jsx";        // NEW page
+import SuggestionBox from "./SuggestionBox.jsx";
 import CreateGrant from "./createGrant.jsx";
 import GovLogin from "./GovLogin.jsx";
 import GovDashboard from "./GovDashboard.jsx";
@@ -19,7 +19,7 @@ export default function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />  
         <Route path="/chart" element={<GrantSectorChart />} />
         <Route path="/suggestions" element={<SuggestionBox />} /> 
         <Route path="/creator-login" element={<CreatorLogin />} />
@@ -29,7 +29,6 @@ export default function App() {
         <Route path="/view/:id" element={<PublicView />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
 
-        {/* Redirect unknown URLs back to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
@@ -38,9 +37,6 @@ export default function App() {
   );
 }
 
-/* ===========================================================
-   NAVBAR
-=========================================================== */
 function Navbar() {
   const [isCreator, setIsCreator] = useState(false);
 
@@ -63,24 +59,16 @@ function Navbar() {
       <nav className="nav-links">
         <Link to="/chart" className="nav-link">Dashboard</Link>
         <Link to="/suggestions" className="nav-link">Suggestions</Link>
-
         {isCreator ? (
-          <button className="btn btn-ghost" onClick={logout}>
-            Logout
-          </button>
+          <button className="btn btn-ghost" onClick={logout}>Logout</button>
         ) : (
-          <Link to="/creator-login" className="btn btn-primary">
-            Creator Login
-          </Link>
+          <Link to="/creator-login" className="btn btn-primary">Creator Login</Link>
         )}
       </nav>
     </header>
   );
 }
 
-/* ===========================================================
-   FOOTER
-=========================================================== */
 function Footer() {
   return (
     <footer className="footer fade-in">
