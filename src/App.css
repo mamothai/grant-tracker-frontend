@@ -183,3 +183,19 @@ a { text-decoration: none; }
 @keyframes floatUp {
   to { opacity: 1; transform: translateY(0); }
 }
+/* ===================== SCROLL ANIMATIONS ===================== */
+
+.fade-up, .fade-left, .fade-right, .float-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.9s ease-out;
+}
+
+.fade-left { transform: translateX(-40px); }
+.fade-right { transform: translateX(40px); }
+.float-up  { transform: translateY(40px) scale(0.95); }
+
+.in-view {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
