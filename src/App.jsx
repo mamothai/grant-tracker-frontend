@@ -1,8 +1,9 @@
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import Home from "./Home.jsx";                      // <-- NEW HOME PAGE
+import Home from "./Home.jsx";                          // New scroll homepage
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
+import SuggestionBox from "./SuggestionBox.jsx";        // NEW page
 import CreateGrant from "./createGrant.jsx";
 import GovLogin from "./GovLogin.jsx";
 import GovDashboard from "./GovDashboard.jsx";
@@ -18,14 +19,17 @@ export default function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />  {/* <-- NEW SCROLL HOMEPAGE */}
+        <Route path="/" element={<Home />} />
         <Route path="/chart" element={<GrantSectorChart />} />
+        <Route path="/suggestions" element={<SuggestionBox />} /> 
         <Route path="/creator-login" element={<CreatorLogin />} />
         <Route path="/create-grant" element={<CreateGrant />} />
         <Route path="/gov-login" element={<GovLogin />} />
         <Route path="/gov-dashboard" element={<GovDashboard />} />
         <Route path="/view/:id" element={<PublicView />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
+
+        {/* Redirect unknown URLs back to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
@@ -34,22 +38,18 @@ export default function App() {
   );
 }
 
-/* ---------- NAVBAR ---------- */
+/* ===========================================================
+   NAVBAR
+=========================================================== */
 function Navbar() {
   const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    try {
-      setIsCreator(localStorage.getItem("creatorAuth") === "true");
-    } catch {
-      setIsCreator(false);
-    }
+    setIsCreator(localStorage.getItem("creatorAuth") === "true");
   }, []);
 
   const logout = () => {
-    try {
-      localStorage.removeItem("creatorAuth");
-    } catch {}
+    localStorage.removeItem("creatorAuth");
     window.location.href = "/";
   };
 
@@ -62,18 +62,25 @@ function Navbar() {
 
       <nav className="nav-links">
         <Link to="/chart" className="nav-link">Dashboard</Link>
+        <Link to="/suggestions" className="nav-link">Suggestions</Link>
 
         {isCreator ? (
-          <button className="btn btn-ghost" onClick={logout}>Logout</button>
+          <button className="btn btn-ghost" onClick={logout}>
+            Logout
+          </button>
         ) : (
-          <Link to="/creator-login" className="btn btn-primary">Creator Login</Link>
+          <Link to="/creator-login" className="btn btn-primary">
+            Creator Login
+          </Link>
         )}
       </nav>
     </header>
   );
 }
 
-/* ---------- FOOTER ---------- */
+/* ===========================================================
+   FOOTER
+=========================================================== */
 function Footer() {
   return (
     <footer className="footer fade-in">
