@@ -1,7 +1,8 @@
 // src/App.jsx
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
-import initScrollAnimations from "./scrollAnimations.css";
+import "./scrollAnimations.css";
+
 
 import Home from "./Home.jsx";
 import SuggestionBox from "./SuggestionBox.jsx";
