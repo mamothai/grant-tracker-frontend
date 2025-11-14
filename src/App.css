@@ -335,3 +335,55 @@ html, body {
   background: linear-gradient(90deg, #06b6d4, #a855f7);
   box-shadow: 0 0 8px #06b6d4;
 }
+/* FIX — Reduce icon size */
+.big-icon {
+  width: 160px !important;   /* adjust size */
+  height: 160px !important;
+  opacity: 0.95;
+}
+
+/* Fix alignment for all panels */
+.panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 40px;
+  gap: 40px;
+}
+
+/* Ensure left and right are balanced */
+.panel-left {
+  flex: 1;
+  max-width: 520px;
+}
+
+.panel-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Prevent huge icons on large screens */
+@media (min-width: 1600px) {
+  .big-icon {
+    width: 180px !important;
+    height: 180px !important;
+  }
+}
+
+/* Prevent overflow on small screens */
+@media (max-width: 768px) {
+  .panel {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .panel-right {
+    justify-content: center;
+  }
+
+  .big-icon {
+    width: 130px !important;
+    height: 130px !important;
+  }
+}
