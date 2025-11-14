@@ -1,55 +1,67 @@
-/* ===============================
-   SCROLL ANIMATION ENGINE
-   =============================== */
-
-.scroll-show {
+/* ---------------------------------------------------
+   BASE HIDDEN STATE 
+--------------------------------------------------- */
+.reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.scroll-show.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Slide from left */
-.scroll-left {
+.reveal-right {
   opacity: 0;
-  transform: translateX(-50px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateX(40px);
+  transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.scroll-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Slide from right */
-.scroll-right {
+.reveal-left {
   opacity: 0;
-  transform: translateX(50px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateX(-40px);
+  transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.scroll-right.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Float up */
-.scroll-float {
+.fade-in {
   opacity: 0;
-  transform: translateY(40px) scale(0.97);
-  transition: opacity 1s ease, transform 1s ease;
+  transition: all 1s ease-out;
 }
 
-.scroll-float.visible {
+/* ---------------------------------------------------
+   WHEN VISIBLE
+--------------------------------------------------- */
+.reveal.visible,
+.reveal-right.visible,
+.reveal-left.visible,
+.fade-in.visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translate(0, 0);
 }
 
-/* Delay classes */
-.delay-1 { transition-delay: 0.15s; }
-.delay-2 { transition-delay: 0.30s; }
-.delay-3 { transition-delay: 0.45s; }
+/* ---------------------------------------------------
+   DELAYS FOR NICER CASCADE EFFECTS
+--------------------------------------------------- */
+
+.delay {
+  transition-delay: 0.2s;
+}
+
+.delay-1 {
+  transition-delay: 0.4s;
+}
+
+.delay-2 {
+  transition-delay: 0.6s;
+}
+
+.delay-3 {
+  transition-delay: 0.8s;
+}
+
+/* ---------------------------------------------------
+   MOBILE RESPONSIVE
+--------------------------------------------------- */
+@media (max-width: 900px) {
+  .reveal,
+  .reveal-right,
+  .reveal-left {
+    transform: translateY(30px);
+  }
+}

@@ -2,9 +2,6 @@
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 
-import "./App.css";
-import "./scrollAnimations.css";
-
 import Home from "./Home.jsx";
 import SuggestionBox from "./SuggestionBox.jsx";
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
@@ -15,15 +12,17 @@ import GovDashboard from "./GovDashboard.jsx";
 import PublicView from "./PublicView.jsx";
 import SectorDetails from "./pages/SectorDetails.jsx";
 
+import "./App.css";
+import "./scrollAnimations.css";
+
 export default function App() {
   useEffect(() => {
-    if (window.initScrollAnimations) window.initScrollAnimations();
+    initScrollAnimations();
   }, []);
 
   return (
     <div className="app-root">
       <Navbar />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chart" element={<GrantSectorChart />} />
@@ -40,18 +39,17 @@ export default function App() {
   );
 }
 
-/* ---------------- NAVBAR ---------------- */
 function Navbar() {
   return (
     <header className="nav glassy">
       <Link to="/" className="brand">
-        <span className="brand-flag">IN</span>
+        <span className="brand-flag">IN</span> 
         <span className="brand-text">GrantTracker</span>
       </Link>
 
       <nav className="nav-links">
-        <Link to="/chart" className="nav-link">Dashboard</Link>
-        <Link to="/creator-login" className="nav-cta">Creator Login</Link>
+        <Link className="nav-link" to="/chart">Dashboard</Link>
+        <Link className="nav-cta" to="/creator-login">Creator Login</Link>
       </nav>
     </header>
   );
