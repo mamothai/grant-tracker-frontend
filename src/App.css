@@ -387,3 +387,12 @@ html, body {
     height: 130px !important;
   }
 }
+.float-icon {
+  animation: floatY 4s ease-in-out infinite;
+}
+
+@keyframes floatY {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
