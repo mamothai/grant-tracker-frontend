@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import "../App.css";
 
 const SectorDetails = () => {
   const { sectorName } = useParams();
@@ -64,33 +65,82 @@ const SectorDetails = () => {
   }, []);
 
   const filtered = grants.filter((g) => g.field === sectorName);
+  const totalAllocation = filtered.reduce((sum, g) => sum + (g.amount || 0), 0);
 
   return (
-    <div className="flex-center">
-      <div className="glass max-w-5xl w-full p-8">
-        <h1 className="text-gradient text-3xl font-bold text-center mb-6">
-          {sectorName} Grants
-        </h1>
+    <div className="sector-details-page reveal">
+      <div className="sector-details-container">
+        <div className="sector-details-header glassy">
+          <div className="sector-details-icon">📊</div>
+          <h1 className="gradient sector-details-title">{sectorName} Grants</h1>
+          <p className="muted sector-details-subtitle">
+            Explore all grants in the {sectorName} sector with full transparency.
+          </p>
+          
+          <div className="sector-details-stats">
+            <div className="sector-stat">
+              <div className="sector-stat-value">{filtered.length}</div>
+              <div className="sector-stat-label">Total Grants</div>
+            </div>
+            <div className="sector-stat">
+              <div className="sector-stat-value">₹{(totalAllocation / 10000000).toFixed(1)}Cr</div>
+              <div className="sector-stat-label">Total Allocation</div>
+            </div>
+          </div>
+        </div>
 
         {filtered.length ? (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="sector-grants-grid">
             {filtered.map((g) => (
-              <div key={g.id} className="glass p-4 text-left">
-                <h3 className="text-cyan text-xl font-bold mb-2">{g.title}</h3>
-                <p className="text-sm text-gray mb-2"><strong>Grant ID:</strong> {g.id}</p>
-                <p className="mb-1"><strong>Amount:</strong> ₹{g.amount.toLocaleString()}</p>
-                <p className="mb-1"><strong>Implementing Body:</strong> {g.creator}</p>
-                <p className="text-gray text-sm mt-2">{g.description}</p>
-              </div>
+              <Link 
+                key={g.id} 
+                to={`/view/${g.id}`}
+                className="sector-grant-card glassy"
+              >
+                <div className="sector-grant-header">
+                  <h3 className="gradient sector-grant-title">{g.title}</h3>
+                  <div className="sector-grant-badge">{g.field}</div>
+                </div>
+                <div className="sector-grant-body">
+                  <div className="sector-grant-info">
+                    <div className="sector-grant-info-item">
+                      <span className="sector-grant-info-label">Grant ID:</span>
+                      <span className="sector-grant-info-value">{g.id}</span>
+                    </div>
+                    <div className="sector-grant-info-item">
+                      <span className="sector-grant-info-label">Amount:</span>
+                      <span className="sector-grant-info-value">₹{g.amount?.toLocaleString() || '0'}</span>
+                    </div>
+                    {g.creator && (
+                      <div className="sector-grant-info-item">
+                        <span className="sector-grant-info-label">Implementing Body:</span>
+                        <span className="sector-grant-info-value">{g.creator}</span>
+                      </div>
+                    )}
+                  </div>
+                  {g.description && (
+                    <p className="muted sector-grant-description">{g.description}</p>
+                  )}
+                </div>
+                <div className="sector-grant-footer">
+                  <span className="sector-grant-link">View Details →</span>
+                </div>
+              </Link>
             ))}
           </div>
         ) : (
-          <p className="text-gray text-center">No grants found for this sector.</p>
+          <div className="sector-no-grants glassy">
+            <div className="sector-no-grants-icon">📭</div>
+            <p className="muted sector-no-grants-text">No grants found for this sector.</p>
+            <Link to="/chart" className="btn-primary sector-back-btn">
+              Back to Dashboard
+            </Link>
+          </div>
         )}
 
-        <Link to="/chart" className="btn-glass block text-center mt-8">
-          ⬅ Back to Dashboard
-        </Link>
+        <div className="sector-details-footer">
+          <Link to="/chart" className="login-footer-link">← Back to Dashboard</Link>
+        </div>
       </div>
     </div>
   );

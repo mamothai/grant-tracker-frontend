@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./App.css";
 
 export default function CreatorLogin() {
   const [email, setEmail] = useState("");
@@ -17,41 +18,84 @@ export default function CreatorLogin() {
   };
 
   return (
-    <main className="container fade-up">
-      <div className="glassy" style={{ maxWidth: 480, margin: "40px auto" }}>
-        <h1
-          className="gradient"
-          style={{ fontWeight: 800, fontSize: "2rem", marginBottom: 8 }}
-        >
-          Creator Login
-        </h1>
-        <p className="muted mb-4">
-          Authorized personnel only — please log in to access the creator
-          dashboard.
-        </p>
+    <main className="login-page reveal">
+      <div className="login-page-container">
+        <div className="login-left">
+          <div className="login-hero">
+            <h1 className="login-hero-title gradient">Creator Portal</h1>
+            <p className="login-hero-subtitle muted">
+              Register and manage grants with transparency and accountability.
+            </p>
+            <div className="login-features">
+              <div className="login-feature">
+                <div className="login-feature-icon">✨</div>
+                <div className="login-feature-text">
+                  <strong>Easy Grant Creation</strong>
+                  <span>Quick and simple grant registration</span>
+                </div>
+              </div>
+              <div className="login-feature">
+                <div className="login-feature-icon">📊</div>
+                <div className="login-feature-text">
+                  <strong>Track Progress</strong>
+                  <span>Monitor your grants in real-time</span>
+                </div>
+              </div>
+              <div className="login-feature">
+                <div className="login-feature-icon">🔒</div>
+                <div className="login-feature-text">
+                  <strong>Secure & Verified</strong>
+                  <span>Blockchain-verified grant records</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <input
-          className="input mb-3"
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          className="input mb-4"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="login-right">
+          <div className="login-card glassy reveal-right">
+            <div className="login-card-header">
+              <div className="login-icon-wrapper">
+                <span className="creator-dot"></span>
+              </div>
+              <h2 className="login-card-title gradient">Creator Login</h2>
+              <p className="login-card-subtitle muted">
+                Authorized personnel only — please log in to access the creator dashboard.
+              </p>
+            </div>
 
-        <button
-          className="btn btn-primary w-full"
-          style={{ width: "100%" }}
-          onClick={handleLogin}
-        >
-          Login
-        </button>
+            <div className="login-form">
+              <label className="form-label">Email Address</label>
+              <input
+                className="input"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <label className="form-label">Password</label>
+              <input
+                className="input"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <button
+                className="btn-primary login-btn"
+                onClick={handleLogin}
+              >
+                Login to Dashboard
+              </button>
+            </div>
+
+            <div className="login-footer">
+              <Link to="/" className="login-footer-link">← Back to Home</Link>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

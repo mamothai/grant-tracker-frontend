@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import './App.css'
 
 export default function GovDashboard() {
   const [grantId, setGrantId] = useState('')
@@ -27,38 +28,93 @@ export default function GovDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-900 to-slate-800">
-      <div className="max-w-2xl mx-auto glass p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-white">Govt Upload Portal</h2>
-        <form onSubmit={handleUpload} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Grant ID (e.g. GT-2025-1234)"
-            value={grantId}
-            onChange={(e) => setGrantId(e.target.value)}
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-gray-400 border border-white/30"
-          />
-          <input
-            type="text"
-            placeholder="Update Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-gray-400 border border-white/30"
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-            className="w-full p-3 rounded-lg bg-white/20 text-white"
-          />
-          <button
-            type="submit"
-            disabled={uploading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold py-3 rounded-xl hover:scale-105 transition disabled:opacity-70"
-          >
-            {uploading ? 'Uploading...' : 'Upload Update'}
-          </button>
-        </form>
+    <div className="gov-dashboard-page reveal">
+      <div className="gov-dashboard-container">
+        <div className="gov-dashboard-header">
+          <div className="gov-dashboard-icon">📋</div>
+          <h1 className="gradient gov-dashboard-title">Government Upload Portal</h1>
+          <p className="muted gov-dashboard-subtitle">
+            Upload proofs, update milestones, and maintain transparency for grants.
+          </p>
+        </div>
+
+        <div className="glassy gov-upload-form">
+          <form onSubmit={handleUpload}>
+            <div className="form-group">
+              <label className="form-label">Grant ID *</label>
+              <input
+                type="text"
+                placeholder="e.g. GT-2025-1234"
+                value={grantId}
+                onChange={(e) => setGrantId(e.target.value)}
+                className="input"
+              />
+              <small className="form-hint muted">Enter the unique Grant ID for the update</small>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Update Title *</label>
+              <input
+                type="text"
+                placeholder="e.g. First Milestone Completed"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="input"
+              />
+              <small className="form-hint muted">Brief description of the update</small>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Upload Proof (Image) *</label>
+              <div className="file-upload-wrapper">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  className="file-input"
+                  id="file-upload"
+                />
+                <label htmlFor="file-upload" className="file-upload-label">
+                  {file ? file.name : 'Choose File'}
+                </label>
+              </div>
+              <small className="form-hint muted">Upload an image as proof (receipt, photo, document)</small>
+            </div>
+
+            <button
+              type="submit"
+              disabled={uploading}
+              className="btn-primary gov-upload-btn"
+            >
+              {uploading ? 'Uploading...' : 'Upload Update'}
+            </button>
+          </form>
+        </div>
+
+        <div className="gov-dashboard-info glassy">
+          <h3 className="gov-dashboard-info-title">What to Upload?</h3>
+          <div className="gov-dashboard-info-grid">
+            <div className="gov-dashboard-info-item">
+              <div className="gov-dashboard-info-icon">📸</div>
+              <strong>Site Photos</strong>
+              <span>Visual proof of progress</span>
+            </div>
+            <div className="gov-dashboard-info-item">
+              <div className="gov-dashboard-info-icon">🧾</div>
+              <strong>Receipts</strong>
+              <span>Financial documentation</span>
+            </div>
+            <div className="gov-dashboard-info-item">
+              <div className="gov-dashboard-info-icon">📄</div>
+              <strong>Documents</strong>
+              <span>Official certificates and reports</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gov-dashboard-footer">
+          <Link to="/" className="login-footer-link">← Back to Home</Link>
+        </div>
       </div>
     </div>
   )

@@ -62,84 +62,107 @@ export default function CreateGrant() {
   };
 
   return (
-    <div style={{ padding: 40, minHeight: "80vh" }}>
-      <div className="glassy" style={{ maxWidth: 800, margin: "0 auto" }}>
-        <h2 style={{ marginBottom: 8 }}>Create New Grant</h2>
-        <p className="muted" style={{ marginBottom: 20 }}>
-          Fill in the details below and generate a Grant ID. Only logged-in creators can create grants.
-        </p>
-
-        <label className="text-sm">Grant Title</label>
-        <input
-          className="input"
-          placeholder="e.g. Rural School Sanitation Initiative"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-
-        <label className="text-sm">Amount (₹)</label>
-        <input
-          className="input"
-          type="number"
-          placeholder="e.g. 1500000"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-
-        <label className="text-sm">Field / Sector</label>
-        <input
-          className="input"
-          placeholder="e.g. Education, Health, Agriculture"
-          value={field}
-          onChange={(e) => setField(e.target.value)}
-        />
-
-        <label className="text-sm">Beneficiary (optional)</label>
-        <input
-          className="input"
-          placeholder="Organization or person (optional)"
-          value={beneficiary}
-          onChange={(e) => setBeneficiary(e.target.value)}
-        />
-
-        <label className="text-sm">Short Description (optional)</label>
-        <textarea
-          className="input textarea"
-          rows={4}
-          placeholder="Short summary of the grant purpose..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <div style={{ marginTop: 16, display: "flex", gap: 12, alignItems: "center" }}>
-          <button
-            className="btn-primary"
-            onClick={createGrant}
-            disabled={loading}
-            style={{ minWidth: 160 }}
-          >
-            {loading ? "Creating…" : "Generate Grant ID"}
-          </button>
-
-          <button
-            className="btn-ghost"
-            onClick={() => {
-              // quick reset
-              setTitle("");
-              setAmount("");
-              setField("");
-              setBeneficiary("");
-              setDescription("");
-            }}
-            style={{ minWidth: 120 }}
-          >
-            Reset
-          </button>
+    <div className="create-grant-page reveal">
+      <div className="create-grant-container">
+        <div className="create-grant-header">
+          <div className="create-grant-icon">✨</div>
+          <h1 className="gradient create-grant-title">Create New Grant</h1>
+          <p className="muted create-grant-subtitle">
+            Fill in the details below and generate a Grant ID. Only logged-in creators can create grants.
+          </p>
         </div>
 
-        <p className="mt-4 text-sm muted">
-          Note: Grants are stored in your browser's localStorage (for demo). To persist server-side, integrate an API.
-        </p>
+        <div className="glassy create-grant-form">
+
+          <div className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Grant Title *</label>
+              <input
+                className="input"
+                placeholder="e.g. Rural School Sanitation Initiative"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Amount (₹) *</label>
+              <input
+                className="input"
+                type="number"
+                placeholder="e.g. 1500000"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Field / Sector *</label>
+            <select
+              className="input"
+              value={field}
+              onChange={(e) => setField(e.target.value)}
+            >
+              <option value="">Select a sector</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Education">Education</option>
+              <option value="Health">Health</option>
+              <option value="Infrastructure">Infrastructure</option>
+              <option value="Environment">Environment</option>
+              <option value="Technology">Technology</option>
+              <option value="Women & Child">Women & Child</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Beneficiary (optional)</label>
+            <input
+              className="input"
+              placeholder="Organization or person (optional)"
+              value={beneficiary}
+              onChange={(e) => setBeneficiary(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Short Description (optional)</label>
+            <textarea
+              className="input textarea"
+              rows={4}
+              placeholder="Short summary of the grant purpose..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div className="form-actions">
+            <button
+              className="btn-primary form-btn-primary"
+              onClick={createGrant}
+              disabled={loading}
+            >
+              {loading ? "Creating…" : "Generate Grant ID"}
+            </button>
+
+            <button
+              className="btn-secondary form-btn-secondary"
+              onClick={() => {
+                setTitle("");
+                setAmount("");
+                setField("");
+                setBeneficiary("");
+                setDescription("");
+              }}
+            >
+              Reset Form
+            </button>
+          </div>
+
+          <p className="form-note muted">
+            <strong>Note:</strong> Grants are stored in your browser's localStorage (for demo). To persist server-side, integrate an API.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -1,39 +1,101 @@
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import './App.css'
 
 export default function PublicView() {
   const { id } = useParams()
+  const [grant, setGrant] = useState(null)
   const [updates, setUpdates] = useState([])
 
-  // Simulate real-time updates (replace with backend later)
+  // Load grant data and updates
   useEffect(() => {
+    // Try to load from localStorage
+    const grants = JSON.parse(localStorage.getItem('grants') || '[]')
+    const foundGrant = grants.find(g => g.id === id)
+    
+    if (foundGrant) {
+      setGrant(foundGrant)
+    } else {
+      // Default fallback
+      setGrant({
+        id,
+        title: 'Grant Details',
+        amount: 50000,
+        field: 'General'
+      })
+    }
+
+    // Simulate real-time updates (replace with backend later)
     const mockUpdates = [
-      { title: '₹50,000 Released', date: new Date(), image: 'https://via.placeholder.com/300x200?text=Receipt' },
-      { title: 'Site Visit Completed', date: new Date(), image: 'https://via.placeholder.com/300x200?text=Photo' },
+      { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
+      { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
     ]
     setUpdates(mockUpdates)
   }, [id])
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-900 to-slate-800">
-      <div className="max-w-4xl mx-auto">
-        <div className="glass p-8 mb-6 text-center">
-          <h1 className="text-4xl font-bold mb-2 text-cyan-400">Grant ID: {id}</h1>
-          <p className="text-2xl text-green-400">₹50,000 Allocated</p>
-        </div>
-        <div className="glass p-8">
-          <h2 className="text-2xl font-bold mb-6 text-white">Live Updates ({updates.length})</h2>
-          <div className="space-y-6">
-            {updates.map((update, i) => (
-              <div key={i} className="bg-white/10 p-6 rounded-xl border border-white/20">
-                <div className="flex justify-between items-center mb-3">
-                  <p className="text-lg font-semibold text-white">{update.title}</p>
-                  <p className="text-sm text-gray-400">{update.date.toLocaleString()}</p>
+    <div className="public-view-page reveal">
+      <div className="public-view-container">
+        <div className="public-view-header glassy">
+          <div className="public-view-badge">Grant Details</div>
+          <h1 className="gradient public-view-title">Grant ID: {id}</h1>
+          {grant && (
+            <>
+              <h2 className="public-view-subtitle">{grant.title}</h2>
+              <div className="public-view-stats">
+                <div className="public-view-stat">
+                  <div className="public-view-stat-label">Amount Allocated</div>
+                  <div className="public-view-stat-value">₹{grant.amount?.toLocaleString() || '50,000'}</div>
                 </div>
-                <img src={update.image} alt="Proof" className="w-full max-w-md rounded-lg shadow-lg" />
+                <div className="public-view-stat">
+                  <div className="public-view-stat-label">Sector</div>
+                  <div className="public-view-stat-value">{grant.field || 'General'}</div>
+                </div>
+                {grant.creator && (
+                  <div className="public-view-stat">
+                    <div className="public-view-stat-label">Creator</div>
+                    <div className="public-view-stat-value">{grant.creator}</div>
+                  </div>
+                )}
               </div>
-            ))}
+            </>
+          )}
+        </div>
+
+        <div className="public-view-updates glassy">
+          <div className="public-view-updates-header">
+            <h2 className="gradient public-view-updates-title">Live Updates</h2>
+            <div className="public-view-updates-count">{updates.length} Update{updates.length !== 1 ? 's' : ''}</div>
           </div>
+
+          {updates.length > 0 ? (
+            <div className="public-view-updates-list">
+              {updates.map((update, i) => (
+                <div key={i} className="public-view-update-card glassy">
+                  <div className="public-view-update-header">
+                    <h3 className="public-view-update-title">{update.title}</h3>
+                    <div className="public-view-update-date">{update.date.toLocaleString()}</div>
+                  </div>
+                  <div className="public-view-update-image-wrapper">
+                    <img 
+                      src={update.image} 
+                      alt="Proof" 
+                      className="public-view-update-image" 
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="public-view-no-updates">
+              <div className="public-view-no-updates-icon">📭</div>
+              <p className="muted">No updates available yet. Check back later!</p>
+            </div>
+          )}
+        </div>
+
+        <div className="public-view-footer">
+          <Link to="/chart" className="login-footer-link">← Back to Dashboard</Link>
         </div>
       </div>
     </div>
