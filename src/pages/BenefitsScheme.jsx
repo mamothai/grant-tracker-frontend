@@ -92,6 +92,21 @@ const schemesData = [
     objectives: "Prevent gender discrimination, enforce later marriage for girls and encourage education.",
     benefits: ["Financial incentives for girls", "Education upto intermediate", "Promote family planning norms"],
     moreInfoLink: "https://www.tnsocialwelfare.tn.gov.in/website-345/en/specilisationschild-welfare/chief-ministers-girl-child-protection-scheme"
+  },
+  {
+    schemeName: "MSME Scheme (Micro, Small & Medium Enterprises)",
+    category: "General Welfare – Business/Entrepreneurs",
+    launchedBy: "Government of India – Ministry of MSME",
+    launchDate: "Ongoing scheme (various sub-schemes)",
+    objectives: "Support micro, small and medium enterprises through registration, access to credit, subsidies, technology upgrades, market access and infrastructure.",
+    benefits: [
+      "Easier access to business loans at lower interest rates and collateral-free loans",
+      "Subsidies and incentives for technology upgradation, ISO certification, bar-code registration, etc.",
+      "Registration under the Udyam Registration Portal gives priority access to schemes, bank credit, and procurement benefits",
+      "Protection from delayed payments from buyers (as per MSMED Act)",
+      "Support for innovation, design, and export competitiveness (via sub-schemes like ZED certification)"
+    ],
+    moreInfoLink: "https://msme.gov.in/sites/default/files/MSME_Schemes_English_0.pdf"
   }
 ];
 
@@ -173,6 +188,7 @@ export default function BenefitsScheme() {
                     {scheme.category.includes("Women") ? "👩" : 
                      scheme.category.includes("Girl") ? "👧" : 
                      scheme.category.includes("Children") ? "🧒" : 
+                     scheme.category.includes("Business") || scheme.category.includes("Entrepreneurs") ? "💼" :
                      scheme.category.includes("General") ? "🤝" : "📋"}
                   </div>
                   <div className="scheme-card-badge">{scheme.category}</div>
