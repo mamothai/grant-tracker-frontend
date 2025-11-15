@@ -1,5 +1,5 @@
 // src/App.jsx
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 import Home from "./Home.jsx";
@@ -15,10 +15,57 @@ import SectorDetails from "./pages/SectorDetails.jsx";
 import "./App.css";
 import "./scrollAnimations.css";
 
+// Initialize scroll animations using Intersection Observer
+function initScrollAnimations() {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        // Once visible, we can unobserve to improve performance
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all elements with reveal classes
+  const revealElements = document.querySelectorAll(
+    ".reveal, .reveal-right, .reveal-left, .fade-in"
+  );
+  
+  revealElements.forEach((el) => {
+    // Only observe elements that aren't already visible
+    if (!el.classList.contains("visible")) {
+      observer.observe(el);
+    }
+  });
+
+  return observer;
+}
+
 export default function App() {
+  const location = useLocation();
+  
   useEffect(() => {
-    initScrollAnimations();
-  }, []);
+    let observer = null;
+    
+    // Initialize animations after DOM is ready
+    const timeoutId = setTimeout(() => {
+      observer = initScrollAnimations();
+    }, 100);
+
+    // Cleanup function
+    return () => {
+      clearTimeout(timeoutId);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [location]); // Re-initialize when route changes
 
   return (
     <div className="app-root">
