@@ -252,6 +252,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Government Benefits Section */}
+      <section className="panel reveal">
+        <div className="panel-left">
+          <div className="feature-card glassy">
+            <div className="feature-icon-wrapper">
+              <span style={{ fontSize: "3rem" }}>🇮🇳</span>
+            </div>
+            <h2 className="panel-title gradient">Government Benefits</h2>
+            <p className="muted">Explore comprehensive government schemes and benefits designed to empower citizens across all sectors.</p>
+            <Link to="/benefits" className="cta cta-primary">View All Benefits</Link>
+          </div>
+        </div>
+        <div className="panel-right reveal-right delay-2">
+          <div className="feature-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80&auto=format&fit=crop" 
+              alt="Government Benefits" 
+              className="feature-image"
+            />
+            <div className="feature-image-overlay"></div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section className="features-grid-section reveal">
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>

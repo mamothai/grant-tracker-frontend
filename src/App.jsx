@@ -11,6 +11,7 @@ import GovLogin from "./GovLogin.jsx";
 import GovDashboard from "./GovDashboard.jsx";
 import PublicView from "./PublicView.jsx";
 import SectorDetails from "./pages/SectorDetails.jsx";
+import BenefitsScheme from "./pages/BenefitsScheme.jsx";
 
 import "./App.css";
 import "./scrollAnimations.css";
@@ -80,6 +81,7 @@ export default function App() {
         <Route path="/gov-dashboard" element={<GovDashboard />} />
         <Route path="/view/:id" element={<PublicView />} />
         <Route path="/sectors/:sectorName" element={<SectorDetails />} />
+        <Route path="/benefits" element={<BenefitsScheme />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
@@ -96,6 +98,7 @@ function Navbar() {
 
       <nav className="nav-links">
         <Link className="nav-link" to="/chart">Dashboard</Link>
+        <Link className="nav-link" to="/benefits">Benefits</Link>
         <Link className="nav-cta" to="/creator-login">Creator Login</Link>
       </nav>
     </header>

@@ -666,3 +666,1152 @@ a {
     padding: 16px;
   }
 }
+
+/* ---------------------------------------------------
+   LOGIN PAGES
+--------------------------------------------------- */
+
+.login-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.login-page-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.login-left {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.login-hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.login-hero-subtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.login-feature-icon {
+  font-size: 2rem;
+  min-width: 40px;
+}
+
+.login-feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.login-feature-text strong {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.login-feature-text span {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
+.login-right {
+  display: flex;
+  justify-content: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+}
+
+.login-card-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 50%;
+  border: 2px solid rgba(6, 182, 212, 0.3);
+}
+
+.login-icon-wrapper.gov-icon {
+  font-size: 2rem;
+}
+
+.login-card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.login-card-subtitle {
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #d4d4d8;
+}
+
+.form-hint {
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-footer-link {
+  color: #06b6d4;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.login-footer-link:hover {
+  color: #a855f7;
+}
+
+/* ---------------------------------------------------
+   CREATE GRANT PAGE
+--------------------------------------------------- */
+
+.create-grant-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.create-grant-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.create-grant-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.create-grant-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.create-grant-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.create-grant-subtitle {
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+.create-grant-form {
+  padding: 40px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.form-btn-primary,
+.form-btn-secondary {
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+}
+
+.form-btn-primary {
+  background: linear-gradient(to right, #06b6d4, #a855f7);
+  color: white;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+  flex: 1;
+}
+
+.form-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.7);
+}
+
+.form-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.form-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-note {
+  margin-top: 24px;
+  font-size: 0.9rem;
+  padding: 16px;
+  background: rgba(6, 182, 212, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #06b6d4;
+}
+
+/* ---------------------------------------------------
+   SUGGESTION PAGE
+--------------------------------------------------- */
+
+.suggestion-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.suggestion-page-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.suggestion-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.suggestion-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.suggestion-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.suggestion-subtitle {
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+.suggestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.suggestion-submit-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.suggestion-info {
+  margin-top: 40px;
+  padding: 40px;
+}
+
+.suggestion-info-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(to right, #38bdf8, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.suggestion-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.suggestion-info-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.suggestion-info-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.suggestion-info-item strong {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.suggestion-info-item span {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------
+   GOV DASHBOARD PAGE
+--------------------------------------------------- */
+
+.gov-dashboard-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.gov-dashboard-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.gov-dashboard-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.gov-dashboard-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.gov-dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.gov-dashboard-subtitle {
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+.gov-upload-form {
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.file-upload-wrapper {
+  position: relative;
+  margin-top: 8px;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.file-upload-label {
+  display: inline-block;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.file-upload-label:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #06b6d4;
+}
+
+.gov-upload-btn {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.gov-dashboard-info {
+  padding: 40px;
+}
+
+.gov-dashboard-info-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(to right, #38bdf8, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.gov-dashboard-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.gov-dashboard-info-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gov-dashboard-info-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.gov-dashboard-info-item strong {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.gov-dashboard-info-item span {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
+.gov-dashboard-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------
+   PUBLIC VIEW PAGE
+--------------------------------------------------- */
+
+.public-view-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.public-view-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.public-view-header {
+  text-align: center;
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.public-view-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #06b6d4;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.public-view-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.public-view-subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #d4d4d8;
+  margin-bottom: 30px;
+}
+
+.public-view-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.public-view-stat {
+  text-align: center;
+}
+
+.public-view-stat-label {
+  font-size: 0.9rem;
+  color: #a1a1aa;
+  margin-bottom: 8px;
+}
+
+.public-view-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #06b6d4, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.public-view-updates {
+  padding: 40px;
+}
+
+.public-view-updates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.public-view-updates-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.public-view-updates-count {
+  padding: 8px 16px;
+  background: rgba(6, 182, 212, 0.1);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #06b6d4;
+  font-weight: 600;
+}
+
+.public-view-updates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.public-view-update-card {
+  padding: 24px;
+}
+
+.public-view-update-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.public-view-update-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.public-view-update-date {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+}
+
+.public-view-update-image-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 600px;
+}
+
+.public-view-update-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.public-view-no-updates {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.public-view-no-updates-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.public-view-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------
+   SECTOR DETAILS PAGE
+--------------------------------------------------- */
+
+.sector-details-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.sector-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sector-details-header {
+  text-align: center;
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.sector-details-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.sector-details-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.sector-details-subtitle {
+  font-size: 1.1rem;
+  margin-top: 8px;
+  margin-bottom: 30px;
+}
+
+.sector-details-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sector-stat {
+  text-align: center;
+}
+
+.sector-stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #06b6d4, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+
+.sector-stat-label {
+  font-size: 0.9rem;
+  color: #a1a1aa;
+}
+
+.sector-grants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.sector-grant-card {
+  padding: 28px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sector-grant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(6, 182, 212, 0.2);
+}
+
+.sector-grant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sector-grant-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  flex: 1;
+}
+
+.sector-grant-badge {
+  padding: 6px 12px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #06b6d4;
+  white-space: nowrap;
+}
+
+.sector-grant-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sector-grant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sector-grant-info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sector-grant-info-label {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
+.sector-grant-info-value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.sector-grant-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+.sector-grant-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sector-grant-link {
+  color: #06b6d4;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.sector-no-grants {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.sector-no-grants-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.sector-no-grants-text {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.sector-back-btn {
+  margin-top: 20px;
+}
+
+.sector-details-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------
+   BENEFITS PAGE
+--------------------------------------------------- */
+
+.benefits-page {
+  min-height: calc(100vh - 100px);
+  padding: 60px 80px;
+}
+
+.benefits-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.benefits-header {
+  text-align: center;
+  padding: 50px 40px;
+  margin-bottom: 40px;
+}
+
+.benefits-header-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.benefits-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.benefits-subtitle {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.benefits-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.benefits-stat {
+  text-align: center;
+}
+
+.benefits-stat-value {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #06b6d4, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.benefits-stat-label {
+  font-size: 0.95rem;
+  color: #a1a1aa;
+  font-weight: 500;
+}
+
+.benefits-filters {
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.benefits-search {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #a1a1aa;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.2s, background 0.2s;
+}
+
+.search-input:focus {
+  border-color: #06b6d4;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.benefits-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.category-filter-btn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #d4d4d8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.category-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.category-filter-btn.active {
+  background: linear-gradient(to right, #06b6d4, #a855f7);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+
+.benefits-schemes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.benefits-scheme-card {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefits-scheme-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(6, 182, 212, 0.3);
+}
+
+.scheme-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.scheme-card-icon {
+  font-size: 2.5rem;
+}
+
+.scheme-card-badge {
+  padding: 6px 14px;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #06b6d4;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.scheme-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.scheme-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+}
+
+.scheme-info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.scheme-info-item:last-child {
+  border-bottom: none;
+}
+
+.scheme-info-label {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
+.scheme-info-value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.scheme-card-objectives,
+.scheme-card-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scheme-card-objectives strong,
+.scheme-card-benefits strong {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #d4d4d8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.benefit-icon {
+  color: #06b6d4;
+  font-weight: 700;
+  min-width: 20px;
+}
+
+.scheme-card-link {
+  margin-top: auto;
+  padding: 12px 20px;
+  text-align: center;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 10px;
+  color: #06b6d4;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.scheme-card-link:hover {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+  transform: translateY(-2px);
+}
+
+.benefits-no-results {
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-results-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.no-results-text {
+  font-size: 1.1rem;
+}
+
+.benefits-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* Responsive adjustments for new pages */
+@media (max-width: 900px) {
+  .login-page-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benefits-stats,
+  .sector-details-stats {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .benefits-schemes-grid,
+  .sector-grants-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .benefits-title {
+    font-size: 2rem;
+  }
+
+  .suggestion-info-grid,
+  .gov-dashboard-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .create-grant-page,
+  .suggestion-page,
+  .gov-dashboard-page,
+  .public-view-page,
+  .sector-details-page,
+  .benefits-page {
+    padding: 40px 20px;
+  }
+
+  .login-page {
+    padding: 40px 20px;
+  }
+}
