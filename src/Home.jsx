@@ -108,9 +108,13 @@ export default function Home() {
       {/* HERO */}
       <section className="panel panel-hero reveal">
         <div className="panel-left">
+          <div className="hero-badge">
+            <span className="badge-dot"></span>
+            <span>Transparency • Accountability • Trust</span>
+          </div>
           <h1 className="big-title gradient">GrantTracker Portal</h1>
           <p className="lead muted">
-            A transparent digital system connecting officials, creators, and the public with verified grant activity.
+            A transparent digital system connecting officials, creators, and the public with verified grant activity. Track, verify, and ensure accountability in real-time.
           </p>
 
           <div className="panel-ctas">
@@ -120,58 +124,158 @@ export default function Home() {
               <span className="creator-dot"></span> Creator Login
             </Link>
           </div>
+
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <div className="hero-stat-number">500+</div>
+              <div className="hero-stat-label">Active Grants</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-number">₹50M+</div>
+              <div className="hero-stat-label">Total Allocation</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-number">100%</div>
+              <div className="hero-stat-label">Transparency</div>
+            </div>
+          </div>
         </div>
 
-        <div className="panel-right reveal-right">
-          <IconNetwork />
+        <div className="panel-right reveal-right hero-image-container">
+          <div className="hero-image-wrapper">
+            <img 
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80&auto=format&fit=crop" 
+              alt="Digital Network" 
+              className="hero-image"
+            />
+            <div className="hero-image-overlay"></div>
+          </div>
+          <div className="hero-decoration">
+            <IconNetwork />
+          </div>
         </div>
       </section>
 
       {/* Public Suggestions */}
       <section className="panel reveal">
         <div className="panel-left">
-          <h2 className="panel-title gradient">Public Suggestions</h2>
-          <p className="muted">Submit feedback about any grant for better transparency.</p>
-          <Link to="/suggestions" className="cta cta-primary">Submit Feedback</Link>
+          <div className="feature-card glassy">
+            <div className="feature-icon-wrapper">
+              <IconLight />
+            </div>
+            <h2 className="panel-title gradient">Public Suggestions</h2>
+            <p className="muted">Submit feedback about any grant for better transparency. Your voice matters in building a more accountable system.</p>
+            <Link to="/suggestions" className="cta cta-primary">Submit Feedback</Link>
+          </div>
         </div>
         <div className="panel-right reveal-right delay">
-          <IconLight />
+          <div className="feature-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop" 
+              alt="Transparency and Feedback" 
+              className="feature-image"
+            />
+            <div className="feature-image-overlay"></div>
+          </div>
         </div>
       </section>
 
       {/* Government Panel */}
       <section className="panel reveal">
-        <div className="panel-left">
-          <h2 className="panel-title gradient">Government Dashboard</h2>
-          <p className="muted">Officials can upload proofs, update milestones and maintain trust.</p>
-          <Link to="/gov-login" className="cta cta-primary">Official Login</Link>
+        <div className="panel-right reveal-left delay-1">
+          <div className="feature-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80&auto=format&fit=crop" 
+              alt="Government Dashboard" 
+              className="feature-image"
+            />
+            <div className="feature-image-overlay"></div>
+          </div>
         </div>
-        <div className="panel-right reveal-right delay-1">
-          <IconCloud />
+        <div className="panel-left">
+          <div className="feature-card glassy">
+            <div className="feature-icon-wrapper">
+              <IconCloud />
+            </div>
+            <h2 className="panel-title gradient">Government Dashboard</h2>
+            <p className="muted">Officials can upload proofs, update milestones and maintain trust. Real-time tracking for better governance.</p>
+            <Link to="/gov-login" className="cta cta-primary">Official Login</Link>
+          </div>
         </div>
       </section>
 
       {/* Public Dashboard */}
       <section className="panel reveal">
         <div className="panel-left">
-          <h2 className="panel-title gradient">Public Dashboard</h2>
-          <p className="muted">Explore live charts, distribution & analytics.</p>
-          <Link to="/chart" className="cta cta-primary">View Dashboard</Link>
+          <div className="feature-card glassy">
+            <div className="feature-icon-wrapper">
+              <IconBell />
+            </div>
+            <h2 className="panel-title gradient">Public Dashboard</h2>
+            <p className="muted">Explore live charts, distribution & analytics. Get insights into grant allocations across sectors in real-time.</p>
+            <Link to="/chart" className="cta cta-primary">View Dashboard</Link>
+          </div>
         </div>
         <div className="panel-right reveal-right delay-2">
-          <IconBell />
+          <div className="feature-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&auto=format&fit=crop" 
+              alt="Analytics Dashboard" 
+              className="feature-image"
+            />
+            <div className="feature-image-overlay"></div>
+          </div>
         </div>
       </section>
 
       {/* Creator Portal */}
       <section className="panel reveal">
-        <div className="panel-left">
-          <h2 className="panel-title gradient">Creator Portal</h2>
-          <p className="muted">Creators can register grants and manage entries.</p>
-          <Link to="/creator-login" className="cta cta-primary">Creator Login</Link>
+        <div className="panel-right reveal-left delay-3">
+          <div className="feature-image-container">
+            <img 
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&auto=format&fit=crop" 
+              alt="Creator Portal" 
+              className="feature-image"
+            />
+            <div className="feature-image-overlay"></div>
+          </div>
         </div>
-        <div className="panel-right reveal-right delay-3">
-          <IconRobot />
+        <div className="panel-left">
+          <div className="feature-card glassy">
+            <div className="feature-icon-wrapper">
+              <IconRobot />
+            </div>
+            <h2 className="panel-title gradient">Creator Portal</h2>
+            <p className="muted">Creators can register grants and manage entries. Streamlined process for grant application and tracking.</p>
+            <Link to="/creator-login" className="cta cta-primary">Creator Login</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="features-grid-section reveal">
+        <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
+        <div className="features-grid">
+          <div className="feature-item glassy">
+            <div className="feature-item-icon">🔒</div>
+            <h3 className="feature-item-title">Secure & Verified</h3>
+            <p className="feature-item-desc">All grants are blockchain-verified and tamper-proof</p>
+          </div>
+          <div className="feature-item glassy">
+            <div className="feature-item-icon">📊</div>
+            <h3 className="feature-item-title">Real-Time Tracking</h3>
+            <p className="feature-item-desc">Monitor grant progress with live updates and analytics</p>
+          </div>
+          <div className="feature-item glassy">
+            <div className="feature-item-icon">🌐</div>
+            <h3 className="feature-item-title">Public Transparency</h3>
+            <p className="feature-item-desc">Open access to all grant information and allocations</p>
+          </div>
+          <div className="feature-item glassy">
+            <div className="feature-item-icon">⚡</div>
+            <h3 className="feature-item-title">Fast Processing</h3>
+            <p className="feature-item-desc">Quick grant registration and approval workflows</p>
+          </div>
         </div>
       </section>
 
