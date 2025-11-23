@@ -5,7 +5,6 @@ import * as THREE from 'three';
 
 // Animated background particles
 function BackgroundParticles({ count = 100 }) {
-  const meshRef = useRef();
   const particles = useRef();
 
   const positions = new Float32Array(count * 3);
@@ -38,7 +37,7 @@ function BackgroundParticles({ count = 100 }) {
 
   return (
     <points ref={particles}>
-      <bufferGeometry>
+      <bufferGeometry attach="geometry">
         <bufferAttribute
           attach="attributes-position"
           count={count}
@@ -58,6 +57,7 @@ function BackgroundParticles({ count = 100 }) {
         transparent 
         opacity={0.4}
         blending={THREE.AdditiveBlending}
+        sizeAttenuation={false}
       />
     </points>
   );
@@ -109,30 +109,35 @@ function FloatingShapes() {
 
 // Main background component
 export default function ThreeDBackground({ style = {} }) {
-  return (
-    <div 
-      style={{ 
-        position: 'absolute', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        zIndex: -1,
-        pointerEvents: 'none',
-        ...style 
-      }}
-    >
-      <Canvas
-        camera={{ position: [0, 0, 10], fov: 75 }}
-        gl={{ alpha: true, antialias: true }}
-        style={{ background: 'transparent' }}
+  try {
+    return (
+      <div 
+        style={{ 
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%', 
+          zIndex: -1,
+          pointerEvents: 'none',
+          ...style 
+        }}
       >
-        <ambientLight intensity={0.3} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} />
-        <BackgroundParticles count={80} />
-        <FloatingShapes />
-      </Canvas>
-    </div>
-  );
+        <Canvas
+          camera={{ position: [0, 0, 10], fov: 75 }}
+          gl={{ alpha: true, antialias: true }}
+          style={{ background: 'transparent' }}
+        >
+          <ambientLight intensity={0.3} />
+          <pointLight position={[10, 10, 10]} intensity={0.5} />
+          <BackgroundParticles count={80} />
+          <FloatingShapes />
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.error('Error rendering 3D background:', error);
+    return null;
+  }
 }
 

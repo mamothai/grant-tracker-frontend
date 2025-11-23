@@ -48,30 +48,35 @@ export default function ThreeDCard({
 }) {
   const [hovered, setHovered] = useState(false);
 
-  return (
-    <div
-      className={className}
-      style={{
-        width: '100px',
-        height: '100px',
-        transition: 'transform 0.3s ease',
-        transform: hovered ? 'scale(1.05)' : 'scale(1)',
-        ...style
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <Canvas
-        camera={{ position: [0, 0, 3], fov: 75 }}
-        gl={{ alpha: true, antialias: true }}
-        style={{ background: 'transparent' }}
+  try {
+    return (
+      <div
+        className={className}
+        style={{
+          width: '100px',
+          height: '100px',
+          transition: 'transform 0.3s ease',
+          transform: hovered ? 'scale(1.05)' : 'scale(1)',
+          ...style
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <ambientLight intensity={0.6} />
-        <pointLight position={[5, 5, 5]} intensity={1} />
-        <pointLight position={[-5, -5, -5]} color={color} intensity={0.5} />
-        <CardShape shape={shape} color={color} hovered={hovered} />
-      </Canvas>
-    </div>
-  );
+        <Canvas
+          camera={{ position: [0, 0, 3], fov: 75 }}
+          gl={{ alpha: true, antialias: true }}
+          style={{ background: 'transparent' }}
+        >
+          <ambientLight intensity={0.6} />
+          <pointLight position={[5, 5, 5]} intensity={1} />
+          <pointLight position={[-5, -5, -5]} color={color} intensity={0.5} />
+          <CardShape shape={shape} color={color} hovered={hovered} />
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.error('Error rendering 3D card:', error);
+    return <div style={{ width: '100px', height: '100px', ...style }} />;
+  }
 }
 
