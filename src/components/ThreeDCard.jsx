@@ -1,8 +1,7 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
-import * as THREE from 'three';
 
-// Interactive 3D shape for cards
+// Simple 3D shape for cards
 function CardShape({ shape = 'box', color = '#06b6d4', hovered }) {
   const meshRef = useRef();
   
@@ -10,24 +9,14 @@ function CardShape({ shape = 'box', color = '#06b6d4', hovered }) {
     if (meshRef.current) {
       meshRef.current.rotation.x += delta * 0.5;
       meshRef.current.rotation.y += delta * 0.3;
-      
-      if (hovered) {
-        meshRef.current.scale.lerp(new THREE.Vector3(1.2, 1.2, 1.2), 0.1);
-      } else {
-        meshRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
-      }
     }
   });
 
-  const geometry = shape === 'box' 
-    ? <boxGeometry args={[1, 1, 1]} />
-    : shape === 'sphere'
-    ? <sphereGeometry args={[0.6, 32, 32]} />
-    : <octahedronGeometry args={[0.7, 0]} />;
-
   return (
-    <mesh ref={meshRef}>
-      {geometry}
+    <mesh ref={meshRef} scale={hovered ? 1.2 : 1}>
+      {shape === 'box' && <boxGeometry args={[1, 1, 1]} />}
+      {shape === 'sphere' && <sphereGeometry args={[0.6, 32, 32]} />}
+      {shape === 'octahedron' && <octahedronGeometry args={[0.7, 0]} />}
       <meshStandardMaterial 
         color={color} 
         emissive={color}
@@ -63,17 +52,8 @@ export default function ThreeDCard({
     >
       <Canvas
         camera={{ position: [0, 0, 3], fov: 75 }}
-        gl={{ 
-          alpha: true, 
-          antialias: true,
-          powerPreference: "high-performance"
-        }}
-        dpr={[1, 2]}
+        gl={{ alpha: true, antialias: true }}
         style={{ background: 'transparent', width: '100%', height: '100%' }}
-        onCreated={(state) => {
-          // Ensure proper rendering
-          state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        }}
       >
         <ambientLight intensity={0.6} />
         <pointLight position={[5, 5, 5]} intensity={1} />

@@ -29,7 +29,7 @@ export default function GrantSectorChart() {
       <div className="chart-wrapper glassy" style={{ position: 'relative' }}>
         <ErrorBoundary fallback={<ThreeDSceneFallback style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }} />}>
           <div style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }}>
-            <ThreeDScene showShapes={true} showParticles={false} showNetwork={false} interactive={true} />
+            <ThreeDScene showShapes={true} interactive={true} />
           </div>
         </ErrorBoundary>
         <div className="chart-stats">

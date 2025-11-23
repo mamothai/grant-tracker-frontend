@@ -160,7 +160,7 @@ export default function Home() {
           </div>
           <ErrorBoundary fallback={<ThreeDSceneFallback style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }} />}>
             <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
-              <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
+              <ThreeDScene showShapes={true} interactive={true} />
             </div>
           </ErrorBoundary>
           <div className="hero-decoration" style={{ zIndex: 0 }}>
