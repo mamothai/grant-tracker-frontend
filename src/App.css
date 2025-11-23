@@ -14,11 +14,15 @@ body {
   color: #e5e7eb;
   min-height: 100vh;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .app-root {
   min-height: 100vh;
   width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* 3D Fallback Animations */
@@ -57,7 +61,7 @@ a {
 
 .nav {
   width: 100%;
-  padding: 18px 40px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -67,6 +71,8 @@ a {
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .brand {
@@ -74,7 +80,8 @@ a {
   align-items: center;
   gap: 8px;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .brand-flag {
@@ -90,12 +97,15 @@ a {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .nav-link {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #d4d4d8;
+  white-space: nowrap;
+  transition: color 0.2s;
 }
 
 .nav-link:hover {
@@ -108,8 +118,10 @@ a {
   background: linear-gradient(to right, #06b6d4, #a855f7);
   color: white;
   font-weight: 600;
+  font-size: 0.9rem;
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
   transition: 0.2s;
+  white-space: nowrap;
 }
 
 .nav-cta:hover {
@@ -122,25 +134,31 @@ a {
 --------------------------------------------------- */
 
 .page-scroll {
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .panel {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 80px 0;
+  padding: 60px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
 .panel-left {
-  width: 50%;
+  flex: 1;
+  min-width: 280px;
 }
 
 .panel-right {
-  width: 50%;
+  flex: 1;
   display: flex;
   justify-content: center;
+  min-width: 280px;
 }
 
 /* ---------------------------------------------------
@@ -148,9 +166,10 @@ a {
 --------------------------------------------------- */
 
 .big-title {
-  font-size: 3rem;
+  font-size: clamp(1.75rem, 5vw, 3rem);
   font-weight: 800;
   margin-bottom: 20px;
+  line-height: 1.2;
 }
 
 .gradient {
@@ -160,9 +179,10 @@ a {
 }
 
 .panel-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
   margin-bottom: 12px;
+  line-height: 1.3;
 }
 
 /* ---------------------------------------------------
@@ -249,7 +269,7 @@ a {
 }
 
 .lead {
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
   line-height: 1.6;
   margin-bottom: 30px;
 }
@@ -265,20 +285,23 @@ a {
 /* Hero Stats */
 .hero-stats {
   display: flex;
-  gap: 40px;
+  gap: clamp(20px, 5vw, 40px);
   margin-top: 40px;
   padding-top: 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
 }
 
 .hero-stat {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-width: 100px;
 }
 
 .hero-stat-number {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
   background: linear-gradient(to right, #06b6d4, #a855f7);
   -webkit-background-clip: text;
@@ -287,7 +310,7 @@ a {
 }
 
 .hero-stat-label {
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   color: #a1a1aa;
   font-weight: 500;
 }
@@ -354,9 +377,11 @@ a {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  padding: 32px;
+  padding: clamp(24px, 4vw, 32px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .feature-card:hover {
@@ -410,20 +435,21 @@ a {
 
 /* Features Grid Section */
 .features-grid-section {
-  padding: 100px 0;
+  padding: clamp(60px, 12vw, 100px) 0;
   text-align: center;
 }
 
 .text-center {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: clamp(30px, 6vw, 50px);
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(20px, 4vw, 30px);
   margin-top: 50px;
+  width: 100%;
 }
 
 .feature-item {
@@ -432,9 +458,11 @@ a {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  padding: 32px;
+  padding: clamp(24px, 4vw, 32px);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .feature-item:hover {
@@ -445,48 +473,52 @@ a {
 }
 
 .feature-item-icon {
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   margin-bottom: 16px;
   display: block;
   filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
 }
 
 .feature-item-title {
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 3vw, 1.4rem);
   font-weight: 700;
   margin-bottom: 12px;
   background: linear-gradient(to right, #38bdf8, #a855f7);
   -webkit-background-clip: text;
   color: transparent;
+  line-height: 1.3;
 }
 
 .feature-item-desc {
   color: #a1a1aa;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   line-height: 1.6;
 }
 
 /* Chart Page Styles */
 .chart-page {
-  padding: 60px 80px;
+  padding: 40px 24px;
   min-height: calc(100vh - 100px);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .chart-page .center {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .chart-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
+  width: 100%;
 }
 
 .chart-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
   margin-bottom: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -514,7 +546,7 @@ a {
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
   background: linear-gradient(to right, #06b6d4, #a855f7);
   -webkit-background-clip: text;
@@ -522,13 +554,43 @@ a {
   line-height: 1;
 }
 
+.chart-container {
+  width: 100%;
+  height: clamp(300px, 50vw, 420px);
+  min-height: 300px;
+}
+
+.chart-decoration {
+  position: absolute;
+  top: clamp(10px, 2vw, 20px);
+  right: clamp(10px, 2vw, 20px);
+  width: clamp(80px, 15vw, 150px);
+  height: clamp(80px, 15vw, 150px);
+  z-index: 1;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.chart-decoration-circle {
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d440, #a855f780);
+  border: 2px solid #06b6d4;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+  animation: rotate-fallback 3s linear infinite;
+}
+
 /* ---------------------------------------------------
    ICONS (animated)
 --------------------------------------------------- */
 
 .big-icon {
-  width: 160px;
-  height: 160px;
+  width: clamp(100px, 20vw, 160px);
+  height: clamp(100px, 20vw, 160px);
   opacity: 0.9;
   animation: float 4s ease-in-out infinite;
   filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
@@ -545,11 +607,11 @@ a {
 --------------------------------------------------- */
 
 .footer {
-  margin-top: 80px;
-  padding: 20px 0;
+  margin-top: clamp(40px, 10vw, 80px);
+  padding: 20px 24px;
   text-align: center;
   color: #cbd5e1;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
 }
 
 .gradient-ink {
@@ -569,10 +631,12 @@ a {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  padding: 32px;
+  padding: clamp(24px, 4vw, 32px);
   box-shadow: 
     0 4px 30px rgba(0, 0, 0, 0.4),
     inset 0 0 20px rgba(255, 255, 255, 0.03);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .page-center {
@@ -597,8 +661,9 @@ a {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
   outline: none;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: border 0.2s, background 0.2s;
+  box-sizing: border-box;
 }
 
 .input:focus {
@@ -612,86 +677,6 @@ a {
   font-family: inherit;
 }
 
-/* ---------------------------------------------------
-   RESPONSIVE
---------------------------------------------------- */
-
-@media (max-width: 900px) {
-  .panel {
-    flex-direction: column;
-    text-align: center;
-    gap: 40px;
-  }
-
-  .panel-left,
-  .panel-right {
-    width: 100%;
-  }
-
-  .big-icon {
-    width: 130px;
-    height: 130px;
-  }
-
-  .page-scroll {
-    padding: 40px 20px;
-  }
-
-  .big-title {
-    font-size: 2.2rem;
-  }
-
-  .hero-stats {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-
-  .panel-ctas {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .wide-btn {
-    width: 100%;
-  }
-
-  .hero-image-wrapper,
-  .feature-image-container {
-    max-width: 100%;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .feature-card {
-    padding: 24px;
-  }
-
-  .hero-badge {
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
-
-  .chart-page {
-    padding: 40px 20px;
-  }
-
-  .chart-wrapper {
-    padding: 24px;
-  }
-
-  .chart-stats {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .stat {
-    padding: 16px;
-  }
-}
 
 /* ---------------------------------------------------
    LOGIN PAGES
@@ -699,13 +684,15 @@ a {
 
 .login-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .login-page-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1fr;
+  gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
   align-items: center;
@@ -718,13 +705,14 @@ a {
 }
 
 .login-hero-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 16px;
+  line-height: 1.2;
 }
 
 .login-hero-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   line-height: 1.6;
   margin-bottom: 30px;
 }
@@ -794,13 +782,14 @@ a {
 }
 
 .login-card-title {
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 4vw, 1.8rem);
   font-weight: 700;
   margin-bottom: 8px;
+  line-height: 1.3;
 }
 
 .login-card-subtitle {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   margin-top: 8px;
 }
 
@@ -852,12 +841,15 @@ a {
 
 .create-grant-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .create-grant-container {
   max-width: 900px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .create-grant-header {
@@ -866,28 +858,29 @@ a {
 }
 
 .create-grant-icon {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 16px;
 }
 
 .create-grant-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 .create-grant-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   margin-top: 8px;
 }
 
 .create-grant-form {
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   margin-bottom: 24px;
 }
@@ -958,12 +951,15 @@ a {
 
 .suggestion-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .suggestion-page-container {
   max-width: 900px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .suggestion-header {
@@ -972,18 +968,19 @@ a {
 }
 
 .suggestion-icon {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 16px;
 }
 
 .suggestion-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 .suggestion-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   margin-top: 8px;
 }
 
@@ -1015,8 +1012,8 @@ a {
 
 .suggestion-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
 }
 
 .suggestion-info-item {
@@ -1047,12 +1044,15 @@ a {
 
 .gov-dashboard-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .gov-dashboard-container {
   max-width: 900px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .gov-dashboard-header {
@@ -1061,23 +1061,24 @@ a {
 }
 
 .gov-dashboard-icon {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 16px;
 }
 
 .gov-dashboard-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 .gov-dashboard-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   margin-top: 8px;
 }
 
 .gov-upload-form {
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
   margin-bottom: 40px;
 }
 
@@ -1132,8 +1133,8 @@ a {
 
 .gov-dashboard-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
 }
 
 .gov-dashboard-info-item {
@@ -1169,17 +1170,20 @@ a {
 
 .public-view-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .public-view-container {
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .public-view-header {
   text-align: center;
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
   margin-bottom: 40px;
 }
 
@@ -1189,29 +1193,32 @@ a {
   background: rgba(6, 182, 212, 0.1);
   border: 1px solid rgba(6, 182, 212, 0.3);
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 2vw, 0.85rem);
   color: #06b6d4;
   margin-bottom: 16px;
   font-weight: 500;
 }
 
 .public-view-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 16px;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .public-view-subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3.5vw, 1.5rem);
   font-weight: 600;
   color: #d4d4d8;
   margin-bottom: 30px;
+  line-height: 1.3;
 }
 
 .public-view-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
   margin-top: 30px;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1228,15 +1235,16 @@ a {
 }
 
 .public-view-stat-value {
-  font-size: 1.8rem;
+  font-size: clamp(1.25rem, 3.5vw, 1.8rem);
   font-weight: 700;
   background: linear-gradient(to right, #06b6d4, #a855f7);
   -webkit-background-clip: text;
   color: transparent;
+  word-break: break-word;
 }
 
 .public-view-updates {
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
 }
 
 .public-view-updates-header {
@@ -1244,11 +1252,14 @@ a {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .public-view-updates-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .public-view-updates-count {
@@ -1267,7 +1278,9 @@ a {
 }
 
 .public-view-update-card {
-  padding: 24px;
+  padding: clamp(20px, 4vw, 24px);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .public-view-update-header {
@@ -1278,9 +1291,10 @@ a {
 }
 
 .public-view-update-title {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
   color: #fff;
+  line-height: 1.3;
 }
 
 .public-view-update-date {
@@ -1291,7 +1305,8 @@ a {
 .public-view-update-image-wrapper {
   border-radius: 12px;
   overflow: hidden;
-  max-width: 600px;
+  max-width: 100%;
+  width: 100%;
 }
 
 .public-view-update-image {
@@ -1321,33 +1336,37 @@ a {
 
 .sector-details-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .sector-details-container {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .sector-details-header {
   text-align: center;
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
   margin-bottom: 40px;
 }
 
 .sector-details-icon {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 16px;
 }
 
 .sector-details-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   margin-bottom: 12px;
+  line-height: 1.2;
 }
 
 .sector-details-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   margin-top: 8px;
   margin-bottom: 30px;
 }
@@ -1355,10 +1374,11 @@ a {
 .sector-details-stats {
   display: flex;
   justify-content: center;
-  gap: 60px;
+  gap: clamp(30px, 8vw, 60px);
   margin-top: 30px;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
 }
 
 .sector-stat {
@@ -1366,12 +1386,14 @@ a {
 }
 
 .sector-stat-value {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   background: linear-gradient(to right, #06b6d4, #a855f7);
   -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 8px;
+  line-height: 1;
+  word-break: break-word;
 }
 
 .sector-stat-label {
@@ -1381,19 +1403,22 @@ a {
 
 .sector-grants-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
   margin-bottom: 40px;
+  width: 100%;
 }
 
 .sector-grant-card {
-  padding: 28px;
+  padding: clamp(20px, 4vw, 28px);
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
   gap: 16px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sector-grant-card:hover {
@@ -1411,10 +1436,12 @@ a {
 }
 
 .sector-grant-title {
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 3vw, 1.4rem);
   font-weight: 700;
   margin: 0;
   flex: 1;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 .sector-grant-badge {
@@ -1505,33 +1532,37 @@ a {
 
 .benefits-page {
   min-height: calc(100vh - 100px);
-  padding: 60px 80px;
+  padding: 40px 24px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .benefits-container {
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .benefits-header {
   text-align: center;
-  padding: 50px 40px;
+  padding: clamp(30px, 6vw, 50px) clamp(24px, 5vw, 40px);
   margin-bottom: 40px;
 }
 
 .benefits-header-icon {
-  font-size: 4rem;
+  font-size: clamp(2.5rem, 8vw, 4rem);
   margin-bottom: 20px;
 }
 
 .benefits-title {
-  font-size: 2.8rem;
+  font-size: clamp(1.75rem, 6vw, 2.8rem);
   font-weight: 800;
   margin-bottom: 16px;
+  line-height: 1.2;
 }
 
 .benefits-subtitle {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   max-width: 700px;
   margin: 0 auto 30px;
   line-height: 1.6;
@@ -1540,10 +1571,11 @@ a {
 .benefits-stats {
   display: flex;
   justify-content: center;
-  gap: 60px;
+  gap: clamp(30px, 8vw, 60px);
   margin-top: 40px;
   padding-top: 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
 }
 
 .benefits-stat {
@@ -1551,7 +1583,7 @@ a {
 }
 
 .benefits-stat-value {
-  font-size: 2.8rem;
+  font-size: clamp(1.75rem, 5vw, 2.8rem);
   font-weight: 800;
   background: linear-gradient(to right, #06b6d4, #a855f7);
   -webkit-background-clip: text;
@@ -1567,7 +1599,7 @@ a {
 }
 
 .benefits-filters {
-  padding: 30px;
+  padding: clamp(20px, 4vw, 30px);
   margin-bottom: 40px;
 }
 
@@ -1635,17 +1667,20 @@ a {
 
 .benefits-schemes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: clamp(20px, 4vw, 28px);
   margin-bottom: 40px;
+  width: 100%;
 }
 
 .benefits-scheme-card {
-  padding: 32px;
+  padding: clamp(24px, 4vw, 32px);
   display: flex;
   flex-direction: column;
   gap: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .benefits-scheme-card:hover {
@@ -1678,10 +1713,11 @@ a {
 }
 
 .scheme-card-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 700;
   margin: 0;
   line-height: 1.3;
+  word-break: break-word;
 }
 
 .scheme-card-info {
@@ -1797,21 +1833,164 @@ a {
   text-align: center;
 }
 
-/* Responsive adjustments for new pages */
-@media (max-width: 900px) {
+/* ---------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+--------------------------------------------------- */
+
+/* Tablet: 768px - 1024px */
+@media (min-width: 768px) {
+  .page-scroll {
+    padding: 50px 40px;
+  }
+
+  .nav {
+    padding: 18px 40px;
+  }
+
+  .nav-links {
+    gap: 32px;
+  }
+
+  .panel {
+    flex-wrap: nowrap;
+  }
+
+  .panel-left,
+  .panel-right {
+    flex: 0 0 48%;
+  }
+
   .login-page-container {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
   }
 
   .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chart-page,
+  .login-page,
+  .create-grant-page,
+  .suggestion-page,
+  .gov-dashboard-page,
+  .public-view-page,
+  .sector-details-page,
+  .benefits-page {
+    padding: 50px 40px;
+  }
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+  .page-scroll {
+    padding: 60px 80px;
+  }
+
+  .nav {
+    padding: 18px 40px;
+  }
+
+  .panel {
+    padding: 80px 0;
+  }
+
+  .chart-page,
+  .login-page,
+  .create-grant-page,
+  .suggestion-page,
+  .gov-dashboard-page,
+  .public-view-page,
+  .sector-details-page,
+  .benefits-page {
+    padding: 60px 80px;
+  }
+}
+
+/* Mobile: up to 767px */
+@media (max-width: 767px) {
+  .nav {
+    padding: 12px 16px;
+  }
+
+  .nav-links {
+    gap: 12px;
+    font-size: 0.85rem;
+  }
+
+  .nav-cta {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .panel {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+    padding: 40px 0;
+  }
+
+  .panel-left,
+  .panel-right {
+    width: 100%;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .panel-ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wide-btn {
+    width: 100%;
+  }
+
+  .hero-image-wrapper,
+  .feature-image-container {
+    max-width: 100%;
+  }
+
+  .features-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-card {
+    padding: 24px;
+  }
+
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  .chart-wrapper {
+    padding: 20px;
+  }
+
+  .chart-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stat {
+    padding: 16px;
+  }
+
+  .big-icon {
+    width: 100px;
+    height: 100px;
   }
 
   .benefits-stats,
   .sector-details-stats {
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
   }
 
   .benefits-schemes-grid,
@@ -1819,76 +1998,35 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .benefits-title {
-    font-size: 2rem;
-  }
-
   .suggestion-info-grid,
   .gov-dashboard-info-grid {
     grid-template-columns: 1fr;
   }
 
-  .create-grant-page,
-  .suggestion-page,
-  .gov-dashboard-page,
-  .public-view-page,
-  .sector-details-page,
-  .benefits-page {
-    padding: 40px 20px;
+  .public-view-updates-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .login-page {
-    padding: 40px 20px;
+  .sector-grant-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .scheme-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .benefits-category-filters {
+    justify-content: flex-start;
+  }
+
+  .category-filter-btn {
+    font-size: 0.85rem;
+    padding: 8px 16px;
   }
 }
 
-/* ---------------------------------------------------
-   3D ELEMENTS STYLES
---------------------------------------------------- */
-
-/* Ensure 3D canvas elements don't interfere with layout */
-canvas {
-  display: block;
-  outline: none;
-}
-
-/* 3D Scene Container */
-.three-d-scene-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.three-d-scene-container canvas {
-  pointer-events: auto;
-}
-
-/* 3D Card hover effects */
-.feature-card:hover .three-d-card-wrapper,
-.feature-item:hover .three-d-card-wrapper {
-  transform: scale(1.1) rotate(5deg);
-}
-
-/* Ensure 3D elements are properly layered */
-.panel-hero {
-  z-index: 1;
-}
-
-.features-grid-section {
-  z-index: 1;
-}
-
-/* Responsive adjustments for 3D elements */
-@media (max-width: 900px) {
-  .three-d-scene-container {
-    width: 100%;
-    height: 300px;
-  }
-  
-  .feature-card .three-d-card-wrapper,
-  .feature-item .three-d-card-wrapper {
-    width: 60px !important;
-    height: 60px !important;
-  }
-}

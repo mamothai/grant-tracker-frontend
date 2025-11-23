@@ -24,31 +24,8 @@ export default function GrantSectorChart() {
       <h1 className="panel-title gradient center">Grant Sector Analytics</h1>
 
       <div className="chart-wrapper glassy" style={{ position: 'relative' }}>
-        <div 
-          style={{ 
-            position: 'absolute', 
-            top: '20px', 
-            right: '20px', 
-            width: '150px', 
-            height: '150px', 
-            zIndex: 1, 
-            opacity: 0.6,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div 
-            style={{
-              width: '60px',
-              height: '60px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #06b6d440, #a855f780)',
-              border: '2px solid #06b6d4',
-              boxShadow: '0 0 30px rgba(6, 182, 212, 0.4)',
-              animation: 'rotate-fallback 3s linear infinite'
-            }}
-          />
+        <div className="chart-decoration">
+          <div className="chart-decoration-circle" />
         </div>
         <div className="chart-stats">
           <div className="stat">
@@ -65,10 +42,17 @@ export default function GrantSectorChart() {
           </div>
         </div>
 
-        <div style={{ width: "100%", height: 420 }}>
-          <ResponsiveContainer>
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={data} dataKey="value" nameKey="name" innerRadius={80} outerRadius={140} onClick={(e) => navigate(`/sectors/${e.name}`)}>
+              <Pie 
+                data={data} 
+                dataKey="value" 
+                nameKey="name" 
+                innerRadius="20%" 
+                outerRadius="35%" 
+                onClick={(e) => navigate(`/sectors/${e.name}`)}
+              >
                 {data.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
               <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
