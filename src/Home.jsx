@@ -1,19 +1,10 @@
 // src/Home.jsx
 import { Link } from "react-router-dom";
-import { useState, useEffect, Suspense, lazy } from "react";
 import "./App.css";
 import ErrorBoundary from "./components/ErrorBoundary";
-
-// Lazy load 3D components with error handling
-const ThreeDScene = lazy(() => 
-  import("./components/ThreeDScene").catch(() => ({ default: () => null }))
-);
-const ThreeDBackground = lazy(() => 
-  import("./components/ThreeDBackground").catch(() => ({ default: () => null }))
-);
-const ThreeDCard = lazy(() => 
-  import("./components/ThreeDCard").catch(() => ({ default: () => null }))
-);
+import ThreeDScene from "./components/ThreeDScene";
+import ThreeDBackground from "./components/ThreeDBackground";
+import ThreeDCard from "./components/ThreeDCard";
 
 function IconNetwork() {
   return (
@@ -121,9 +112,7 @@ export default function Home() {
       {/* HERO */}
       <section className="panel panel-hero reveal" style={{ position: 'relative', overflow: 'hidden' }}>
         <ErrorBoundary>
-          <Suspense fallback={null}>
-            <ThreeDBackground />
-          </Suspense>
+          <ThreeDBackground />
         </ErrorBoundary>
         <div className="panel-left">
           <div className="hero-badge">
@@ -169,11 +158,9 @@ export default function Home() {
             <div className="hero-image-overlay"></div>
           </div>
           <ErrorBoundary>
-            <Suspense fallback={null}>
-              <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
-                <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
-              </div>
-            </Suspense>
+            <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
+              <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
+            </div>
           </ErrorBoundary>
           <div className="hero-decoration" style={{ zIndex: 0 }}>
             <IconNetwork />
@@ -186,11 +173,9 @@ export default function Home() {
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                  <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
-                </div>
-              </Suspense>
+              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
+              </div>
             </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconLight />
@@ -227,11 +212,9 @@ export default function Home() {
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                  <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
-                </div>
-              </Suspense>
+              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
+              </div>
             </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconCloud />
@@ -248,11 +231,9 @@ export default function Home() {
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                  <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
-                </div>
-              </Suspense>
+              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
+              </div>
             </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconBell />
@@ -289,11 +270,9 @@ export default function Home() {
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                  <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
-                </div>
-              </Suspense>
+              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
+              </div>
             </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconRobot />
@@ -332,19 +311,15 @@ export default function Home() {
       {/* Features Grid */}
       <section className="features-grid-section reveal" style={{ position: 'relative' }}>
         <ErrorBoundary>
-          <Suspense fallback={null}>
-            <ThreeDBackground style={{ opacity: 0.3 }} />
-          </Suspense>
+          <ThreeDBackground style={{ opacity: 0.3 }} />
         </ErrorBoundary>
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
         <div className="features-grid">
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                  <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
-                </div>
-              </Suspense>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
+              </div>
             </ErrorBoundary>
             <div className="feature-item-icon">🔒</div>
             <h3 className="feature-item-title">Secure & Verified</h3>
@@ -352,11 +327,9 @@ export default function Home() {
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                  <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
-                </div>
-              </Suspense>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
+              </div>
             </ErrorBoundary>
             <div className="feature-item-icon">📊</div>
             <h3 className="feature-item-title">Real-Time Tracking</h3>
@@ -364,11 +337,9 @@ export default function Home() {
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                  <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
-                </div>
-              </Suspense>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
+              </div>
             </ErrorBoundary>
             <div className="feature-item-icon">🌐</div>
             <h3 className="feature-item-title">Public Transparency</h3>
@@ -376,11 +347,9 @@ export default function Home() {
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
             <ErrorBoundary>
-              <Suspense fallback={null}>
-                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                  <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
-                </div>
-              </Suspense>
+              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
+              </div>
             </ErrorBoundary>
             <div className="feature-item-icon">⚡</div>
             <h3 className="feature-item-title">Fast Processing</h3>

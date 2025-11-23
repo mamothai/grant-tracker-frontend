@@ -123,36 +123,31 @@ export default function ThreeDScene({
   showShapes = true,
   interactive = true 
 }) {
-  try {
-    return (
-      <div style={{ width: '100%', height: '100%', ...style }}>
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 75 }}
-          gl={{ alpha: true, antialias: true }}
-          style={{ background: 'transparent' }}
-        >
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} color="#a855f7" intensity={0.5} />
-          
-          {showShapes && (
-            <>
-              <RotatingShape position={[-2, 1, 0]} color="#06b6d4" shape="box" />
-              <RotatingShape position={[2, -1, 0]} color="#a855f7" shape="sphere" />
-              <RotatingShape position={[0, 2, -1]} color="#ec4899" shape="octahedron" />
-            </>
-          )}
-          
-          {showParticles && <FloatingParticles count={30} />}
-          {showNetwork && <NetworkConnections />}
-          
-          {interactive && <OrbitControls enableZoom={false} enablePan={false} />}
-        </Canvas>
-      </div>
-    );
-  } catch (error) {
-    console.error('Error rendering 3D scene:', error);
-    return <div style={{ width: '100%', height: '100%', ...style }} />;
-  }
+  return (
+    <div style={{ width: '100%', height: '100%', ...style }}>
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        gl={{ alpha: true, antialias: true }}
+        style={{ background: 'transparent', width: '100%', height: '100%' }}
+      >
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <pointLight position={[-10, -10, -10]} color="#a855f7" intensity={0.5} />
+        
+        {showShapes && (
+          <>
+            <RotatingShape position={[-2, 1, 0]} color="#06b6d4" shape="box" />
+            <RotatingShape position={[2, -1, 0]} color="#a855f7" shape="sphere" />
+            <RotatingShape position={[0, 2, -1]} color="#ec4899" shape="octahedron" />
+          </>
+        )}
+        
+        {showParticles && <FloatingParticles count={30} />}
+        {showNetwork && <NetworkConnections />}
+        
+        {interactive && <OrbitControls enableZoom={false} enablePan={false} />}
+      </Canvas>
+    </div>
+  );
 }
 
