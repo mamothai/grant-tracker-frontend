@@ -1,9 +1,19 @@
 // src/Home.jsx
 import { Link } from "react-router-dom";
+import { useState, useEffect, Suspense, lazy } from "react";
 import "./App.css";
-import ThreeDScene from "./components/ThreeDScene";
-import ThreeDBackground from "./components/ThreeDBackground";
-import ThreeDCard from "./components/ThreeDCard";
+import ErrorBoundary from "./components/ErrorBoundary";
+
+// Lazy load 3D components with error handling
+const ThreeDScene = lazy(() => 
+  import("./components/ThreeDScene").catch(() => ({ default: () => null }))
+);
+const ThreeDBackground = lazy(() => 
+  import("./components/ThreeDBackground").catch(() => ({ default: () => null }))
+);
+const ThreeDCard = lazy(() => 
+  import("./components/ThreeDCard").catch(() => ({ default: () => null }))
+);
 
 function IconNetwork() {
   return (
@@ -110,7 +120,11 @@ export default function Home() {
 
       {/* HERO */}
       <section className="panel panel-hero reveal" style={{ position: 'relative', overflow: 'hidden' }}>
-        <ThreeDBackground />
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <ThreeDBackground />
+          </Suspense>
+        </ErrorBoundary>
         <div className="panel-left">
           <div className="hero-badge">
             <span className="badge-dot"></span>
@@ -154,9 +168,13 @@ export default function Home() {
             />
             <div className="hero-image-overlay"></div>
           </div>
-          <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
-            <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
-          </div>
+          <ErrorBoundary>
+            <Suspense fallback={null}>
+              <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
+                <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
+              </div>
+            </Suspense>
+          </ErrorBoundary>
           <div className="hero-decoration" style={{ zIndex: 0 }}>
             <IconNetwork />
           </div>
@@ -167,9 +185,13 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-              <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                  <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconLight />
             </div>
@@ -204,9 +226,13 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-              <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                  <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconCloud />
             </div>
@@ -221,9 +247,13 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-              <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                  <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconBell />
             </div>
@@ -258,9 +288,13 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-              <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+                  <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div style={{ marginTop: '20px' }}>
               <IconRobot />
             </div>
@@ -297,37 +331,57 @@ export default function Home() {
 
       {/* Features Grid */}
       <section className="features-grid-section reveal" style={{ position: 'relative' }}>
-        <ThreeDBackground style={{ opacity: 0.3 }} />
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <ThreeDBackground style={{ opacity: 0.3 }} />
+          </Suspense>
+        </ErrorBoundary>
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
         <div className="features-grid">
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-              <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                  <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div className="feature-item-icon">🔒</div>
             <h3 className="feature-item-title">Secure & Verified</h3>
             <p className="feature-item-desc">All grants are blockchain-verified and tamper-proof</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-              <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                  <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div className="feature-item-icon">📊</div>
             <h3 className="feature-item-title">Real-Time Tracking</h3>
             <p className="feature-item-desc">Monitor grant progress with live updates and analytics</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-              <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                  <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div className="feature-item-icon">🌐</div>
             <h3 className="feature-item-title">Public Transparency</h3>
             <p className="feature-item-desc">Open access to all grant information and allocations</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-              <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+                  <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
+                </div>
+              </Suspense>
+            </ErrorBoundary>
             <div className="feature-item-icon">⚡</div>
             <h3 className="feature-item-title">Fast Processing</h3>
             <p className="feature-item-desc">Quick grant registration and approval workflows</p>

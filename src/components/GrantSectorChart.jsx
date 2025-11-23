@@ -1,8 +1,13 @@
 // src/components/GrantSectorChart.jsx
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useNavigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import "../App.css";
-import ThreeDScene from "./ThreeDScene";
+import ErrorBoundary from "./ErrorBoundary";
+
+const ThreeDScene = lazy(() => 
+  import("./ThreeDScene").catch(() => ({ default: () => null }))
+);
 
 const COLORS = ["#06b6d4", "#a855f7", "#ef4444", "#10b981", "#f59e0b"];
 
@@ -25,9 +30,13 @@ export default function GrantSectorChart() {
       <h1 className="panel-title gradient center">Grant Sector Analytics</h1>
 
       <div className="chart-wrapper glassy" style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }}>
-          <ThreeDScene showShapes={true} showParticles={false} showNetwork={false} interactive={true} />
-        </div>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <div style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }}>
+              <ThreeDScene showShapes={true} showParticles={false} showNetwork={false} interactive={true} />
+            </div>
+          </Suspense>
+        </ErrorBoundary>
         <div className="chart-stats">
           <div className="stat">
             <div className="stat-label">Total Grants</div>
