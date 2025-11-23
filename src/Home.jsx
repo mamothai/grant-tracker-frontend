@@ -1,11 +1,6 @@
 // src/Home.jsx
 import { Link } from "react-router-dom";
 import "./App.css";
-import ErrorBoundary from "./components/ErrorBoundary";
-import ThreeDScene from "./components/ThreeDScene";
-import ThreeDBackground from "./components/ThreeDBackground";
-import ThreeDCard from "./components/ThreeDCard";
-import { ThreeDCardFallback, ThreeDSceneFallback, ThreeDBackgroundFallback } from "./components/ThreeDFallback";
 
 function IconNetwork() {
   return (
@@ -112,9 +107,18 @@ export default function Home() {
 
       {/* HERO */}
       <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden' }}>
-        <ErrorBoundary fallback={<ThreeDBackgroundFallback />}>
-          <ThreeDBackground />
-        </ErrorBoundary>
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            zIndex: -1,
+            pointerEvents: 'none',
+            background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.1), transparent 50%), radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.1), transparent 50%)'
+          }}
+        />
         <div className="panel-left">
           <div className="hero-badge">
             <span className="badge-dot"></span>
@@ -158,11 +162,33 @@ export default function Home() {
             />
             <div className="hero-image-overlay"></div>
           </div>
-          <ErrorBoundary fallback={<ThreeDSceneFallback style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }} />}>
-            <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
-              <ThreeDScene showShapes={true} interactive={true} />
-            </div>
-          </ErrorBoundary>
+          <div 
+            style={{ 
+              position: 'absolute', 
+              width: '300px', 
+              height: '300px', 
+              top: '50%', 
+              left: '50%', 
+              transform: 'translate(-50%, -50%)', 
+              zIndex: 1, 
+              opacity: 0.7,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <div 
+              style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #06b6d440, #a855f780)',
+                border: '2px solid #06b6d4',
+                boxShadow: '0 0 30px rgba(6, 182, 212, 0.4)',
+                animation: 'rotate-fallback 3s linear infinite'
+              }}
+            />
+          </div>
           <div className="hero-decoration" style={{ zIndex: 0 }}>
             <IconNetwork />
           </div>
@@ -173,11 +199,19 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#06b6d4" style={{ width: '80px', height: '80px' }} /></div>}>
-              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
-              </div>
-            </ErrorBoundary>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #06b6d440, #06b6d480)',
+                  border: '2px solid #06b6d4',
+                  boxShadow: '0 0 20px #06b6d440',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div style={{ marginTop: '20px' }}>
               <IconLight />
             </div>
@@ -212,11 +246,19 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#a855f7" style={{ width: '80px', height: '80px' }} /></div>}>
-              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
-              </div>
-            </ErrorBoundary>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #a855f740, #a855f780)',
+                  border: '2px solid #a855f7',
+                  boxShadow: '0 0 20px #a855f740',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div style={{ marginTop: '20px' }}>
               <IconCloud />
             </div>
@@ -231,11 +273,19 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#ec4899" style={{ width: '80px', height: '80px' }} /></div>}>
-              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
-              </div>
-            </ErrorBoundary>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ec489940, #ec489980)',
+                  border: '2px solid #ec4899',
+                  boxShadow: '0 0 20px #ec489940',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div style={{ marginTop: '20px' }}>
               <IconBell />
             </div>
@@ -270,11 +320,19 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#10b981" style={{ width: '80px', height: '80px' }} /></div>}>
-              <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
-                <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
-              </div>
-            </ErrorBoundary>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #10b98140, #10b98180)',
+                  border: '2px solid #10b981',
+                  boxShadow: '0 0 20px #10b98140',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div style={{ marginTop: '20px' }}>
               <IconRobot />
             </div>
@@ -311,47 +369,89 @@ export default function Home() {
 
       {/* Features Grid */}
       <section className="features-grid-section reveal" style={{ position: 'relative' }}>
-        <ErrorBoundary fallback={<ThreeDBackgroundFallback style={{ opacity: 0.3 }} />}>
-          <ThreeDBackground style={{ opacity: 0.3 }} />
-        </ErrorBoundary>
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            zIndex: -1,
+            pointerEvents: 'none',
+            opacity: 0.3,
+            background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.1), transparent 50%), radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.1), transparent 50%)'
+          }}
+        />
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
         <div className="features-grid">
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#06b6d4" style={{ width: '60px', height: '60px' }} /></div>}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
-              </div>
-            </ErrorBoundary>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #06b6d440, #06b6d480)',
+                  border: '2px solid #06b6d4',
+                  boxShadow: '0 0 20px #06b6d440',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div className="feature-item-icon">🔒</div>
             <h3 className="feature-item-title">Secure & Verified</h3>
             <p className="feature-item-desc">All grants are blockchain-verified and tamper-proof</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#a855f7" style={{ width: '60px', height: '60px' }} /></div>}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
-              </div>
-            </ErrorBoundary>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #a855f740, #a855f780)',
+                  border: '2px solid #a855f7',
+                  boxShadow: '0 0 20px #a855f740',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div className="feature-item-icon">📊</div>
             <h3 className="feature-item-title">Real-Time Tracking</h3>
             <p className="feature-item-desc">Monitor grant progress with live updates and analytics</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#ec4899" style={{ width: '60px', height: '60px' }} /></div>}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
-              </div>
-            </ErrorBoundary>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ec489940, #ec489980)',
+                  border: '2px solid #ec4899',
+                  boxShadow: '0 0 20px #ec489940',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div className="feature-item-icon">🌐</div>
             <h3 className="feature-item-title">Public Transparency</h3>
             <p className="feature-item-desc">Open access to all grant information and allocations</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#10b981" style={{ width: '60px', height: '60px' }} /></div>}>
-              <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
-                <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
-              </div>
-            </ErrorBoundary>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <div 
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #10b98140, #10b98180)',
+                  border: '2px solid #10b981',
+                  boxShadow: '0 0 20px #10b98140',
+                  animation: 'pulse-fallback 2s ease-in-out infinite'
+                }}
+              />
+            </div>
             <div className="feature-item-icon">⚡</div>
             <h3 className="feature-item-title">Fast Processing</h3>
             <p className="feature-item-desc">Quick grant registration and approval workflows</p>
