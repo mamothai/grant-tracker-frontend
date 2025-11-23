@@ -116,7 +116,7 @@ export default function Home() {
             height: '100%', 
             zIndex: -1,
             pointerEvents: 'none',
-            background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.15), transparent 60%), radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.15), transparent 60%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.05), transparent 80%)'
+            background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.1), transparent 50%), radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.1), transparent 50%)'
           }}
         />
         <div className="panel-left">
