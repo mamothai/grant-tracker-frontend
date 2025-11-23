@@ -1,11 +1,14 @@
+import React from 'react';
+
 // Fallback components for when 3D animations fail
 
 export function ThreeDCardFallback({ color = '#06b6d4', style = {} }) {
+  const { width, height, ...restStyle } = style;
   return (
     <div 
       style={{
-        width: style.width || '100px',
-        height: style.height || '100px',
+        width: width || '100px',
+        height: height || '100px',
         borderRadius: '50%',
         background: `linear-gradient(135deg, ${color}40, ${color}80)`,
         border: `2px solid ${color}`,
@@ -13,8 +16,8 @@ export function ThreeDCardFallback({ color = '#06b6d4', style = {} }) {
         alignItems: 'center',
         justifyContent: 'center',
         boxShadow: `0 0 20px ${color}40`,
-        animation: 'pulse 2s ease-in-out infinite',
-        ...style
+        animation: 'pulse-fallback 2s ease-in-out infinite',
+        ...restStyle
       }}
     >
       <div 
@@ -26,12 +29,6 @@ export function ThreeDCardFallback({ color = '#06b6d4', style = {} }) {
           opacity: 0.6
         }}
       />
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.8; }
-          50% { transform: scale(1.1); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -59,7 +56,7 @@ export function ThreeDSceneFallback({ style = {} }) {
           alignItems: 'center',
           justifyContent: 'center',
           boxShadow: '0 0 30px rgba(6, 182, 212, 0.4)',
-          animation: 'rotate 3s linear infinite'
+          animation: 'rotate-fallback 3s linear infinite'
         }}
       >
         <div 
@@ -72,12 +69,6 @@ export function ThreeDSceneFallback({ style = {} }) {
           }}
         />
       </div>
-      <style>{`
-        @keyframes rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }

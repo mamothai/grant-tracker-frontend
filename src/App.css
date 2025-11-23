@@ -21,6 +21,27 @@ body {
   width: 100%;
 }
 
+/* 3D Fallback Animations */
+@keyframes pulse-fallback {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.8; 
+  }
+  50% { 
+    transform: scale(1.1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes rotate-fallback {
+  from { 
+    transform: rotate(0deg); 
+  }
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
 a {
   text-decoration: none;
   color: inherit;
