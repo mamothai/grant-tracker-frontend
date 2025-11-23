@@ -5,6 +5,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ThreeDScene from "./components/ThreeDScene";
 import ThreeDBackground from "./components/ThreeDBackground";
 import ThreeDCard from "./components/ThreeDCard";
+import { ThreeDCardFallback, ThreeDSceneFallback, ThreeDBackgroundFallback } from "./components/ThreeDFallback";
 
 function IconNetwork() {
   return (
@@ -111,7 +112,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden' }}>
-        <ErrorBoundary>
+        <ErrorBoundary fallback={<ThreeDBackgroundFallback />}>
           <ThreeDBackground />
         </ErrorBoundary>
         <div className="panel-left">
@@ -157,7 +158,7 @@ export default function Home() {
             />
             <div className="hero-image-overlay"></div>
           </div>
-          <ErrorBoundary>
+          <ErrorBoundary fallback={<ThreeDSceneFallback style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }} />}>
             <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
               <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
             </div>
@@ -172,7 +173,7 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#06b6d4" style={{ width: '80px', height: '80px' }} /></div>}>
               <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
                 <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
               </div>
@@ -211,7 +212,7 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#a855f7" style={{ width: '80px', height: '80px' }} /></div>}>
               <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
                 <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
               </div>
@@ -230,7 +231,7 @@ export default function Home() {
       <section className="panel reveal">
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#ec4899" style={{ width: '80px', height: '80px' }} /></div>}>
               <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
                 <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
               </div>
@@ -269,7 +270,7 @@ export default function Home() {
         </div>
         <div className="panel-left">
           <div className="feature-card glassy" style={{ position: 'relative' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}><ThreeDCardFallback color="#10b981" style={{ width: '80px', height: '80px' }} /></div>}>
               <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
                 <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
               </div>
@@ -310,13 +311,13 @@ export default function Home() {
 
       {/* Features Grid */}
       <section className="features-grid-section reveal" style={{ position: 'relative' }}>
-        <ErrorBoundary>
+        <ErrorBoundary fallback={<ThreeDBackgroundFallback style={{ opacity: 0.3 }} />}>
           <ThreeDBackground style={{ opacity: 0.3 }} />
         </ErrorBoundary>
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
         <div className="features-grid">
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#06b6d4" style={{ width: '60px', height: '60px' }} /></div>}>
               <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
                 <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
               </div>
@@ -326,7 +327,7 @@ export default function Home() {
             <p className="feature-item-desc">All grants are blockchain-verified and tamper-proof</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#a855f7" style={{ width: '60px', height: '60px' }} /></div>}>
               <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
                 <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
               </div>
@@ -336,7 +337,7 @@ export default function Home() {
             <p className="feature-item-desc">Monitor grant progress with live updates and analytics</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#ec4899" style={{ width: '60px', height: '60px' }} /></div>}>
               <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
                 <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
               </div>
@@ -346,7 +347,7 @@ export default function Home() {
             <p className="feature-item-desc">Open access to all grant information and allocations</p>
           </div>
           <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
-            <ErrorBoundary>
+            <ErrorBoundary fallback={<div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}><ThreeDCardFallback color="#10b981" style={{ width: '60px', height: '60px' }} /></div>}>
               <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
                 <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
               </div>

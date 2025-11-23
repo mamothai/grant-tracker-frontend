@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 import ErrorBoundary from "./ErrorBoundary";
 import ThreeDScene from "./ThreeDScene";
+import { ThreeDSceneFallback } from "./ThreeDFallback";
 
 const COLORS = ["#06b6d4", "#a855f7", "#ef4444", "#10b981", "#f59e0b"];
 
@@ -26,7 +27,7 @@ export default function GrantSectorChart() {
       <h1 className="panel-title gradient center">Grant Sector Analytics</h1>
 
       <div className="chart-wrapper glassy" style={{ position: 'relative' }}>
-        <ErrorBoundary>
+        <ErrorBoundary fallback={<ThreeDSceneFallback style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }} />}>
           <div style={{ position: 'absolute', top: '20px', right: '20px', width: '150px', height: '150px', zIndex: 1, opacity: 0.6 }}>
             <ThreeDScene showShapes={true} showParticles={false} showNetwork={false} interactive={true} />
           </div>
