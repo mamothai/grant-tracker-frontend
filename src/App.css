@@ -1815,3 +1815,54 @@ a {
     padding: 40px 20px;
   }
 }
+
+/* ---------------------------------------------------
+   3D ELEMENTS STYLES
+--------------------------------------------------- */
+
+/* Ensure 3D canvas elements don't interfere with layout */
+canvas {
+  display: block;
+  outline: none;
+}
+
+/* 3D Scene Container */
+.three-d-scene-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.three-d-scene-container canvas {
+  pointer-events: auto;
+}
+
+/* 3D Card hover effects */
+.feature-card:hover .three-d-card-wrapper,
+.feature-item:hover .three-d-card-wrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Ensure 3D elements are properly layered */
+.panel-hero {
+  z-index: 1;
+}
+
+.features-grid-section {
+  z-index: 1;
+}
+
+/* Responsive adjustments for 3D elements */
+@media (max-width: 900px) {
+  .three-d-scene-container {
+    width: 100%;
+    height: 300px;
+  }
+  
+  .feature-card .three-d-card-wrapper,
+  .feature-item .three-d-card-wrapper {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}

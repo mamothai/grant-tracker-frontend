@@ -1,6 +1,9 @@
 // src/Home.jsx
 import { Link } from "react-router-dom";
 import "./App.css";
+import ThreeDScene from "./components/ThreeDScene";
+import ThreeDBackground from "./components/ThreeDBackground";
+import ThreeDCard from "./components/ThreeDCard";
 
 function IconNetwork() {
   return (
@@ -106,7 +109,8 @@ export default function Home() {
     <main className="page-scroll">
 
       {/* HERO */}
-      <section className="panel panel-hero reveal">
+      <section className="panel panel-hero reveal" style={{ position: 'relative', overflow: 'hidden' }}>
+        <ThreeDBackground />
         <div className="panel-left">
           <div className="hero-badge">
             <span className="badge-dot"></span>
@@ -141,8 +145,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="panel-right reveal-right hero-image-container">
-          <div className="hero-image-wrapper">
+        <div className="panel-right reveal-right hero-image-container" style={{ position: 'relative' }}>
+          <div className="hero-image-wrapper" style={{ position: 'relative', zIndex: 2 }}>
             <img 
               src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80&auto=format&fit=crop" 
               alt="Digital Network" 
@@ -150,7 +154,10 @@ export default function Home() {
             />
             <div className="hero-image-overlay"></div>
           </div>
-          <div className="hero-decoration">
+          <div style={{ position: 'absolute', width: '300px', height: '300px', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1, opacity: 0.7 }}>
+            <ThreeDScene showShapes={true} showParticles={true} showNetwork={true} interactive={true} />
+          </div>
+          <div className="hero-decoration" style={{ zIndex: 0 }}>
             <IconNetwork />
           </div>
         </div>
@@ -159,8 +166,11 @@ export default function Home() {
       {/* Public Suggestions */}
       <section className="panel reveal">
         <div className="panel-left">
-          <div className="feature-card glassy">
-            <div className="feature-icon-wrapper">
+          <div className="feature-card glassy" style={{ position: 'relative' }}>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <ThreeDCard shape="sphere" color="#06b6d4" style={{ width: '80px', height: '80px' }} />
+            </div>
+            <div style={{ marginTop: '20px' }}>
               <IconLight />
             </div>
             <h2 className="panel-title gradient">Public Suggestions</h2>
@@ -193,8 +203,11 @@ export default function Home() {
           </div>
         </div>
         <div className="panel-left">
-          <div className="feature-card glassy">
-            <div className="feature-icon-wrapper">
+          <div className="feature-card glassy" style={{ position: 'relative' }}>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <ThreeDCard shape="octahedron" color="#a855f7" style={{ width: '80px', height: '80px' }} />
+            </div>
+            <div style={{ marginTop: '20px' }}>
               <IconCloud />
             </div>
             <h2 className="panel-title gradient">Government Dashboard</h2>
@@ -207,8 +220,11 @@ export default function Home() {
       {/* Public Dashboard */}
       <section className="panel reveal">
         <div className="panel-left">
-          <div className="feature-card glassy">
-            <div className="feature-icon-wrapper">
+          <div className="feature-card glassy" style={{ position: 'relative' }}>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <ThreeDCard shape="box" color="#ec4899" style={{ width: '80px', height: '80px' }} />
+            </div>
+            <div style={{ marginTop: '20px' }}>
               <IconBell />
             </div>
             <h2 className="panel-title gradient">Public Dashboard</h2>
@@ -241,8 +257,11 @@ export default function Home() {
           </div>
         </div>
         <div className="panel-left">
-          <div className="feature-card glassy">
-            <div className="feature-icon-wrapper">
+          <div className="feature-card glassy" style={{ position: 'relative' }}>
+            <div className="feature-icon-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1 }}>
+              <ThreeDCard shape="sphere" color="#10b981" style={{ width: '80px', height: '80px' }} />
+            </div>
+            <div style={{ marginTop: '20px' }}>
               <IconRobot />
             </div>
             <h2 className="panel-title gradient">Creator Portal</h2>
@@ -277,25 +296,38 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="features-grid-section reveal">
+      <section className="features-grid-section reveal" style={{ position: 'relative' }}>
+        <ThreeDBackground style={{ opacity: 0.3 }} />
         <h2 className="panel-title gradient text-center">Why Choose GrantTracker?</h2>
         <div className="features-grid">
-          <div className="feature-item glassy">
+          <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <ThreeDCard shape="box" color="#06b6d4" style={{ width: '60px', height: '60px' }} />
+            </div>
             <div className="feature-item-icon">🔒</div>
             <h3 className="feature-item-title">Secure & Verified</h3>
             <p className="feature-item-desc">All grants are blockchain-verified and tamper-proof</p>
           </div>
-          <div className="feature-item glassy">
+          <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <ThreeDCard shape="sphere" color="#a855f7" style={{ width: '60px', height: '60px' }} />
+            </div>
             <div className="feature-item-icon">📊</div>
             <h3 className="feature-item-title">Real-Time Tracking</h3>
             <p className="feature-item-desc">Monitor grant progress with live updates and analytics</p>
           </div>
-          <div className="feature-item glassy">
+          <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <ThreeDCard shape="octahedron" color="#ec4899" style={{ width: '60px', height: '60px' }} />
+            </div>
             <div className="feature-item-icon">🌐</div>
             <h3 className="feature-item-title">Public Transparency</h3>
             <p className="feature-item-desc">Open access to all grant information and allocations</p>
           </div>
-          <div className="feature-item glassy">
+          <div className="feature-item glassy" style={{ position: 'relative', overflow: 'visible' }}>
+            <div style={{ position: 'absolute', top: '-20px', right: '-20px', zIndex: 1 }}>
+              <ThreeDCard shape="box" color="#10b981" style={{ width: '60px', height: '60px' }} />
+            </div>
             <div className="feature-item-icon">⚡</div>
             <h3 className="feature-item-title">Fast Processing</h3>
             <p className="feature-item-desc">Quick grant registration and approval workflows</p>
