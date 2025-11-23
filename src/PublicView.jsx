@@ -15,6 +15,22 @@ export default function PublicView() {
     
     if (foundGrant) {
       setGrant(foundGrant)
+      
+      // Use updates from localStorage if they exist
+      if (foundGrant.updates && Array.isArray(foundGrant.updates) && foundGrant.updates.length > 0) {
+        const formattedUpdates = foundGrant.updates.map(update => ({
+          ...update,
+          date: update.date ? (typeof update.date === 'string' ? new Date(update.date) : new Date(update.date)) : new Date()
+        }))
+        setUpdates(formattedUpdates)
+      } else {
+        // Default mock updates if none exist
+        const mockUpdates = [
+          { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
+          { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
+        ]
+        setUpdates(mockUpdates)
+      }
     } else {
       // Default fallback
       setGrant({
@@ -23,14 +39,14 @@ export default function PublicView() {
         amount: 50000,
         field: 'General'
       })
+      
+      // Default mock updates
+      const mockUpdates = [
+        { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
+        { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
+      ]
+      setUpdates(mockUpdates)
     }
-
-    // Simulate real-time updates (replace with backend later)
-    const mockUpdates = [
-      { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
-      { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
-    ]
-    setUpdates(mockUpdates)
   }, [id])
 
   return (
@@ -74,7 +90,11 @@ export default function PublicView() {
                 <div key={i} className="public-view-update-card glassy">
                   <div className="public-view-update-header">
                     <h3 className="public-view-update-title">{update.title}</h3>
-                    <div className="public-view-update-date">{update.date.toLocaleString()}</div>
+                    <div className="public-view-update-date">
+                      {update.date instanceof Date 
+                        ? update.date.toLocaleString() 
+                        : new Date(update.date).toLocaleString()}
+                    </div>
                   </div>
                   <div className="public-view-update-image-wrapper">
                     <img 
