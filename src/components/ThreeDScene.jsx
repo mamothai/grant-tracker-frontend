@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Float } from '@react-three/drei';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -40,11 +40,15 @@ function RotatingShape({ position, color, shape = 'box' }) {
 // Floating particles
 function FloatingParticles({ count = 50 }) {
   const particles = useRef();
-  const positions = new Float32Array(count * 3);
   
-  for (let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 10;
-  }
+  // Use useMemo to prevent regeneration on every render
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count * 3; i++) {
+      pos[i] = (Math.random() - 0.5) * 10;
+    }
+    return pos;
+  }, [count]);
 
   useFrame((state) => {
     if (particles.current) {
@@ -75,11 +79,14 @@ function NetworkConnections() {
     [-1.5, 1.5, 1], [1.5, 1.5, 1], [-1.5, -1.5, -1], [1.5, -1.5, -1]
   ];
 
-  const connections = [];
-  for (let i = 0; i < points.length; i++) {
-    for (let j = i + 1; j < points.length; j++) {
-      if (Math.random() > 0.7) {
-        connections.push([points[i], points[j]]);
+  // Use useMemo to prevent regeneration on every render
+  const connections = useRef([]);
+  if (connections.current.length === 0) {
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        if (Math.random() > 0.7) {
+          connections.current.push([points[i], points[j]]);
+        }
       }
     }
   }
@@ -92,21 +99,24 @@ function NetworkConnections() {
 
   return (
     <group ref={linesRef}>
-      {connections.map(([start, end], idx) => (
-        <line key={idx}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              count={2}
-              array={new Float32Array([...start, ...end])}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial color="#a855f7" transparent opacity={0.3} />
-        </line>
-      ))}
+      {connections.current.map(([start, end], idx) => {
+        const linePoints = new Float32Array([...start, ...end]);
+        return (
+          <line key={`line-${idx}`}>
+            <bufferGeometry>
+              <bufferAttribute
+                attach="attributes-position"
+                count={2}
+                array={linePoints}
+                itemSize={3}
+              />
+            </bufferGeometry>
+            <lineBasicMaterial color="#a855f7" transparent opacity={0.3} />
+          </line>
+        );
+      })}
       {points.map((pos, idx) => (
-        <mesh key={idx} position={pos}>
+        <mesh key={`point-${idx}`} position={pos}>
           <sphereGeometry args={[0.1, 16, 16]} />
           <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.5} />
         </mesh>
@@ -127,8 +137,17 @@ export default function ThreeDScene({
     <div style={{ width: '100%', height: '100%', ...style }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          powerPreference: "high-performance"
+        }}
+        dpr={[1, 2]}
         style={{ background: 'transparent', width: '100%', height: '100%' }}
+        onCreated={(state) => {
+          // Ensure proper rendering
+          state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }}
       >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
@@ -145,7 +164,7 @@ export default function ThreeDScene({
         {showParticles && <FloatingParticles count={30} />}
         {showNetwork && <NetworkConnections />}
         
-        {interactive && <OrbitControls enableZoom={false} enablePan={false} />}
+        {interactive && <OrbitControls enableZoom={false} enablePan={false} enableDamping dampingFactor={0.05} />}
       </Canvas>
     </div>
   );

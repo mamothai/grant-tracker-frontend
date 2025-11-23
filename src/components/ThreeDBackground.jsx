@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -7,26 +7,31 @@ import * as THREE from 'three';
 function BackgroundParticles({ count = 100 }) {
   const particles = useRef();
 
-  const positions = new Float32Array(count * 3);
-  const colors = new Float32Array(count * 3);
-  
-  for (let i = 0; i < count * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 20;
-    positions[i + 1] = (Math.random() - 0.5) * 20;
-    positions[i + 2] = (Math.random() - 0.5) * 20;
+  // Use useMemo to prevent regeneration on every render
+  const { positions, colors } = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const cols = new Float32Array(count * 3);
     
-    // Gradient colors from cyan to purple
-    const color = new THREE.Color();
-    const t = Math.random();
-    if (t < 0.5) {
-      color.setHex(0x06b6d4); // cyan
-    } else {
-      color.setHex(0xa855f7); // purple
+    for (let i = 0; i < count * 3; i += 3) {
+      pos[i] = (Math.random() - 0.5) * 20;
+      pos[i + 1] = (Math.random() - 0.5) * 20;
+      pos[i + 2] = (Math.random() - 0.5) * 20;
+      
+      // Gradient colors from cyan to purple
+      const color = new THREE.Color();
+      const t = Math.random();
+      if (t < 0.5) {
+        color.setHex(0x06b6d4); // cyan
+      } else {
+        color.setHex(0xa855f7); // purple
+      }
+      cols[i] = color.r;
+      cols[i + 1] = color.g;
+      cols[i + 2] = color.b;
     }
-    colors[i] = color.r;
-    colors[i + 1] = color.g;
-    colors[i + 2] = color.b;
-  }
+    
+    return { positions: pos, colors: cols };
+  }, [count]);
 
   useFrame((state) => {
     if (particles.current) {
@@ -124,8 +129,17 @@ export default function ThreeDBackground({ style = {} }) {
     >
       <Canvas
         camera={{ position: [0, 0, 10], fov: 75 }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          powerPreference: "high-performance"
+        }}
+        dpr={[1, 2]}
         style={{ background: 'transparent', width: '100%', height: '100%' }}
+        onCreated={(state) => {
+          // Ensure proper rendering
+          state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }}
       >
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={0.5} />

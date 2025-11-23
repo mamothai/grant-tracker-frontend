@@ -63,8 +63,17 @@ export default function ThreeDCard({
     >
       <Canvas
         camera={{ position: [0, 0, 3], fov: 75 }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ 
+          alpha: true, 
+          antialias: true,
+          powerPreference: "high-performance"
+        }}
+        dpr={[1, 2]}
         style={{ background: 'transparent', width: '100%', height: '100%' }}
+        onCreated={(state) => {
+          // Ensure proper rendering
+          state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }}
       >
         <ambientLight intensity={0.6} />
         <pointLight position={[5, 5, 5]} intensity={1} />
