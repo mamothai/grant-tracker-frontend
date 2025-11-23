@@ -110,7 +110,7 @@ export default function Home() {
     <main className="page-scroll">
 
       {/* HERO */}
-      <section className="panel panel-hero reveal" style={{ position: 'relative', overflow: 'hidden' }}>
+      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden' }}>
         <ErrorBoundary>
           <ThreeDBackground />
         </ErrorBoundary>

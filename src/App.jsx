@@ -31,8 +31,8 @@ function initScrollAnimations() {
   }
 
   const observerOptions = {
-    threshold: 0.05, // Lower threshold to trigger earlier
-    rootMargin: "0px 0px -20px 0px" // More lenient margin
+    threshold: 0.01, // Very low threshold to trigger almost immediately
+    rootMargin: "50px" // Large margin to trigger before element enters viewport
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -45,30 +45,33 @@ function initScrollAnimations() {
     });
   }, observerOptions);
 
-  // Observe all elements with reveal classes
-  const revealElements = document.querySelectorAll(
-    ".reveal, .reveal-right, .reveal-left, .fade-in"
-  );
-  
-  if (revealElements.length === 0) {
-    // If no elements found, try again after a short delay
-    setTimeout(() => {
-      const retryElements = document.querySelectorAll(
-        ".reveal, .reveal-right, .reveal-left, .fade-in"
-      );
-      retryElements.forEach((el) => {
-        if (!el.classList.contains("visible")) {
-          observer.observe(el);
-        }
-      });
-    }, 200);
-  } else {
+  // Function to observe elements
+  const observeElements = () => {
+    const revealElements = document.querySelectorAll(
+      ".reveal, .reveal-right, .reveal-left, .fade-in"
+    );
+    
     revealElements.forEach((el) => {
-      // Only observe elements that aren't already visible
-      if (!el.classList.contains("visible")) {
+      // Check if element is already in viewport
+      const rect = el.getBoundingClientRect();
+      const isInViewport = rect.top < window.innerHeight + 100 && rect.bottom > -100;
+      
+      if (isInViewport && !el.classList.contains("visible")) {
+        // Make visible immediately if in viewport
+        el.classList.add("visible");
+      } else if (!el.classList.contains("visible")) {
+        // Observe if not in viewport
         observer.observe(el);
       }
     });
+  };
+
+  // Observe elements
+  observeElements();
+  
+  // Retry if no elements found initially
+  if (document.querySelectorAll(".reveal, .reveal-right, .reveal-left, .fade-in").length === 0) {
+    setTimeout(observeElements, 200);
   }
 
   return observer;
@@ -80,21 +83,43 @@ export default function App() {
   useEffect(() => {
     let observer = null;
     
+    // First, make all elements visible immediately as fallback
+    const makeVisibleFallback = () => {
+      const revealElements = document.querySelectorAll(
+        ".reveal, .reveal-right, .reveal-left, .fade-in"
+      );
+      revealElements.forEach((el) => {
+        if (!el.classList.contains("visible")) {
+          el.classList.add("visible");
+        }
+      });
+    };
+    
     // Initialize animations after DOM is ready
     const timeoutId = setTimeout(() => {
       try {
         observer = initScrollAnimations();
+        // Also check elements already in viewport and make them visible
+        const checkViewport = () => {
+          const revealElements = document.querySelectorAll(
+            ".reveal, .reveal-right, .reveal-left, .fade-in"
+          );
+          revealElements.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+            if (isInViewport && !el.classList.contains("visible")) {
+              el.classList.add("visible");
+            }
+          });
+        };
+        checkViewport();
+        // Fallback after 2 seconds if observer didn't trigger
+        setTimeout(makeVisibleFallback, 2000);
       } catch (error) {
         console.error('Error initializing scroll animations:', error);
-        // Fallback: make all reveal elements visible if observer fails
-        const revealElements = document.querySelectorAll(
-          ".reveal, .reveal-right, .reveal-left, .fade-in"
-        );
-        revealElements.forEach((el) => {
-          el.classList.add("visible");
-        });
+        makeVisibleFallback();
       }
-    }, 100);
+    }, 50); // Reduced delay
 
     // Cleanup function
     return () => {
@@ -127,7 +152,7 @@ export default function App() {
 
 function Navbar() {
   return (
-    <header className="nav glassy">
+    <header className="nav glassy" style={{ opacity: 1, transform: 'none' }}>
       <Link to="/" className="brand">
         <span className="brand-flag">IN</span> 
         <span className="brand-text">GrantTracker</span>

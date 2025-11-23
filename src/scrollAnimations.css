@@ -30,7 +30,7 @@
   .reveal-right:not(.visible),
   .reveal-left:not(.visible),
   .fade-in:not(.visible) {
-    animation: fadeInFallback 0.1s 1s forwards;
+    animation: fadeInFallback 0.1s 0.8s forwards;
   }
 }
 
@@ -39,6 +39,12 @@
     opacity: 1;
     transform: translate(0, 0);
   }
+}
+
+/* Ensure navbar is always visible */
+.nav {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* ---------------------------------------------------
