@@ -54,7 +54,7 @@ function FloatingParticles({ count = 50 }) {
 
   return (
     <points ref={particles}>
-      <bufferGeometry attach="geometry">
+      <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
           count={count}
@@ -94,7 +94,7 @@ function NetworkConnections() {
     <group ref={linesRef}>
       {connections.map(([start, end], idx) => (
         <line key={idx}>
-          <bufferGeometry attach="geometry">
+          <bufferGeometry>
             <bufferAttribute
               attach="attributes-position"
               count={2}

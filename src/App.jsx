@@ -18,9 +18,21 @@ import "./scrollAnimations.css";
 
 // Initialize scroll animations using Intersection Observer
 function initScrollAnimations() {
+  // Check if IntersectionObserver is supported
+  if (typeof IntersectionObserver === 'undefined') {
+    // Fallback: make all elements visible immediately
+    const revealElements = document.querySelectorAll(
+      ".reveal, .reveal-right, .reveal-left, .fade-in"
+    );
+    revealElements.forEach((el) => {
+      el.classList.add("visible");
+    });
+    return null;
+  }
+
   const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px"
+    threshold: 0.05, // Lower threshold to trigger earlier
+    rootMargin: "0px 0px -20px 0px" // More lenient margin
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -38,12 +50,26 @@ function initScrollAnimations() {
     ".reveal, .reveal-right, .reveal-left, .fade-in"
   );
   
-  revealElements.forEach((el) => {
-    // Only observe elements that aren't already visible
-    if (!el.classList.contains("visible")) {
-      observer.observe(el);
-    }
-  });
+  if (revealElements.length === 0) {
+    // If no elements found, try again after a short delay
+    setTimeout(() => {
+      const retryElements = document.querySelectorAll(
+        ".reveal, .reveal-right, .reveal-left, .fade-in"
+      );
+      retryElements.forEach((el) => {
+        if (!el.classList.contains("visible")) {
+          observer.observe(el);
+        }
+      });
+    }, 200);
+  } else {
+    revealElements.forEach((el) => {
+      // Only observe elements that aren't already visible
+      if (!el.classList.contains("visible")) {
+        observer.observe(el);
+      }
+    });
+  }
 
   return observer;
 }
@@ -56,7 +82,18 @@ export default function App() {
     
     // Initialize animations after DOM is ready
     const timeoutId = setTimeout(() => {
-      observer = initScrollAnimations();
+      try {
+        observer = initScrollAnimations();
+      } catch (error) {
+        console.error('Error initializing scroll animations:', error);
+        // Fallback: make all reveal elements visible if observer fails
+        const revealElements = document.querySelectorAll(
+          ".reveal, .reveal-right, .reveal-left, .fade-in"
+        );
+        revealElements.forEach((el) => {
+          el.classList.add("visible");
+        });
+      }
     }, 100);
 
     // Cleanup function

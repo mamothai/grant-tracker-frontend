@@ -37,7 +37,7 @@ function BackgroundParticles({ count = 100 }) {
 
   return (
     <points ref={particles}>
-      <bufferGeometry attach="geometry">
+      <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
           count={count}
