@@ -23,7 +23,11 @@ export default function About() {
             <span className="badge-dot"></span>
             <span>About the GrantTracker team</span>
           </div>
-          <h1 className="big-title gradient">Transparent grants start with honest data.</h1>
+          <h1 className="big-title gradient">
+            Transparent grants
+            <br />
+            start with honest data.
+          </h1>
           <p className="lead muted">
             GrantTracker brings every stakeholder&nbsp;&mdash; officials, creators and citizens&nbsp;&mdash; onto a
             single, verifiable source of truth for how public and institutional funds are planned, approved and used.
