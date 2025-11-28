@@ -716,7 +716,22 @@ const SectorDetails = () => {
       },
     ];
 
-    setGrants([...sampleGrants, ...stored]);
+    // Merge existing localStorage grants with enriched sample data by id
+    const merged = [...sampleGrants];
+    stored.forEach((g) => {
+      const idx = merged.findIndex((s) => s.id === g.id);
+      if (idx === -1) {
+        merged.push(g);
+      } else {
+        // Stored grants override or extend defaults without losing enriched metadata
+        merged[idx] = { ...merged[idx], ...g };
+      }
+    });
+
+    // Persist merged dataset so other pages (like PublicView) can read the full records
+    localStorage.setItem("grants", JSON.stringify(merged));
+
+    setGrants(merged);
   }, []);
 
   const filtered = grants.filter((g) => g.field === sectorName);
