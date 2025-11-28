@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 import Home from "./Home.jsx";
+import About from "./About.jsx";
 import SuggestionBox from "./SuggestionBox.jsx";
 import GrantSectorChart from "./components/GrantSectorChart.jsx";
 import CreatorLogin from "./CreatorLogin.jsx";
@@ -135,6 +136,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/chart" element={<GrantSectorChart />} />
         <Route path="/suggestions" element={<SuggestionBox />} />
         <Route path="/creator-login" element={<CreatorLogin />} />
@@ -159,6 +161,7 @@ function Navbar() {
       </Link>
 
       <nav className="nav-links">
+        <Link className="nav-link" to="/about">About</Link>
         <Link className="nav-link" to="/chart">Dashboard</Link>
         <Link className="nav-link" to="/benefits">Benefits</Link>
         <Link className="nav-cta" to="/creator-login">Creator Login</Link>

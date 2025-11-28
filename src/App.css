@@ -1842,6 +1842,200 @@ a {
 }
 
 /* ---------------------------------------------------
+   ABOUT PAGE
+--------------------------------------------------- */
+
+.about-page {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.about-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.about-block p + p {
+  margin-top: 4px;
+}
+
+.about-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #d4d4d8;
+}
+
+.about-list li::before {
+  content: "•";
+  margin-right: 6px;
+  color: var(--accent-cyan, #06b6d4);
+}
+
+.about-hero-card {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  width: 100%;
+  max-width: 320px;
+}
+
+.about-hero-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+}
+
+.about-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.about-dot--green {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+}
+
+.about-hero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 6px;
+}
+
+.about-hero-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 0.74rem;
+}
+
+.about-hero-pill--warning {
+  border-color: #facc15;
+  color: #fbbf24;
+}
+
+.about-hero-pill--accent {
+  border-color: #22c55e;
+  color: #bbf7d0;
+}
+
+.about-timeline-section {
+  padding-top: 0;
+}
+
+.about-timeline-header {
+  max-width: 640px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.about-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.about-timeline-item {
+  position: relative;
+}
+
+.about-timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent-cyan, #06b6d4);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+  margin-bottom: 10px;
+}
+
+.about-timeline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-timeline-meta {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.about-timeline-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.about-cta-section {
+  padding-top: 40px;
+}
+
+.about-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.about-cta-text {
+  max-width: 520px;
+}
+
+.about-cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.about-team-card {
+  align-self: stretch;
+}
+
+@media (max-width: 1024px) {
+  .about-hero-card {
+    position: relative;
+    transform: none;
+    margin-top: 24px;
+  }
+
+  .about-timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .about-timeline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .about-cta-actions {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------
    RESPONSIVE BREAKPOINTS
 --------------------------------------------------- */
 
