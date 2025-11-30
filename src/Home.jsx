@@ -211,7 +211,7 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden', zIndex: 10 }}>
+      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden' }}>
         <div 
           style={{ 
             position: 'absolute', 
