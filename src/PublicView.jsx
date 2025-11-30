@@ -52,31 +52,62 @@ export default function PublicView() {
   return (
     <div className="public-view-page reveal">
       <div className="public-view-container">
-        <div className="public-view-header glassy">
-          <div className="public-view-badge">Grant Details</div>
-          <h1 className="gradient public-view-title">Grant ID: {id}</h1>
-          {grant && (
-            <>
-              <h2 className="public-view-subtitle">{grant.title}</h2>
-              <div className="public-view-stats">
-                <div className="public-view-stat">
-                  <div className="public-view-stat-label">Amount Allocated</div>
-                  <div className="public-view-stat-value">₹{grant.amount?.toLocaleString() || '50,000'}</div>
-                </div>
-                <div className="public-view-stat">
-                  <div className="public-view-stat-label">Sector</div>
-                  <div className="public-view-stat-value">{grant.field || 'General'}</div>
-                </div>
-                {grant.creator && (
-                  <div className="public-view-stat">
-                    <div className="public-view-stat-label">Creator</div>
-                    <div className="public-view-stat-value">{grant.creator}</div>
-                  </div>
-                )}
+        {/* Grant Details - Benefits Style Card */}
+        {grant && (
+          <div className="benefits-scheme-card glassy" style={{ marginBottom: '40px' }}>
+            <div className="scheme-card-header">
+              <div className="scheme-card-icon">
+                {grant.field === "Agriculture" ? "🌾" : 
+                 grant.field === "Education" ? "📚" : 
+                 grant.field === "Health" ? "⚕️" : 
+                 grant.field === "Infrastructure" ? "🏗️" : 
+                 grant.field === "Environment" ? "🌱" : 
+                 grant.field === "Technology" ? "💻" : 
+                 grant.field === "Women & Child" ? "👨‍👩‍👧" : "📋"}
               </div>
-            </>
-          )}
-        </div>
+              <div className="scheme-card-badge">{grant.field || 'General'}</div>
+            </div>
+            
+            <h3 className="gradient scheme-card-title">{grant.title}</h3>
+            
+            <div className="scheme-card-info">
+              <div className="scheme-info-item">
+                <span className="scheme-info-label">Grant ID:</span>
+                <span className="scheme-info-value">{grant.id}</span>
+              </div>
+              <div className="scheme-info-item">
+                <span className="scheme-info-label">Amount Allocated:</span>
+                <span className="scheme-info-value">₹{grant.amount?.toLocaleString() || '50,000'}</span>
+              </div>
+              {grant.creator && (
+                <div className="scheme-info-item">
+                  <span className="scheme-info-label">Creator:</span>
+                  <span className="scheme-info-value">{grant.creator}</span>
+                </div>
+              )}
+              {grant.createdAt && (
+                <div className="scheme-info-item">
+                  <span className="scheme-info-label">Created:</span>
+                  <span className="scheme-info-value">{new Date(grant.createdAt).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+
+            {grant.description && (
+              <div className="scheme-card-objectives">
+                <strong>Description:</strong>
+                <p className="muted">{grant.description}</p>
+              </div>
+            )}
+
+            {grant.beneficiary && grant.beneficiary !== "Not specified" && (
+              <div className="scheme-card-benefits">
+                <strong>Beneficiary:</strong>
+                <p className="muted">{grant.beneficiary}</p>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="public-view-updates glassy">
           <div className="public-view-updates-header">
