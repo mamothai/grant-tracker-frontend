@@ -111,7 +111,7 @@ export default function Home() {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: -1,
+        zIndex: 0,
         pointerEvents: 'none',
         overflow: 'hidden',
         background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)'
@@ -211,7 +211,7 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
+      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden', zIndex: 10 }}>
         <div 
           style={{ 
             position: 'absolute', 
