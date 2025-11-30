@@ -103,7 +103,7 @@ function IconRobot() {
 
 export default function Home() {
   return (
-    <main className="page-scroll" style={{ position: 'relative', overflow: 'hidden' }}>
+    <main className="page-scroll" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
       {/* Animated snowfall background */}
       <div style={{
         position: 'fixed',
@@ -227,7 +227,7 @@ export default function Home() {
         <div className="panel-left">
           <div className="hero-badge">
             <span className="badge-dot"></span>
-            <span>Transparency • Accountability • Trust</span>
+            <span>🎄 Christmas Special • Transparency • Accountability • Trust</span>
           </div>
           <h1 className="big-title gradient">GrantTracker Portal</h1>
           <p className="lead muted">
