@@ -240,7 +240,7 @@ export default function GrantSectorChart() {
       }} />
       
       <h1 className="panel-title gradient center" style={{ position: 'relative', zIndex: 1, marginBottom: '40px' }}>
-        🌐 Interactive Grant Sector Globe
+        🌐 Grant Distribution Across Sectors
       </h1>
 
       <div className="chart-wrapper glassy" style={{ position: 'relative', zIndex: 1 }}>
