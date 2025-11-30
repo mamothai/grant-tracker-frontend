@@ -106,6 +106,82 @@ export default function PublicView() {
                 <p className="muted">{grant.beneficiary}</p>
               </div>
             )}
+
+            {grant.yearLaunched && (
+              <div className="scheme-card-info" style={{ marginTop: '16px' }}>
+                <div className="scheme-info-item">
+                  <span className="scheme-info-label">Year Launched:</span>
+                  <span className="scheme-info-value">{grant.yearLaunched}</span>
+                </div>
+              </div>
+            )}
+
+            {grant.status && (
+              <div className="scheme-card-objectives">
+                <strong>Status:</strong>
+                <p className="muted">{grant.status}</p>
+              </div>
+            )}
+
+            {grant.beneficiaries && (
+              <div className="scheme-card-objectives">
+                <strong>Beneficiaries:</strong>
+                <p className="muted">{grant.beneficiaries}</p>
+              </div>
+            )}
+
+            {grant.fundsUtilized && (
+              <div className="scheme-card-objectives">
+                <strong>Funds Utilized:</strong>
+                <p className="muted">{grant.fundsUtilized}</p>
+              </div>
+            )}
+
+            {grant.impact && (
+              <div className="scheme-card-objectives">
+                <strong>Impact:</strong>
+                <p className="muted">{grant.impact}</p>
+              </div>
+            )}
+
+            {grant.coverage && (
+              <div className="scheme-card-info" style={{ marginTop: '16px' }}>
+                <div className="scheme-info-item">
+                  <span className="scheme-info-label">Coverage:</span>
+                  <span className="scheme-info-value">{grant.coverage}</span>
+                </div>
+              </div>
+            )}
+
+            {grant.nodalAgency && (
+              <div className="scheme-card-info" style={{ marginTop: '8px' }}>
+                <div className="scheme-info-item">
+                  <span className="scheme-info-label">Nodal Agency:</span>
+                  <span className="scheme-info-value">{grant.nodalAgency}</span>
+                </div>
+              </div>
+            )}
+
+            {grant.latestUpdate && (
+              <div className="scheme-card-objectives">
+                <strong>Latest Update:</strong>
+                <p className="muted">{grant.latestUpdate}</p>
+              </div>
+            )}
+
+            {grant.sources && Array.isArray(grant.sources) && grant.sources.length > 0 && (
+              <div className="scheme-card-benefits">
+                <strong>Sources:</strong>
+                <ul className="benefits-list">
+                  {grant.sources.map((source, idx) => (
+                    <li key={idx} className="benefit-item">
+                      <span className="benefit-icon">📌</span>
+                      {source}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
 
