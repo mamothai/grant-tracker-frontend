@@ -103,10 +103,75 @@ function IconRobot() {
 
 export default function Home() {
   return (
-    <main className="page-scroll">
+    <main className="page-scroll" style={{ position: 'relative', overflow: 'hidden' }}>
+      {/* Dynamic animated background */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+        pointerEvents: 'none',
+        overflow: 'hidden'
+      }}>
+        {/* Animated gradient orbs */}
+        <div style={{
+          position: 'absolute',
+          width: '400px',
+          height: '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%)',
+          top: '-100px',
+          left: '-100px',
+          animation: 'float 20s ease-in-out infinite',
+          filter: 'blur(60px)'
+        }} />
+        <div style={{
+          position: 'absolute',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
+          bottom: '-150px',
+          right: '-150px',
+          animation: 'float 25s ease-in-out infinite reverse',
+          filter: 'blur(80px)'
+        }} />
+        <div style={{
+          position: 'absolute',
+          width: '350px',
+          height: '350px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%)',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          animation: 'float 30s ease-in-out infinite',
+          filter: 'blur(70px)'
+        }} />
+
+        {/* Add keyframes animation via style tag */}
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-30px) translateX(20px); }
+            50% { transform: translateY(-60px) translateX(-20px); }
+            75% { transform: translateY(-30px) translateX(30px); }
+          }
+          @keyframes float-alt {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-40px); }
+          }
+          @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+          }
+        `}</style>
+      </div>
 
       {/* HERO */}
-      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden' }}>
+      <section className="panel panel-hero reveal visible" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
         <div 
           style={{ 
             position: 'absolute', 
