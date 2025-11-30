@@ -250,8 +250,7 @@ export default function About() {
           <div className="feature-card glassy about-block">
             <h2 className="panel-title gradient">A note from the team</h2>
             <p className="muted">
-              GrantTracker is built by a small, hands‑on team led by{" "}
-              <strong className="gradient-ink">Ayush GS</strong>, an engineer‑designer who has worked on accountability
+              GrantTracker is built by a small, hands‑on team of engineer-designers who have worked on accountability
               tools for public systems and citizen platforms.
             </p>
             <p className="muted">
