@@ -68,11 +68,21 @@ export default function GrantSectorChart() {
       const centerY = height / 2;
       const radius = Math.min(width, height) / 2.5;
 
-      // Clear canvas with gradient
-      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 1.5);
-      gradient.addColorStop(0, "rgba(15, 23, 42, 0)");
-      gradient.addColorStop(1, "rgba(6, 182, 212, 0.1)");
-      ctx.fillStyle = gradient;
+      // Create animated background
+      const time = Date.now() * 0.0001;
+      const bgGradient1 = ctx.createLinearGradient(0, 0, width, height);
+      bgGradient1.addColorStop(0, `rgba(6, 182, 212, ${0.08 + Math.sin(time) * 0.04})`);
+      bgGradient1.addColorStop(0.5, `rgba(15, 23, 42, 0.95)`);
+      bgGradient1.addColorStop(1, `rgba(168, 85, 247, ${0.08 + Math.cos(time) * 0.04})`);
+      ctx.fillStyle = bgGradient1;
+      ctx.fillRect(0, 0, width, height);
+
+      // Animated radial background
+      const bgGradient2 = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 2);
+      bgGradient2.addColorStop(0, `rgba(6, 182, 212, ${0.12 + Math.sin(time * 1.5) * 0.06})`);
+      bgGradient2.addColorStop(0.5, `rgba(168, 85, 247, ${0.08 + Math.cos(time * 1.2) * 0.04})`);
+      bgGradient2.addColorStop(1, "rgba(15, 23, 42, 0)");
+      ctx.fillStyle = bgGradient2;
       ctx.fillRect(0, 0, width, height);
 
       // Draw segments
@@ -80,58 +90,94 @@ export default function GrantSectorChart() {
       data.forEach((item, index) => {
         const sliceAngle = (item.value / total) * Math.PI * 2;
         
-        // Draw 3D segment
-        drawSegment3D(ctx, centerX, centerY, radius, currentAngle, sliceAngle, COLORS[index % COLORS.length]);
+        // Draw 3D segment with enhanced gradient
+        drawSegment3D(ctx, centerX, centerY, radius, currentAngle, sliceAngle, COLORS[index % COLORS.length], index);
         currentAngle += sliceAngle;
       });
 
-      // Draw gloss effect
+      // Draw enhanced gloss effect
       const glossGradient = ctx.createRadialGradient(
-        centerX - radius * 0.3, 
-        centerY - radius * 0.3, 
+        centerX - radius * 0.35, 
+        centerY - radius * 0.35, 
         0, 
         centerX, 
         centerY, 
-        radius
+        radius * 1.1
       );
-      glossGradient.addColorStop(0, "rgba(255, 255, 255, 0.15)");
-      glossGradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
+      glossGradient.addColorStop(0, `rgba(255, 255, 255, ${0.2 + Math.sin(time * 2) * 0.1})`);
+      glossGradient.addColorStop(0.3, "rgba(255, 255, 255, 0.05)");
+      glossGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
       ctx.fillStyle = glossGradient;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, radius * 1.1, 0, Math.PI * 2);
       ctx.fill();
+
+      // Draw outer glow
+      ctx.strokeStyle = `rgba(6, 182, 212, ${0.15 + Math.sin(time * 0.8) * 0.1})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius * 1.15, 0, Math.PI * 2);
+      ctx.stroke();
 
       rotation += 0.005;
       animationId = requestAnimationFrame(drawGlobe);
     };
 
-    const drawSegment3D = (ctx, centerX, centerY, radius, startAngle, sliceAngle, color) => {
+    const drawSegment3D = (ctx, centerX, centerY, radius, startAngle, sliceAngle, color, index) => {
       const endAngle = startAngle + sliceAngle;
+      const time = Date.now() * 0.0001;
       
-      // Draw shadow for 3D effect
-      ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+      // Multi-layer shadow for depth
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
       ctx.beginPath();
-      ctx.arc(centerX + 4, centerY + 4, radius * 0.9, startAngle, endAngle);
-      ctx.lineTo(centerX + 4, centerY + 4);
+      ctx.arc(centerX + 6, centerY + 6, radius * 0.92, startAngle, endAngle);
+      ctx.lineTo(centerX + 6, centerY + 6);
       ctx.fill();
 
-      // Main segment
-      ctx.fillStyle = color;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.beginPath();
+      ctx.arc(centerX + 3, centerY + 3, radius * 0.95, startAngle, endAngle);
+      ctx.lineTo(centerX + 3, centerY + 3);
+      ctx.fill();
+
+      // Main segment with gradient fill
+      const segmentGradient = ctx.createRadialGradient(
+        centerX, centerY, radius * 0.5,
+        centerX, centerY, radius
+      );
+      segmentGradient.addColorStop(0, adjustBrightness(color, 1.4));
+      segmentGradient.addColorStop(0.5, color);
+      segmentGradient.addColorStop(1, adjustBrightness(color, 0.6));
+      ctx.fillStyle = segmentGradient;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, startAngle, endAngle);
       ctx.lineTo(centerX, centerY);
       ctx.fill();
 
-      // Highlight edge
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
-      ctx.lineWidth = 2;
+      // Animated inner highlight
+      const highlightGradient = ctx.createRadialGradient(
+        centerX - radius * 0.4, centerY - radius * 0.4, 0,
+        centerX, centerY, radius
+      );
+      highlightGradient.addColorStop(0, `rgba(255, 255, 255, ${0.2 + Math.sin(time * (0.5 + index * 0.2)) * 0.15})`);
+      highlightGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.05)");
+      highlightGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+      ctx.fillStyle = highlightGradient;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.lineTo(centerX, centerY);
+      ctx.fill();
+
+      // Bright edge highlight
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 + Math.sin(time * (1 + index * 0.3)) * 0.2})`;
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, startAngle, endAngle);
       ctx.stroke();
 
       // Darker edge for depth
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(
@@ -139,6 +185,14 @@ export default function GrantSectorChart() {
         centerY + Math.sin(endAngle) * radius
       );
       ctx.stroke();
+    };
+
+    const adjustBrightness = (color, factor) => {
+      const hex = color.replace('#', '');
+      const r = Math.min(255, Math.floor(parseInt(hex.substring(0, 2), 16) * factor));
+      const g = Math.min(255, Math.floor(parseInt(hex.substring(2, 4), 16) * factor));
+      const b = Math.min(255, Math.floor(parseInt(hex.substring(4, 6), 16) * factor));
+      return `rgb(${r}, ${g}, ${b})`;
     };
 
     canvas.width = canvas.offsetWidth;
@@ -224,17 +278,30 @@ export default function GrantSectorChart() {
           {/* 3D Canvas Globe */}
           <div style={{
             position: 'relative',
-            borderRadius: '16px',
+            borderRadius: '20px',
             overflow: 'hidden',
-            background: 'radial-gradient(circle at 50% 30%, rgba(6, 182, 212, 0.1), transparent)'
+            background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(15, 23, 42, 0.95) 50%, rgba(168, 85, 247, 0.08) 100%)',
+            boxShadow: '0 0 60px rgba(6, 182, 212, 0.2), inset 0 0 60px rgba(6, 182, 212, 0.05)',
+            border: '1px solid rgba(6, 182, 212, 0.2)',
+            padding: '20px'
           }}>
+            <div style={{
+              position: 'absolute',
+              inset: '20px',
+              borderRadius: '12px',
+              background: 'radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.1), transparent 60%), radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.1), transparent 60%)',
+              pointerEvents: 'none'
+            }} />
             <canvas
               ref={canvasRef}
               style={{
                 width: '100%',
                 height: '400px',
                 display: 'block',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                borderRadius: '12px',
+                position: 'relative',
+                zIndex: 1
               }}
             />
           </div>
