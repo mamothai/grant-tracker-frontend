@@ -227,10 +227,10 @@ export default function Home() {
         <div className="panel-left">
           <div className="hero-badge">
             <span className="badge-dot"></span>
-            <span>🎄 Christmas Special • Transparency • Accountability • Trust</span>
+            <span style={{ opacity: 0.7 }}>🎄 Christmas Special • Transparency • Accountability • Trust</span>
           </div>
-          <h1 className="big-title gradient">GrantTracker Portal</h1>
-          <p className="lead muted">
+          <h1 className="big-title gradient" style={{ opacity: 0.9 }}>GrantTracker Portal</h1>
+          <p className="lead muted" style={{ opacity: 0.7 }}>
             A transparent digital system connecting officials, creators, and the public with verified grant activity. Track, verify, and ensure accountability in real-time.
           </p>
 
