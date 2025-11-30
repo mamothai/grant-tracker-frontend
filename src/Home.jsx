@@ -104,7 +104,7 @@ function IconRobot() {
 export default function Home() {
   return (
     <main className="page-scroll" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Dynamic animated background */}
+      {/* Animated snowfall background */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -113,61 +113,101 @@ export default function Home() {
         height: '100%',
         zIndex: -1,
         pointerEvents: 'none',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)'
       }}>
-        {/* Animated gradient orbs */}
-        <div style={{
-          position: 'absolute',
-          width: '400px',
-          height: '400px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, transparent 70%)',
-          top: '-100px',
-          left: '-100px',
-          animation: 'float 20s ease-in-out infinite',
-          filter: 'blur(60px)'
-        }} />
-        <div style={{
-          position: 'absolute',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
-          bottom: '-150px',
-          right: '-150px',
-          animation: 'float 25s ease-in-out infinite reverse',
-          filter: 'blur(80px)'
-        }} />
-        <div style={{
-          position: 'absolute',
-          width: '350px',
-          height: '350px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%)',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          animation: 'float 30s ease-in-out infinite',
-          filter: 'blur(70px)'
-        }} />
-
-        {/* Add keyframes animation via style tag */}
+        {/* Snowflakes container */}
         <style>{`
-          @keyframes float {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            25% { transform: translateY(-30px) translateX(20px); }
-            50% { transform: translateY(-60px) translateX(-20px); }
-            75% { transform: translateY(-30px) translateX(30px); }
+          @keyframes snowfall {
+            0% {
+              transform: translateY(-10vh) translateX(0);
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) translateX(100px);
+              opacity: 0;
+            }
           }
-          @keyframes float-alt {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-40px); }
+          @keyframes snowfall-2 {
+            0% {
+              transform: translateY(-10vh) translateX(0);
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) translateX(-50px);
+              opacity: 0;
+            }
           }
-          @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+          @keyframes snowfall-3 {
+            0% {
+              transform: translateY(-10vh) translateX(0);
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) translateX(70px);
+              opacity: 0;
+            }
+          }
+          @keyframes sway {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+          }
+          .snowflake {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            pointer-events: none;
           }
         `}</style>
+
+        {/* Generate snowflakes dynamically */}
+        {[...Array(60)].map((_, i) => {
+          const duration = 10 + Math.random() * 15;
+          const delay = Math.random() * 5;
+          const leftPos = Math.random() * 100;
+          const size = 6 + Math.random() * 8;
+          const animationNames = ['snowfall', 'snowfall-2', 'snowfall-3'];
+          const animation = animationNames[i % 3];
+          
+          return (
+            <div
+              key={i}
+              className="snowflake"
+              style={{
+                left: `${leftPos}%`,
+                top: `-${Math.random() * 10}vh`,
+                width: `${size}px`,
+                height: `${size}px`,
+                animation: `${animation} ${duration}s linear ${delay}s infinite`,
+                opacity: 0.6 + Math.random() * 0.4,
+                filter: `blur(${Math.random() * 0.5}px)`
+              }}
+            />
+          );
+        })}
+
+        {/* Subtle gradient overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'radial-gradient(circle at 30% 0%, rgba(6, 182, 212, 0.05), transparent 40%), radial-gradient(circle at 70% 100%, rgba(168, 85, 247, 0.05), transparent 40%)',
+          pointerEvents: 'none'
+        }} />
       </div>
 
       {/* HERO */}
