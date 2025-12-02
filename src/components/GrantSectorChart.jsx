@@ -18,14 +18,43 @@ export default function GrantSectorChart() {
   const navigate = useNavigate();
   const canvasRef = useRef(null);
 
-  // Get real data from localStorage
+  // Sample grant data with all sectors
+  const sampleGrants = [
+    // Agriculture
+    { id: "AGR-001", title: "PM Kisan Samman Nidhi", field: "Agriculture", amount: 60000 * 10000000 },
+    { id: "AGR-002", title: "Soil Health Card Scheme", field: "Agriculture", amount: 2500 * 10000000 },
+    { id: "AGR-003", title: "Pradhan Mantri Fasal Bima Yojana", field: "Agriculture", amount: 18000 * 10000000 },
+    // Education
+    { id: "EDU-001", title: "Mid Day Meal Scheme", field: "Education", amount: 40000 * 10000000 },
+    { id: "EDU-002", title: "Samagra Shiksha", field: "Education", amount: 30000 * 10000000 },
+    { id: "EDU-003", title: "National Scholarship Scheme", field: "Education", amount: 15000 * 10000000 },
+    // Health
+    { id: "HEL-001", title: "Ayushman Bharat", field: "Health", amount: 60000 * 10000000 },
+    { id: "HEL-002", title: "National Health Mission", field: "Health", amount: 50000 * 10000000 },
+    { id: "HEL-003", title: "COVID-19 Vaccination Drive", field: "Health", amount: 35000 * 10000000 },
+    // Infrastructure
+    { id: "INF-001", title: "Pradhan Mantri Gram Sadak Yojana", field: "Infrastructure", amount: 45000 * 10000000 },
+    { id: "INF-002", title: "Smart Cities Mission", field: "Infrastructure", amount: 25000 * 10000000 },
+    // Environment
+    { id: "ENV-001", title: "Swachh Bharat Mission", field: "Environment", amount: 30000 * 10000000 },
+    { id: "ENV-002", title: "National Clean Air Programme", field: "Environment", amount: 8000 * 10000000 },
+    // Technology
+    { id: "TECH-001", title: "Digital India Programme", field: "Technology", amount: 35000 * 10000000 },
+    { id: "TECH-002", title: "E-Governance Initiative", field: "Technology", amount: 12000 * 10000000 },
+    // Women & Child
+    { id: "WC-001", title: "ICDS - Integrated Child Development Services", field: "Women & Child", amount: 28000 * 10000000 },
+    { id: "WC-002", title: "Ujjwala - Women's Safety Programme", field: "Women & Child", amount: 5000 * 10000000 },
+  ];
+
+  // Get real data from localStorage or use sample data
   const data = (() => {
     try {
       const grants = JSON.parse(localStorage.getItem("grants") || "[]");
+      const storedGrants = grants.length > 0 ? grants : sampleGrants;
       
       // Group by field/sector
       const sectors = {};
-      grants.forEach(g => {
+      storedGrants.forEach(g => {
         const field = g.field || "General";
         if (!sectors[field]) {
           sectors[field] = 0;
@@ -40,13 +69,20 @@ export default function GrantSectorChart() {
       })).sort((a, b) => b.value - a.value);
     } catch (e) {
       console.error("Error loading grants:", e);
-      return [
-        { name: "Agriculture", value: 180000000000 },
-        { name: "Education", value: 120000000000 },
-        { name: "Health", value: 240000000000 },
-        { name: "Infrastructure", value: 90000000000 },
-        { name: "Environment", value: 60000000000 }
-      ];
+      // Fallback with sample data
+      const sectors = {};
+      sampleGrants.forEach(g => {
+        const field = g.field || "General";
+        if (!sectors[field]) {
+          sectors[field] = 0;
+        }
+        sectors[field] += g.amount || 0;
+      });
+
+      return Object.entries(sectors).map(([name, value]) => ({
+        name,
+        value
+      })).sort((a, b) => b.value - a.value);
     }
   })();
 
