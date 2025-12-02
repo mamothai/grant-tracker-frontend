@@ -103,7 +103,7 @@ function IconRobot() {
 
 export default function Home() {
   return (
-    <main className="page-scroll" style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
+    <main className="page-scroll" style={{ position: 'relative', overflow: 'visible', zIndex: 1 }}>
       {/* Animated snowfall background */}
       <div style={{
         position: 'fixed',
