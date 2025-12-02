@@ -2127,6 +2127,14 @@ a {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .chart-wrapper {
+    padding: 30px !important;
+  }
+
+  canvas {
+    height: 350px !important;
+  }
 }
 
 /* Desktop: 1024px+ */
@@ -2316,6 +2324,38 @@ a {
   .cta {
     padding: 10px 16px;
     font-size: 0.9rem;
+  }
+
+  /* Chart page mobile fixes */
+  .chart-page {
+    padding: 20px 16px;
+    min-height: auto;
+  }
+
+  .chart-wrapper {
+    padding: 16px !important;
+  }
+
+  .chart-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stat {
+    padding: 14px !important;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+
+  canvas {
+    height: 300px !important;
   }
 }
 

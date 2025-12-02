@@ -274,7 +274,7 @@ export default function GrantSectorChart() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', marginTop: '40px', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '40px', marginTop: '40px', alignItems: 'start' }}>
           {/* 3D Canvas Globe */}
           <div style={{
             position: 'relative',
