@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import santaImg from "../assets/santa.svg";
-import sleighImg from "../assets/sleigh.svg";
 
 // Comprehensive grant database from your website
 const GRANTS = [
@@ -329,22 +328,7 @@ export default function ChatBot() {
   return (
     <>
       {/* Toggle Button */}
-      {/* animated sleigh (flies in loop above the chat button) */}
-      <div style={{ position: "fixed", right: "-10px", bottom: "88px", width: "220px", height: "80px", pointerEvents: "none", overflow: "visible", zIndex: 998 }}>
-        <style>{`
-          @keyframes sleigh-fly {
-            0% { transform: translateX(110%); opacity: 0; }
-            10% { opacity: 1; }
-            50% { transform: translateX(-30%); opacity: 1; }
-            90% { opacity: 0.6; }
-            100% { transform: translateX(110%); opacity: 0; }
-          }
-          .grant-sleigh { width: 220px; height: auto; transform: translateX(110%); }
-          .grant-sleigh.fly { animation: sleigh-fly 9s linear infinite; }
-        `}</style>
-        <img src={sleighImg} alt="sleigh" className="grant-sleigh fly" style={{ display: "block", filter: "drop-shadow(0 6px 8px rgba(0,0,0,0.35))" }} />
-      </div>
-
+      
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
