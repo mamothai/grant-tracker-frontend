@@ -41,7 +41,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 Welcome to **GrantTracker**! I'm your AI Assistant. This website helps you discover and track **18+ Indian government grants** across **7 sectors** - Agriculture, Education, Health, Infrastructure, Environment, Technology, and Women & Child welfare.\n\nI can help you:\n• Find grants matching your profile\n• Check eligibility for specific schemes\n• Get detailed information about benefits\n• Browse by sector or search by name\n\nWhat would you like to explore?",
+      text: "👋 Welcome to **GrantTracker**! I'm your AI Assistant. This website helps you discover and track government grants across **7 sectors** - Agriculture, Education, Health, Infrastructure, Environment, Technology, and Women & Child welfare.\n\nI can help you:\n• Find grants matching your profile\n• Check eligibility for specific schemes\n• Get detailed information about benefits\n• Browse by sector or search by name\n\nWhat would you like to explore?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -139,7 +139,7 @@ export default function ChatBot() {
     // About website query
     if (isAboutWebsite) {
       return {
-        text: "📱 **GrantTracker - Your Personal Grant Discovery Platform**\n\n**What We Do:**\nGrantTracker is an intelligent platform that helps Indians find and track government grants they're eligible for. No more missing opportunities!\n\n**Our Features:**\n• **Smart Search**: AI-powered grant discovery based on your profile\n• **18+ Schemes**: Agriculture, Education, Health, Infrastructure, Environment, Tech, Women & Child\n• **Full Details**: Benefits, eligibility, coverage, and implementation details\n• **Dashboard**: Track all available grants in one place\n• **AI Assistant**: Me! I can answer any question about grants\n\n**How It Works:**\n1. Tell me about yourself (occupation, location, needs)\n2. I find matching grants for you\n3. Get detailed info and eligibility criteria\n4. Access the dashboard for comprehensive view\n\n**Why GrantTracker?**\nMillions of Indians miss out on benefits they're eligible for. We bridge that gap with smart technology!",
+        text: "📱 **GrantTracker - Your Personal Grant Discovery Platform**\n\n**What We Do:**\nGrantTracker is an intelligent platform that helps Indians find and track government grants they're eligible for. No more missing opportunities!\n\n**Our Features:**\n• **Smart Search**: AI-powered grant discovery based on your profile\n• **Multiple Schemes**: Agriculture, Education, Health, Infrastructure, Environment, Tech, Women & Child\n• **Full Details**: Benefits, eligibility, coverage, and implementation details\n• **Dashboard**: Track all available grants in one place\n• **AI Assistant**: Me! I can answer any question about grants\n\n**How It Works:**\n1. Tell me about yourself (occupation, location, needs)\n2. I find matching grants for you\n3. Get detailed info and eligibility criteria\n4. Access the dashboard for comprehensive view\n\n**Why GrantTracker?**\nMillions of Indians miss out on benefits they're eligible for. We bridge that gap with smart technology!",
         suggestions: ["Check Eligibility", "View All Grants", "Agriculture Grants"],
       };
     }
@@ -245,7 +245,7 @@ export default function ChatBot() {
 
     // Conversational/general help
     return {
-      text: `👋 **Hi! I'm your GrantTracker AI Assistant powered by ChatGPT-like intelligence.**\n\nI have access to **18+ government grants** and can help you:\n\n✨ **What I can do:**\n• Search for specific grants by name or benefit\n• Check your eligibility based on your profile\n• Browse grants by sector (Agriculture, Health, Education, etc.)\n• Compare different schemes\n• Answer questions about benefits and coverage\n\n💬 **Try asking me:**\n• "Tell me about PM Kisan Yojana"\n• "I'm a farmer, what grants am I eligible for?"\n• "Show me health sector grants"\n• "Which grants provide cash benefits?"\n• "How many schemes are available?"\n\n**What would you like to know?**`,
+      text: `👋 **Hi! I'm your GrantTracker AI Assistant powered by ChatGPT-like intelligence.**\n\nI can help you:\n\n✨ **What I can do:**\n• Search for specific grants by name or benefit\n• Check your eligibility based on your profile\n• Browse grants by sector (Agriculture, Health, Education, etc.)\n• Compare different schemes\n• Answer questions about benefits and coverage\n\n💬 **Try asking me:**\n• "Tell me about PM Kisan Yojana"\n• "I'm a farmer, what grants am I eligible for?"\n• "Show me health sector grants"\n• "Which grants provide cash benefits?"\n• "How many schemes are available?"\n\n**What would you like to know?**`,
       suggestions: ["Search Grants", "Check Eligibility", "View All Programs"],
     };
   };
@@ -382,7 +382,7 @@ export default function ChatBot() {
           {/* Header */}
           <div style={{ padding: "16px", borderBottom: "1px solid rgba(6, 182, 212, 0.1)", background: "linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(168, 85, 247, 0.1))" }}>
             <h3 style={{ margin: 0, color: "#06b6d4", fontSize: "16px" }}>🤖 GrantTracker AI</h3>
-            <p style={{ margin: "4px 0 0 0", color: "#a1a1aa", fontSize: "12px" }}>Powered by 18+ Grants Database</p>
+            <p style={{ margin: "4px 0 0 0", color: "#a1a1aa", fontSize: "12px" }}>Your Grant Discovery Assistant</p>
           </div>
 
           {/* Messages */}
