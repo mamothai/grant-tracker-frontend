@@ -2,18 +2,32 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
+// Sample grant database
+const GRANT_DATABASE = [
+  { id: "AGR-001", name: "PM Kisan Samman Nidhi", sector: "Agriculture", amount: "₹6,000/year", desc: "Annual income support for farmers", keywords: ["kisan", "farmer", "agriculture", "income", "support"] },
+  { id: "AGR-002", name: "Soil Health Card Scheme", sector: "Agriculture", amount: "Free testing", desc: "Soil testing and nutrient management", keywords: ["soil", "testing", "health", "nutrients", "agriculture"] },
+  { id: "EDU-001", name: "Mid Day Meal Scheme", sector: "Education", amount: "Free meals", desc: "Nutrition support for school children", keywords: ["midday", "meal", "school", "student", "education", "nutrition"] },
+  { id: "EDU-002", name: "National Scholarship Scheme", sector: "Education", amount: "Varies", desc: "Scholarships for meritorious students", keywords: ["scholarship", "student", "merit", "education", "financial"] },
+  { id: "HEL-001", name: "Ayushman Bharat", sector: "Health", amount: "₹5 Lakh/family", desc: "Health insurance for poor families", keywords: ["ayushman", "health", "insurance", "medical", "hospital", "free"] },
+  { id: "INF-001", name: "Pradhan Mantri Gram Sadak Yojana", sector: "Infrastructure", amount: "Full funding", desc: "Road connectivity in rural areas", keywords: ["gram sadak", "road", "rural", "infrastructure", "connectivity"] },
+  { id: "ENV-001", name: "Swachh Bharat Mission", sector: "Environment", amount: "Full funding", desc: "Sanitation and cleanliness drive", keywords: ["swachh", "clean", "sanitation", "environment", "toilets"] },
+  { id: "TECH-001", name: "Digital India Programme", sector: "Technology", amount: "Full funding", desc: "Digital infrastructure development", keywords: ["digital", "india", "technology", "broadband", "internet"] },
+  { id: "WC-001", name: "ICDS Scheme", sector: "Women & Child", amount: "Free services", desc: "Child development and nutrition programs", keywords: ["icds", "child", "development", "nutrition", "women", "mother"] },
+];
+
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 Hi! I'm your GrantTracker Assistant. I can help you find grants, navigate the website, and answer questions about different sectors. What can I help you with?",
+      text: "👋 Hi! I'm your GrantTracker Assistant. I can help you find grants, answer eligibility questions, explain schemes, or guide you through the website. What are you looking for?",
       sender: "bot",
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationContext, setConversationContext] = useState("");
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
@@ -25,127 +39,193 @@ export default function ChatBot() {
     scrollToBottom();
   }, [messages]);
 
-  // Grant sectors and keywords for routing
-  const sectorKeywords = {
-    agriculture: ["agriculture", "farming", "farmer", "crop", "soil", "pm kisan"],
-    education: ["education", "school", "student", "midday", "scholarship"],
-    health: ["health", "ayushman", "medical", "healthcare", "hospital"],
-    infrastructure: ["infrastructure", "road", "gram sadak", "city", "smart"],
-    environment: ["environment", "swachh", "clean", "pollution", "sustainability"],
-    technology: ["technology", "digital", "india", "e-governance"],
-    "women & child": ["women", "child", "ujjwala", "icds", "mother"],
+  // Smart grant search function
+  const findRelatedGrants = (query) => {
+    const queryLower = query.toLowerCase();
+    return GRANT_DATABASE.filter(grant =>
+      grant.keywords.some(keyword => queryLower.includes(keyword)) ||
+      grant.name.toLowerCase().includes(queryLower) ||
+      grant.sector.toLowerCase().includes(queryLower)
+    ).slice(0, 3);
   };
 
-  // Generate bot response based on user input
+  // Calculate eligibility based on keywords
+  const assessEligibility = (message) => {
+    const lower = message.toLowerCase();
+    const indicators = {
+      farmer: "You might be eligible for agricultural schemes like PM Kisan",
+      student: "You might be eligible for education scholarships and meal schemes",
+      child: "Your child might benefit from ICDS programs",
+      elderly: "You might be eligible for senior citizen benefits",
+      woman: "You might be eligible for women-specific schemes",
+      poor: "You might be eligible for subsidized/free government services",
+      rural: "You might be eligible for rural development schemes",
+      unemployed: "You might be eligible for skill development and employment schemes",
+    };
+
+    for (const [keyword, message] of Object.entries(indicators)) {
+      if (lower.includes(keyword)) {
+        return message;
+      }
+    }
+    return null;
+  };
+
+  // Enhanced bot response with intelligent matching
   const generateBotResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
+    
+    // Check for eligibility questions
+    if (
+      lowerMessage.includes("eligible") ||
+      lowerMessage.includes("am i") ||
+      lowerMessage.includes("can i") ||
+      lowerMessage.includes("qualify")
+    ) {
+      const eligibility = assessEligibility(userMessage);
+      const relatedGrants = findRelatedGrants(userMessage);
+      
+      let text = eligibility || "To check eligibility, tell me more about yourself (your profession, age, location, etc.)";
+      
+      if (relatedGrants.length > 0) {
+        text += "\n\n💡 These schemes might interest you:\n";
+        relatedGrants.forEach(g => {
+          text += `• **${g.name}** - ${g.desc}\n`;
+        });
+      }
+      
+      return {
+        text,
+        suggestions: relatedGrants.length > 0 ? 
+          relatedGrants.map(g => `Learn about ${g.name.split(" ")[0]}`) : 
+          ["View Dashboard", "All Sectors"],
+        action: null,
+      };
+    }
+
+    // Search grants by keyword
+    const relatedGrants = findRelatedGrants(userMessage);
+    if (relatedGrants.length > 0 && !lowerMessage.includes("how")) {
+      let text = `🎯 I found ${relatedGrants.length} grant(s) matching your search:\n\n`;
+      relatedGrants.forEach((g, idx) => {
+        text += `${idx + 1}. **${g.name}**\n   Sector: ${g.sector}\n   Benefit: ${g.amount}\n   ${g.desc}\n\n`;
+      });
+      
+      return {
+        text,
+        suggestions: relatedGrants.map(g => `Details: ${g.name.substring(0, 20)}`),
+        action: null,
+      };
+    }
+
+    // General questions about grants
+    if (lowerMessage.includes("what is") || lowerMessage.includes("what are")) {
+      if (lowerMessage.includes("grant")) {
+        return {
+          text: "💰 **Grants** are financial aids provided by government to individuals, businesses, or organizations for specific purposes. They don't need to be repaid!\n\nCommon types:\n• Individual grants (farmers, students)\n• Development grants (infrastructure, environment)\n• Social welfare grants (health, education, women & children)\n\nWould you like to explore specific grant types?",
+          suggestions: ["View Dashboard", "Find Grants", "About Schemes"],
+          action: null,
+        };
+      }
+    }
 
     // Navigation suggestions
     if (
       lowerMessage.includes("dashboard") ||
       lowerMessage.includes("chart") ||
-      lowerMessage.includes("sectors")
+      lowerMessage.includes("all sectors")
     ) {
       return {
-        text: "📊 I can take you to the dashboard to view grant distribution across sectors. Would you like me to navigate you there? You can also explore individual sectors to see detailed grant information.",
-        suggestions: ["View Dashboard", "Back to Home"],
+        text: "📊 The Dashboard shows all grants organized by sector with visual distribution. You can see:\n• Total grants by sector\n• Funding allocation\n• Grant breakdown\n• Sector-wise comparison",
+        suggestions: ["View Dashboard", "Specific Sector"],
         action: "dashboard",
       };
     }
 
-    if (lowerMessage.includes("grant") && lowerMessage.includes("details")) {
-      return {
-        text: "📋 To view detailed grant information, you can either explore the dashboard or search for specific sectors. Which sector interests you? (Agriculture, Education, Health, Infrastructure, Environment, Technology, Women & Child)",
-        suggestions: [
-          "Agriculture Grants",
-          "Education Grants",
-          "Health Grants",
-          "More Options",
-        ],
-        action: null,
-      };
-    }
-
+    // How to use guide
     if (
       lowerMessage.includes("how") &&
-      (lowerMessage.includes("work") || lowerMessage.includes("use"))
+      (lowerMessage.includes("work") || lowerMessage.includes("use") || lowerMessage.includes("navigate"))
     ) {
       return {
-        text: "🔍 GrantTracker helps you find and track government grants! Here's how to use it:\n\n1. 📊 **Dashboard**: View all grants by sector\n2. 🔎 **Search**: Find specific grants\n3. 📄 **Details**: Get comprehensive grant information\n4. 💬 **Feedback**: Share your suggestions\n\nWould you like to explore any specific area?",
-        suggestions: ["View Dashboard", "Search Grants", "About Us"],
+        text: "🗺️ **How to use GrantTracker:**\n\n1. **Explore Dashboard** - See all grants by sector\n2. **Search** - Ask about specific grants or sectors\n3. **Check Eligibility** - Tell me about yourself\n4. **View Details** - Click on any grant for full information\n5. **Submit Feedback** - Share your suggestions\n\nWhat would you like to do first?",
+        suggestions: ["View Dashboard", "Search Grants", "Check Eligibility"],
         action: null,
       };
     }
 
+    // About page
     if (lowerMessage.includes("about")) {
       return {
-        text: "ℹ️ GrantTracker is a transparent digital platform connecting officials, creators, and the public with verified grant activity. We ensure accountability and trust in the grant distribution system.\n\nWant to learn more about our mission?",
-        suggestions: ["About Us", "Dashboard", "Submit Feedback"],
+        text: "ℹ️ **GrantTracker** is a transparent digital platform ensuring accountability in government grant distribution. We provide:\n\n✓ Real-time grant information\n✓ Sector-wise breakdown\n✓ Eligibility guidance\n✓ Transparent allocation data\n✓ Public feedback system\n\nOur mission: Connect officials, creators, and citizens with verified grant activity.",
+        suggestions: ["About Us", "View Dashboard", "Submit Feedback"],
         action: "about",
       };
     }
 
+    // Feedback
     if (lowerMessage.includes("feedback") || lowerMessage.includes("suggest")) {
       return {
-        text: "💭 Your feedback is valuable! You can submit suggestions about any grant to help improve transparency and accountability in our system.",
+        text: "💬 We value your feedback! You can submit:\n• Grant improvement suggestions\n• New grant ideas\n• Website feedback\n• Eligibility concerns\n• General suggestions\n\nYour input helps us improve transparency and serve you better!",
         suggestions: ["Submit Feedback", "View Dashboard"],
         action: "suggestions",
       };
     }
 
-    // Sector-specific responses
+    // Sector navigation
+    const sectorKeywords = {
+      agriculture: ["agriculture", "farming", "farmer", "crop", "soil", "pm kisan", "rural", "agri"],
+      education: ["education", "school", "student", "midday", "scholarship", "learning", "college"],
+      health: ["health", "ayushman", "medical", "healthcare", "hospital", "disease", "insurance"],
+      infrastructure: ["infrastructure", "road", "gram sadak", "city", "smart", "construction"],
+      environment: ["environment", "swachh", "clean", "pollution", "eco", "sustainable"],
+      technology: ["technology", "digital", "india", "e-governance", "broadband", "internet"],
+      "women & child": ["women", "child", "ujjwala", "icds", "mother", "girl", "pregnant"],
+    };
+
     for (const [sector, keywords] of Object.entries(sectorKeywords)) {
       if (keywords.some((keyword) => lowerMessage.includes(keyword))) {
         return {
-          text: `🎯 Great! You're interested in ${sector} grants. I can show you all grants in this sector with details about funding, benefits, and eligibility.\n\nWould you like to explore ${sector} grants?`,
+          text: `📌 **${sector.toUpperCase()} GRANTS**\n\nI can show you all available grants in this sector with details about:\n• Eligibility criteria\n• Funding amounts\n• Application process\n• Benefits\n\nWould you like to explore ${sector} grants?`,
           suggestions: [`Explore ${sector}`, "Other Sectors", "Dashboard"],
           action: sector,
         };
       }
     }
 
-    if (lowerMessage.includes("creator") || lowerMessage.includes("login")) {
+    // Login options
+    if (lowerMessage.includes("creator") || lowerMessage.includes("official") || lowerMessage.includes("login")) {
       return {
-        text: "🔐 Are you a grant creator or government official? You can log in to your dedicated portal to manage and create grants.",
-        suggestions: ["Creator Login", "Official Login", "Back to Home"],
+        text: "🔐 **Login Options:**\n\n👨‍💻 **Creator Login** - Create and manage grants\n👔 **Official Login** - Government dashboard access\n\nWhich portal are you interested in?",
+        suggestions: ["Creator Login", "Official Login", "Public Dashboard"],
         action: null,
       };
     }
 
+    // Default helpful response
     if (
+      lowerMessage.includes("hi") || 
+      lowerMessage.includes("hello") || 
       lowerMessage.includes("help") ||
-      lowerMessage.includes("support") ||
-      lowerMessage.includes("?")
+      lowerMessage.includes("?") ||
+      lowerMessage.includes("start")
     ) {
       return {
-        text: "📞 How can I help you today?\n\n• 📊 View grant dashboard\n• 🔍 Search specific sectors\n• 📚 Learn about grants\n• 💬 Submit feedback\n• 🔐 Login options\n\nJust ask me anything!",
+        text: "👋 **Welcome to GrantTracker!** I'm here to help you:\n\n💡 **Ask me about:**\n• Grant searches (e.g., \"agriculture grants\")\n• Eligibility (e.g., \"I'm a student\")\n• Website navigation\n• Specific schemes\n\n🎯 **Popular actions:**",
         suggestions: [
+          "Find Grants",
+          "Check Eligibility",
           "View Dashboard",
-          "About Grants",
-          "Submit Feedback",
-          "Login",
+          "About Schemes"
         ],
         action: null,
       };
     }
 
-    if (lowerMessage.includes("hi") || lowerMessage.includes("hello")) {
-      return {
-        text: "👋 Hello! I'm here to help you navigate GrantTracker and find the grants you're looking for. What would you like to explore?",
-        suggestions: [
-          "View Dashboard",
-          "Search Grants",
-          "About Us",
-          "Submit Feedback",
-        ],
-        action: null,
-      };
-    }
-
-    // Default response
+    // Catch-all intelligent response
     return {
-      text: "I can help you with:\n• 📊 Dashboard & sector information\n• 🔍 Grant details by category\n• 🔐 Login options\n• 💬 Feedback submission\n\nWhat would you like to do?",
-      suggestions: ["View Dashboard", "Search Grants", "Submit Feedback"],
+      text: `🤔 I understand you're looking for information about "${userMessage.substring(0, 30)}..."\n\nI can help you with:\n• Grant searches and details\n• Eligibility checks\n• Sector information\n• Website navigation\n• General grant questions\n\nCould you be more specific?`,
+      suggestions: ["View Dashboard", "Search Grants", "Check Eligibility", "Help"],
       action: null,
     };
   };
