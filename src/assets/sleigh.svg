@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="240" height="120" preserveAspectRatio="xMidYMid meet">
+  <!-- simple sleigh + reindeer silhouette for lightweight animation -->
+  <g fill="none" stroke="none">
+    <!-- sleigh body -->
+    <path d="M10 36 C24 28, 46 28, 62 34 L86 40 C92 41, 94 46, 86 48 L34 52 C24 53, 18 50, 10 44 Z" fill="#b71c1c"/>
+    <!-- sleigh runners -->
+    <path d="M14 52 L26 52" stroke="#2d2d2d" stroke-width="2" stroke-linecap="round"/>
+    <path d="M58 54 L94 54" stroke="#2d2d2d" stroke-width="2" stroke-linecap="round"/>
+    <!-- small cargo box -->
+    <rect x="38" y="26" width="20" height="12" rx="2" fill="#ffcc80"/>
+    <!-- reindeer - simplified head and antlers -->
+    <g transform="translate(92,18)">
+      <circle cx="0" cy="6" r="6" fill="#8d6e63"/>
+      <path d="M-2 -2 L-6 -8 M2 -2 L6 -8" stroke="#5d4037" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="-4" y="8" width="8" height="4" rx="1" fill="#8d6e63"/>
+    </g>
+  </g>
+</svg>
