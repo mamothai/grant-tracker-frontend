@@ -58,28 +58,54 @@ module.exports = async (req, res) => {
   // Add the current user message
   messages.push({ role: 'user', content: String(message) });
 
-  // Call OpenAI (requires OPENAI_API_KEY in env)
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'OPENAI_API_KEY not configured. Please set the OPENAI_API_KEY environment variable.' });
-  }
+  // Prefer OpenAI if key is configured, otherwise try Hugging Face Inference API (free tier)
+  const openaiKey = process.env.OPENAI_API_KEY;
+  const hfKey = process.env.HUGGINGFACE_API_KEY;
+  const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
 
-  try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ model: 'gpt-4o-mini', messages, max_tokens: 900 }),
-    });
+  if (openaiKey) {
+    try {
+      const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
+        body: JSON.stringify({ model: 'gpt-4o-mini', messages, max_tokens: 900 }),
+      });
 
-    if (!resp.ok) {
-      const txt = await resp.text();
-      return res.status(502).json({ error: 'LLM error', details: txt });
+      if (!resp.ok) {
+        const txt = await resp.text();
+        return res.status(502).json({ error: 'OpenAI LLM error', details: txt });
+      }
+
+      const data = await resp.json();
+      const reply = data.choices?.[0]?.message?.content || 'Sorry, I had no response.';
+      return res.json({ reply, citations: retrieved.map(g => g.id) });
+    } catch (err) {
+      return res.status(500).json({ error: 'OpenAI request failed', details: err.message });
     }
-
-    const data = await resp.json();
-    const reply = data.choices?.[0]?.message?.content || 'Sorry, I had no response.';
-    return res.json({ reply, citations: retrieved.map(g => g.id) });
-  } catch (err) {
-    return res.status(500).json({ error: 'Request failed', details: err.message });
   }
+
+  // If OpenAI not available, try Hugging Face Inference API (requires HUGGINGFACE_API_KEY)
+  if (hfKey) {
+    try {
+      const hfResp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(hfModel)}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${hfKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'), parameters: { max_new_tokens: 400 } }),
+      });
+
+      if (!hfResp.ok) {
+        const txt = await hfResp.text();
+        return res.status(502).json({ error: 'HuggingFace LLM error', details: txt });
+      }
+
+      const hfData = await hfResp.json();
+      // Hugging Face returns [{ generated_text: '...' }] for text-generation models
+      const reply = Array.isArray(hfData) ? (hfData[0].generated_text || hfData[0].text || '') : (hfData.generated_text || hfData.text || '');
+      return res.json({ reply: reply.trim(), citations: retrieved.map(g => g.id) });
+    } catch (err) {
+      return res.status(500).json({ error: 'HuggingFace request failed', details: err.message });
+    }
+  }
+
+  return res.status(500).json({ error: 'No LLM provider configured. Set OPENAI_API_KEY or HUGGINGFACE_API_KEY.' });
 };
