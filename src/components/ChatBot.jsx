@@ -80,7 +80,7 @@ export default function ChatBot() {
   };
 
   // Get grants by sector
-  const getGrantsByS ector = (sector) => {
+  const getGrantsBySector = (sector) => {
     return GRANTS.filter(g => g.sector.toLowerCase().includes(sector.toLowerCase()));
   };
 
