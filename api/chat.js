@@ -58,11 +58,14 @@ module.exports = async (req, res) => {
   // Add the current user message
   messages.push({ role: 'user', content: String(message) });
 
-  // Prefer OpenAI if key is configured, otherwise try Hugging Face Inference API (free tier)
+  // Provider chain: OpenAI → Local Ollama → Hugging Face Inference API
   const openaiKey = process.env.OPENAI_API_KEY;
+  const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+  const ollamaModel = process.env.OLLAMA_MODEL || 'mistral';
   const hfKey = process.env.HUGGINGFACE_API_KEY;
   const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
 
+  // 1. Try OpenAI
   if (openaiKey) {
     try {
       const resp = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -84,7 +87,24 @@ module.exports = async (req, res) => {
     }
   }
 
-  // If OpenAI not available, try Hugging Face Inference API (requires HUGGINGFACE_API_KEY)
+  // 2. Try local Ollama (if running)
+  try {
+    const ollamaResp = await fetch(`${ollamaUrl}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: ollamaModel, messages, stream: false }),
+    });
+
+    if (ollamaResp.ok) {
+      const ollamaData = await ollamaResp.json();
+      const reply = ollamaData.message?.content || 'Sorry, I had no response from Ollama.';
+      return res.json({ reply, citations: retrieved.map(g => g.id) });
+    }
+  } catch (err) {
+    // Ollama not available, continue to next fallback
+  }
+
+  // 3. Try Hugging Face Inference API (requires HUGGINGFACE_API_KEY)
   if (hfKey) {
     try {
       const hfResp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(hfModel)}`, {
@@ -107,5 +127,5 @@ module.exports = async (req, res) => {
     }
   }
 
-  return res.status(500).json({ error: 'No LLM provider configured. Set OPENAI_API_KEY or HUGGINGFACE_API_KEY.' });
+  return res.status(500).json({ error: 'No LLM provider configured. Set OPENAI_API_KEY, run Ollama locally, or set HUGGINGFACE_API_KEY.' });
 };
