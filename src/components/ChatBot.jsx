@@ -242,14 +242,13 @@ export default function ChatBot() {
       };
       setMessages(prev => [...prev, botMsg]);
       setIsLoading(false);
-    }).catch(() => {
-      // fallback local response
-      const response = generateResponse(text);
+    }).catch((err) => {
+      // Remote AI failed — inform user and provide guidance (no local fallback to keep responses consistent)
       const botMsg = {
         id: Date.now() + 1,
-        text: response.text,
+        text: `⚠️ Remote AI unavailable. Please ensure the server has an OPENAI_API_KEY configured. Error: ${err?.message || 'network error'}`,
         sender: 'bot',
-        suggestions: response.suggestions,
+        suggestions: ["Try again later", "Contact support"],
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, botMsg]);

@@ -37,29 +37,45 @@ module.exports = async (req, res) => {
     });
   }
 
-  const system = `You are GrantTracker Assistant. Use the provided 'Relevant grants' section to ground your answer. If no relevant grants are present say you couldn't find a direct match and offer to browse by sector.`;
-  const prompt = `${system}\n\n${contextText}\nUser: ${message}\nAssistant:`;
+  const system = `You are GrantTracker Assistant. Use the provided 'Relevant grants' section to ground your answer. If no relevant grants are present say you couldn't find a direct match and offer to browse by sector. Answer concisely and include citations when mentioning specific grants.`;
+
+  // Build messages array for the chat completion using client history for continuity
+  const messages = [];
+  messages.push({ role: 'system', content: system });
+  if (contextText) {
+    messages.push({ role: 'system', content: `Relevant grants:\n${contextText}` });
+  }
+
+  // history is expected as array of { sender: 'user'|'bot', text }
+  if (Array.isArray(history)) {
+    history.forEach(h => {
+      if (!h || !h.sender || !h.text) return;
+      const role = h.sender === 'user' ? 'user' : 'assistant';
+      messages.push({ role, content: String(h.text) });
+    });
+  }
+
+  // Add the current user message
+  messages.push({ role: 'user', content: String(message) });
 
   // Call OpenAI (requires OPENAI_API_KEY in env)
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    // Fallback: answer with retrieved grants or a helpful message
-    if (retrieved.length) {
-      return res.json({ reply: `I found the following grants relevant to your question:\n\n${retrieved.map(g => `• ${g.name} — ${g.description} (Benefit: ${g.amount})`).join('\n')}`, citations: retrieved.map(g => g.id) });
-    }
-    return res.json({ reply: `I don't have an API key configured to call a remote model. I can still search our database locally — try asking about a sector (e.g., 'health grants') or describe yourself (e.g., 'I'm a farmer').` });
+    return res.status(500).json({ error: 'OPENAI_API_KEY not configured. Please set the OPENAI_API_KEY environment variable.' });
   }
 
   try {
     const resp = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'system', content: system }, { role: 'user', content: `${contextText}\nUser: ${message}` }], max_tokens: 800 }),
+      body: JSON.stringify({ model: 'gpt-4o-mini', messages, max_tokens: 900 }),
     });
+
     if (!resp.ok) {
       const txt = await resp.text();
       return res.status(502).json({ error: 'LLM error', details: txt });
     }
+
     const data = await resp.json();
     const reply = data.choices?.[0]?.message?.content || 'Sorry, I had no response.';
     return res.json({ reply, citations: retrieved.map(g => g.id) });
