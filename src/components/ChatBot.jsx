@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import santaImg from "../assets/santa.svg";
 
 // Comprehensive grant database from your website
 const GRANTS = [
@@ -329,35 +330,41 @@ export default function ChatBot() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close chat" : "Open chat"}
         style={{
           position: "fixed",
           bottom: "20px",
           right: "20px",
-          width: "60px",
-          height: "60px",
+          width: "64px",
+          height: "64px",
+          padding: 0,
           borderRadius: "50%",
-          background: "linear-gradient(135deg, #06b6d4, #a855f7)",
+          background: "transparent",
           border: "none",
-          color: "white",
-          fontSize: "28px",
           cursor: "pointer",
-          boxShadow: "0 4px 12px rgba(6, 182, 212, 0.4)",
+          boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 999,
-          transition: "all 0.3s ease",
+          transition: "transform 0.18s ease, box-shadow 0.18s ease",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.15)";
-          e.currentTarget.style.boxShadow = "0 6px 20px rgba(6, 182, 212, 0.6)";
+          e.currentTarget.style.transform = "translateY(-4px) scale(1.06)";
+          e.currentTarget.style.boxShadow = "0 10px 24px rgba(0,0,0,0.32)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.boxShadow = "0 4px 12px rgba(6, 182, 212, 0.4)";
+          e.currentTarget.style.transform = "translateY(0) scale(1)";
+          e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.25)";
         }}
       >
-        {isOpen ? "✕" : "💬"}
+        {isOpen ? (
+          <div style={{ width: 36, height: 36, borderRadius: 8, background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 18 }}>
+            ✕
+          </div>
+        ) : (
+          <img src={santaImg} alt="Santa" style={{ width: 48, height: 48, borderRadius: "50%", display: "block" }} />
+        )}
       </button>
 
       {/* Chat Window */}

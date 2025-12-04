@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#ff4d4d"/>
+      <stop offset="100%" stop-color="#c70000"/>
+    </linearGradient>
+  </defs>
+  <!-- Hat -->
+  <path d="M8 22c0-6 9-12 24-12s24 6 24 12v2H8z" fill="url(#g)"/>
+  <circle cx="52" cy="22" r="4" fill="#fff"/>
+  <!-- Face -->
+  <circle cx="32" cy="36" r="12" fill="#ffd1b3"/>
+  <!-- Beard -->
+  <path d="M20 40c0 8 24 12 24 0 0-6-4-8-12-8s-12 2-12 8" fill="#fff"/>
+  <!-- Eyes -->
+  <circle cx="26" cy="34" r="1.6" fill="#2d2d2d"/>
+  <circle cx="38" cy="34" r="1.6" fill="#2d2d2d"/>
+  <!-- Nose -->
+  <circle cx="32" cy="36" r="2" fill="#ff9f9a"/>
+</svg>
