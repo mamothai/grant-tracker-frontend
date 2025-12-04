@@ -59,24 +59,49 @@ export default function ChatBot() {
     scrollToBottom();
   }, [messages]);
 
-  // Find grant by name or keyword
-  const findGrant = (query) => {
+  // Calculate relevance score for grant matching
+  const scoreGrant = (grant, query) => {
     const q = query.toLowerCase();
-    return GRANTS.find(g => 
-      g.name.toLowerCase().includes(q) ||
-      g.keywords.some(k => q.includes(k)) ||
-      q.includes(g.name.toLowerCase().split(" ")[0])
-    );
+    let score = 0;
+
+    // Exact name match
+    if (grant.name.toLowerCase() === q) score += 100;
+    
+    // Name contains query
+    if (grant.name.toLowerCase().includes(q)) score += 50;
+    
+    // Query contains grant keywords
+    grant.keywords.forEach(k => {
+      if (q.includes(k)) score += 30;
+      if (k.includes(q.split(" ")[0])) score += 15;
+    });
+    
+    // Sector match
+    if (grant.sector.toLowerCase().includes(q)) score += 25;
+    
+    // Description/details match
+    if (grant.description.toLowerCase().includes(q)) score += 20;
+    if (grant.details.toLowerCase().includes(q)) score += 10;
+
+    return score;
   };
 
-  // Find multiple grants
-  const searchGrants = (query) => {
-    const q = query.toLowerCase();
-    return GRANTS.filter(g =>
-      g.keywords.some(k => q.includes(k)) ||
-      g.sector.toLowerCase().includes(q) ||
-      g.name.toLowerCase().includes(q)
-    );
+  // Find best matching grant
+  const findBestGrant = (query) => {
+    const scored = GRANTS.map(g => ({ grant: g, score: scoreGrant(g, query) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    
+    return scored.length > 0 ? scored[0].grant : null;
+  };
+
+  // Find multiple related grants
+  const findRelatedGrants = (query) => {
+    const scored = GRANTS.map(g => ({ grant: g, score: scoreGrant(g, query) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    
+    return scored.map(x => x.grant).slice(0, 5);
   };
 
   // Get grants by sector
@@ -84,37 +109,78 @@ export default function ChatBot() {
     return GRANTS.filter(g => g.sector.toLowerCase().includes(sector.toLowerCase()));
   };
 
+  // Analyze user profile from message
+  const analyzeUserProfile = (query) => {
+    const profile = {};
+    const q = query.toLowerCase();
+
+    if (q.includes("farmer") || q.includes("agriculture") || q.includes("crop") || q.includes("farming")) profile.occupation = "farmer";
+    if (q.includes("student") || q.includes("study") || q.includes("school") || q.includes("college")) profile.occupation = "student";
+    if (q.includes("woman") || q.includes("women") || q.includes("female") || q.includes("girl")) profile.gender = "female";
+    if (q.includes("child") || q.includes("children") || q.includes("kid") || q.includes("infant")) profile.hasChildren = true;
+    if (q.includes("poor") || q.includes("low income") || q.includes("weaker") || q.includes("bpl")) profile.income = "low";
+    if (q.includes("rural") || q.includes("village")) profile.location = "rural";
+    if (q.includes("urban") || q.includes("city")) profile.location = "urban";
+
+    return profile;
+  };
+
   // Generate ChatGPT-like response
   const generateResponse = (msg) => {
     const lower = msg.toLowerCase();
+    const profile = analyzeUserProfile(msg);
 
-    // Specific grant query
-    const grant = findGrant(msg);
-    if (grant && (lower.includes("tell") || lower.includes("about") || lower.includes("what") || lower.includes("how") || lower.includes("?"))) {
+    // Question patterns
+    const isQuestion = msg.includes("?") || lower.includes("what") || lower.includes("how") || lower.includes("which") || lower.includes("can");
+    const isEligibilityQ = lower.includes("eligible") || lower.includes("qualify") || lower.includes("am i") || lower.includes("can i");
+    const isGrantQ = lower.includes("grant") || lower.includes("scheme") || lower.includes("support") || lower.includes("benefit");
+
+    // Try to find a specific grant
+    const bestGrant = findBestGrant(msg);
+
+    // Specific grant query - detailed response
+    if (bestGrant && isQuestion && isGrantQ) {
       return {
-        text: `✅ **${grant.name}**\n\n💰 **Benefit:** ${grant.amount}\n📍 **Sector:** ${grant.sector}\n📝 **Description:** ${grant.description}\n\n**Details:** ${grant.details}\n\n**Key Info:**\n• Year Launched: ${grant.yearLaunched}\n• Beneficiaries: ${grant.beneficiaries}\n• Coverage: ${grant.coverage}\n\n💡 Would you like to check eligibility or see similar grants?`,
-        suggestions: ["Check Eligibility", "Similar Grants", `All ${grant.sector}`],
+        text: `✅ **${bestGrant.name}**\n\n**💰 Benefit:** ${bestGrant.amount}\n**📍 Sector:** ${bestGrant.sector}\n**📝 What it offers:** ${bestGrant.description}\n\n**Complete Details:**\n${bestGrant.details}\n\n**📋 Key Information:**\n• **Launched:** ${bestGrant.yearLaunched}\n• **Who benefits:** ${bestGrant.beneficiaries}\n• **Coverage:** ${bestGrant.coverage}\n• **Nodal Agency:** ${bestGrant.nodalAgency}\n\nThis grant is perfect for you! Would you like to know more or explore similar programs?`,
+        suggestions: ["Check My Eligibility", `Similar ${bestGrant.sector}`, "View Dashboard"],
       };
     }
 
-    // Eligibility
-    if (lower.includes("eligible") || lower.includes("am i") || lower.includes("qualify")) {
-      const related = searchGrants(msg);
-      let text = "✅ **Eligibility Check:**\n\n";
+    // Eligibility check
+    if (isEligibilityQ) {
+      let text = "✅ **Let me find the best grants for you!**\n\n";
       
-      if (lower.includes("farmer")) {
-        text += "As a farmer, you're eligible for:\n• **PM Kisan Samman Nidhi** (₹6,000/year)\n• **Soil Health Card Scheme** (free testing)\n• **Pradhan Mantri Fasal Bima Yojana** (crop insurance)\n";
-      } else if (lower.includes("student")) {
-        text += "As a student, you're eligible for:\n• **Mid Day Meal Scheme** (free meals)\n• **National Scholarship Scheme** (merit-based)\n• **Samagra Shiksha** (education support)\n";
-      } else if (lower.includes("woman")) {
-        text += "As a woman, you're eligible for:\n• **Ujjwala Program** (safety & empowerment)\n• **ICDS** (if you have children)\n• **Ayushman Bharat** (health insurance)\n";
+      if (profile.occupation === "farmer") {
+        text += "🚜 **Perfect! As a farmer, you qualify for:**\n\n";
+        const farmGrants = GRANTS.filter(g => g.keywords.includes("agriculture") || g.keywords.includes("farmer") || g.keywords.includes("kisan"));
+        farmGrants.slice(0, 3).forEach(g => {
+          text += `✓ **${g.name}** → ${g.amount}\n  ${g.description}\n\n`;
+        });
+      } else if (profile.occupation === "student") {
+        text += "🎓 **Excellent! As a student, you can benefit from:**\n\n";
+        const studGrants = GRANTS.filter(g => g.keywords.includes("student") || g.keywords.includes("education") || g.keywords.includes("school"));
+        studGrants.slice(0, 3).forEach(g => {
+          text += `✓ **${g.name}** → ${g.amount}\n  ${g.description}\n\n`;
+        });
+      } else if (profile.hasChildren) {
+        text += "👶 **Great! With children, you're eligible for:**\n\n";
+        const childGrants = GRANTS.filter(g => g.keywords.includes("child") || g.keywords.includes("children") || g.keywords.includes("icds"));
+        childGrants.slice(0, 3).forEach(g => {
+          text += `✓ **${g.name}** → ${g.amount}\n  ${g.description}\n\n`;
+        });
+      } else if (profile.gender === "female") {
+        text += "👩 **Perfect! As a woman, these programs are for you:**\n\n";
+        const womenGrants = GRANTS.filter(g => g.keywords.includes("woman") || g.keywords.includes("women") || g.keywords.includes("ujjwala"));
+        womenGrants.slice(0, 3).forEach(g => {
+          text += `✓ **${g.name}** → ${g.amount}\n  ${g.description}\n\n`;
+        });
       } else {
-        text += "Tell me more about yourself:\n• Profession (farmer, student, etc.)\n• Age group\n• Location (rural/urban)\n• Income level\n\nI'll find matching grants!";
+        text += "To help you better, tell me about yourself:\n• Your profession (farmer, student, worker, etc.)\n• Your location (rural or urban)\n• Family situation (children, dependents)\n• Any specific needs\n\nI'll match you with the best grants!";
       }
 
       return {
         text,
-        suggestions: related.length > 0 ? related.slice(0, 3).map(g => `About ${g.name}`) : ["Tell More About Yourself"],
+        suggestions: ["Show All Grants", "Health Programs", "Agriculture Support"],
       };
     }
 
@@ -122,42 +188,56 @@ export default function ChatBot() {
     for (const sector of ["Agriculture", "Education", "Health", "Infrastructure", "Environment", "Technology", "Women & Child"]) {
       if (lower.includes(sector.toLowerCase())) {
         const grants = getGrantsBySector(sector);
-        let text = `📊 **${sector.toUpperCase()} GRANTS** (${grants.length} schemes)\n\n`;
-        grants.forEach(g => {
-          text += `**${g.name}**\n• ${g.description}\n• Benefit: ${g.amount}\n\n`;
+        let text = `📊 **${sector.toUpperCase()} SECTOR - ${grants.length} ACTIVE PROGRAMS**\n\n`;
+        grants.forEach((g, i) => {
+          text += `${i + 1}. **${g.name}**\n   Benefit: ${g.amount} | Coverage: ${g.coverage}\n   ${g.description}\n\n`;
         });
         return {
           text,
-          suggestions: grants.map(g => `Details: ${g.name}`),
+          suggestions: grants.slice(0, 3).map(g => `More: ${g.name}`),
         };
       }
     }
 
-    // General questions
-    if (lower.includes("total grants") || lower.includes("how many")) {
-      return {
-        text: `📊 **GrantTracker has ${GRANTS.length} Major Grants** across 7 sectors:\n\n• Agriculture: 3 grants\n• Education: 3 grants\n• Health: 3 grants\n• Infrastructure: 2 grants\n• Environment: 2 grants\n• Technology: 2 grants\n• Women & Child: 2 grants\n\nEach includes full details on eligibility, benefits, and application!`,
-        suggestions: ["View Dashboard", "Agriculture Grants", "Health Grants"],
-      };
-    }
-
-    // Multiple results
-    const results = searchGrants(msg);
-    if (results.length > 0) {
-      let text = `🔍 **Found ${results.length} Matching Grant(s):**\n\n`;
-      results.forEach(g => {
-        text += `**${g.name}** (${g.sector})\n${g.description}\n\n`;
+    // Statistics/Info questions
+    if (lower.includes("total") || lower.includes("how many") || lower.includes("statistics")) {
+      const sectors = {};
+      GRANTS.forEach(g => {
+        sectors[g.sector] = (sectors[g.sector] || 0) + 1;
       });
+
+      let text = `📊 **GrantTracker Database Overview**\n\n🎯 **Total Active Programs:** ${GRANTS.length}\n\n**By Sector:**\n`;
+      Object.entries(sectors).forEach(([sector, count]) => {
+        text += `• ${sector}: ${count} programs\n`;
+      });
+
+      text += `\nAll programs offer substantial benefits ranging from ₹6,000 to ₹5 lakhs+ in various forms of support. Browse any sector to explore!`;
+
       return {
         text,
-        suggestions: results.map(g => `About ${g.name}`),
+        suggestions: ["Agriculture Programs", "Health Programs", "Education Support"],
       };
     }
 
-    // Default helpful response
+    // Related grants search
+    const related = findRelatedGrants(msg);
+    if (related.length > 0 && isGrantQ) {
+      let text = `🔍 **Found ${related.length} matching grant(s) for your query:**\n\n`;
+      related.slice(0, 4).forEach((g, i) => {
+        text += `${i + 1}. **${g.name}** (${g.sector})\n   ${g.description}\n   💰 ${g.amount}\n\n`;
+      });
+      text += "Which one would you like to know more about?";
+
+      return {
+        text,
+        suggestions: related.slice(0, 3).map(g => `About ${g.name.split(" ")[0]}`),
+      };
+    }
+
+    // Conversational/general help
     return {
-      text: `💡 **I can help you with:**\n\n✅ Find any government grant\n✅ Check your eligibility\n✅ Compare schemes\n✅ Get detailed information\n✅ Navigate the website\n\n**Try asking me:**\n• "Tell me about PM Kisan"\n• "I'm a student, what grants?"\n• "Show health sector grants"\n• "How many grants total?"\n\nWhat can I help with?`,
-      suggestions: ["Search Grants", "Check Eligibility", "View Dashboard"],
+      text: `👋 **Hi! I'm your GrantTracker AI Assistant powered by ChatGPT-like intelligence.**\n\nI have access to **18+ government grants** and can help you:\n\n✨ **What I can do:**\n• Search for specific grants by name or benefit\n• Check your eligibility based on your profile\n• Browse grants by sector (Agriculture, Health, Education, etc.)\n• Compare different schemes\n• Answer questions about benefits and coverage\n\n💬 **Try asking me:**\n• "Tell me about PM Kisan Yojana"\n• "I'm a farmer, what grants am I eligible for?"\n• "Show me health sector grants"\n• "Which grants provide cash benefits?"\n• "How many schemes are available?"\n\n**What would you like to know?**`,
+      suggestions: ["Search Grants", "Check Eligibility", "View All Programs"],
     };
   };
 
