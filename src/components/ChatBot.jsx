@@ -41,7 +41,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 Hi! I'm your **GrantTracker AI Assistant**. I have comprehensive knowledge about **18+ major government grants** across India. Ask me anything about grants, eligibility, schemes, or how to apply!",
+      text: "👋 Welcome to **GrantTracker**! I'm your AI Assistant. This website helps you discover and track **18+ Indian government grants** across **7 sectors** - Agriculture, Education, Health, Infrastructure, Environment, Technology, and Women & Child welfare.\n\nI can help you:\n• Find grants matching your profile\n• Check eligibility for specific schemes\n• Get detailed information about benefits\n• Browse by sector or search by name\n\nWhat would you like to explore?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -134,6 +134,15 @@ export default function ChatBot() {
     const isQuestion = msg.includes("?") || lower.includes("what") || lower.includes("how") || lower.includes("which") || lower.includes("can");
     const isEligibilityQ = lower.includes("eligible") || lower.includes("qualify") || lower.includes("am i") || lower.includes("can i");
     const isGrantQ = lower.includes("grant") || lower.includes("scheme") || lower.includes("support") || lower.includes("benefit");
+    const isAboutWebsite = lower.includes("about") || lower.includes("website") || lower.includes("what is") || lower.includes("tell me about this") || lower.includes("purpose");
+
+    // About website query
+    if (isAboutWebsite) {
+      return {
+        text: "📱 **GrantTracker - Your Personal Grant Discovery Platform**\n\n**What We Do:**\nGrantTracker is an intelligent platform that helps Indians find and track government grants they're eligible for. No more missing opportunities!\n\n**Our Features:**\n• **Smart Search**: AI-powered grant discovery based on your profile\n• **18+ Schemes**: Agriculture, Education, Health, Infrastructure, Environment, Tech, Women & Child\n• **Full Details**: Benefits, eligibility, coverage, and implementation details\n• **Dashboard**: Track all available grants in one place\n• **AI Assistant**: Me! I can answer any question about grants\n\n**How It Works:**\n1. Tell me about yourself (occupation, location, needs)\n2. I find matching grants for you\n3. Get detailed info and eligibility criteria\n4. Access the dashboard for comprehensive view\n\n**Why GrantTracker?**\nMillions of Indians miss out on benefits they're eligible for. We bridge that gap with smart technology!",
+        suggestions: ["Check Eligibility", "View All Grants", "Agriculture Grants"],
+      };
+    }
 
     // Try to find a specific grant
     const bestGrant = findBestGrant(msg);
