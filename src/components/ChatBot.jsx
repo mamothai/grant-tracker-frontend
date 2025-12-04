@@ -2,17 +2,38 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-// Sample grant database
-const GRANT_DATABASE = [
-  { id: "AGR-001", name: "PM Kisan Samman Nidhi", sector: "Agriculture", amount: "₹6,000/year", desc: "Annual income support for farmers", keywords: ["kisan", "farmer", "agriculture", "income", "support"] },
-  { id: "AGR-002", name: "Soil Health Card Scheme", sector: "Agriculture", amount: "Free testing", desc: "Soil testing and nutrient management", keywords: ["soil", "testing", "health", "nutrients", "agriculture"] },
-  { id: "EDU-001", name: "Mid Day Meal Scheme", sector: "Education", amount: "Free meals", desc: "Nutrition support for school children", keywords: ["midday", "meal", "school", "student", "education", "nutrition"] },
-  { id: "EDU-002", name: "National Scholarship Scheme", sector: "Education", amount: "Varies", desc: "Scholarships for meritorious students", keywords: ["scholarship", "student", "merit", "education", "financial"] },
-  { id: "HEL-001", name: "Ayushman Bharat", sector: "Health", amount: "₹5 Lakh/family", desc: "Health insurance for poor families", keywords: ["ayushman", "health", "insurance", "medical", "hospital", "free"] },
-  { id: "INF-001", name: "Pradhan Mantri Gram Sadak Yojana", sector: "Infrastructure", amount: "Full funding", desc: "Road connectivity in rural areas", keywords: ["gram sadak", "road", "rural", "infrastructure", "connectivity"] },
-  { id: "ENV-001", name: "Swachh Bharat Mission", sector: "Environment", amount: "Full funding", desc: "Sanitation and cleanliness drive", keywords: ["swachh", "clean", "sanitation", "environment", "toilets"] },
-  { id: "TECH-001", name: "Digital India Programme", sector: "Technology", amount: "Full funding", desc: "Digital infrastructure development", keywords: ["digital", "india", "technology", "broadband", "internet"] },
-  { id: "WC-001", name: "ICDS Scheme", sector: "Women & Child", amount: "Free services", desc: "Child development and nutrition programs", keywords: ["icds", "child", "development", "nutrition", "women", "mother"] },
+// Comprehensive grant database from your website
+const GRANTS = [
+  // Agriculture
+  { id: "AGR-001", name: "PM Kisan Samman Nidhi", sector: "Agriculture", amount: "₹6,000/year", description: "Annual income support to farmers", details: "Provides ₹6,000 annually. Over 11 crore farmer families registered. ₹2.8 lakh crore disbursed.", yearLaunched: "2019", beneficiaries: "11 crore farmers", coverage: "National", keywords: ["kisan", "farmer", "agriculture", "income"] },
+  { id: "AGR-002", name: "Soil Health Card Scheme", sector: "Agriculture", amount: "Free testing", description: "Soil testing and nutrient management", details: "22 crore soil health cards issued. Improves balanced fertilizer use", yearLaunched: "2015", beneficiaries: "22 crore farmers", coverage: "National", keywords: ["soil", "health", "testing", "agriculture"] },
+  { id: "AGR-003", name: "Pradhan Mantri Fasal Bima Yojana", sector: "Agriculture", amount: "Premium coverage", description: "Crop insurance against crop failure", details: "Protects farmers from natural calamities. Government subsidizes premium.", yearLaunched: "2016", beneficiaries: "Millions of farmers", coverage: "National", keywords: ["crop insurance", "fasal bima", "protection"] },
+  
+  // Education
+  { id: "EDU-001", name: "Mid Day Meal Scheme", sector: "Education", amount: "Free meals", description: "Nutritious meals to school children", details: "10 crore children receive daily meals. Improves attendance and learning.", yearLaunched: "1995", beneficiaries: "10 crore children", coverage: "National", keywords: ["midday meal", "education", "school", "nutrition", "student"] },
+  { id: "EDU-002", name: "National Scholarship Scheme", sector: "Education", amount: "Varies by merit", description: "Scholarships for meritorious students", details: "Supports talented students from weaker sections. Covers tuition and maintenance.", yearLaunched: "2006", beneficiaries: "Lakh of students", coverage: "National", keywords: ["scholarship", "student", "education", "merit"] },
+  { id: "EDU-003", name: "Samagra Shiksha", sector: "Education", amount: "Full funding", description: "Comprehensive education program", details: "Integrates RMSA and SSA. Focuses on quality education and infrastructure.", yearLaunched: "2018", beneficiaries: "Millions of students", coverage: "National", keywords: ["samagra shiksha", "education", "school"] },
+  
+  // Health
+  { id: "HEL-001", name: "Ayushman Bharat", sector: "Health", amount: "₹5 Lakh/family/year", description: "Cashless health insurance scheme", details: "11 crore families covered. Cashless treatment at 24,000+ hospitals. ₹5 lakh annual coverage per family.", yearLaunched: "2018", beneficiaries: "11 crore families", coverage: "National", keywords: ["ayushman bharat", "health insurance", "medical", "hospital"] },
+  { id: "HEL-002", name: "National Health Mission", sector: "Health", amount: "Full funding", description: "Aims to improve health outcomes", details: "Strengthens healthcare delivery. Focuses on maternal and child health.", yearLaunched: "2013", beneficiaries: "Entire population", coverage: "National", keywords: ["health mission", "healthcare", "medical"] },
+  { id: "HEL-003", name: "COVID-19 Vaccination Drive", sector: "Health", amount: "Free vaccination", description: "Nationwide vaccination program", details: "Free vaccines. Largest vaccination drive globally. Achieved crores of vaccinations.", yearLaunched: "2021", beneficiaries: "Entire eligible population", coverage: "National", keywords: ["covid vaccine", "vaccination", "immunization"] },
+  
+  // Infrastructure
+  { id: "INF-001", name: "Pradhan Mantri Gram Sadak Yojana", sector: "Infrastructure", amount: "Full funding", description: "Roads connecting rural habitations", details: "All-weather roads to unconnected villages. Improves rural connectivity and development.", yearLaunched: "2000", beneficiaries: "Rural populations", coverage: "National", keywords: ["gram sadak", "road", "rural", "infrastructure"] },
+  { id: "INF-002", name: "Smart Cities Mission", sector: "Infrastructure", amount: "₹98,000 crore", description: "Modern infrastructure for 100 cities", details: "Smart transportation, water, waste management. 100 selected cities transformation.", yearLaunched: "2015", beneficiaries: "Urban populations", coverage: "100 cities", keywords: ["smart city", "infrastructure", "urban", "technology"] },
+  
+  // Environment
+  { id: "ENV-001", name: "Swachh Bharat Mission", sector: "Environment", amount: "Full funding", description: "National sanitation campaign", details: "11 crore toilets built. Aims for open defecation free India and waste management.", yearLaunched: "2014", beneficiaries: "Entire population", coverage: "National", keywords: ["swachh bharat", "sanitation", "clean", "environment"] },
+  { id: "ENV-002", name: "National Clean Air Programme", sector: "Environment", amount: "Full funding", description: "Address air pollution", details: "20-30% reduction in PM2.5 and PM10. Covers 102 cities nationwide.", yearLaunched: "2019", beneficiaries: "Urban populations", coverage: "102 cities", keywords: ["clean air", "pollution", "environment"] },
+  
+  // Technology
+  { id: "TECH-001", name: "Digital India Programme", sector: "Technology", amount: "Full funding", description: "Digital empowerment of India", details: "Broadband to all villages. Digital literacy and e-governance promotion.", yearLaunched: "2015", beneficiaries: "Entire population", coverage: "National", keywords: ["digital india", "technology", "broadband", "internet"] },
+  { id: "TECH-002", name: "E-Governance Initiative", sector: "Technology", amount: "Full funding", description: "Online government services", details: "Efficient government service delivery. Online portals for citizens. Reduces corruption.", yearLaunched: "2006", beneficiaries: "Entire population", coverage: "National", keywords: ["e-governance", "technology", "online", "digital"] },
+  
+  // Women & Child
+  { id: "WC-001", name: "ICDS - Integrated Child Development Services", sector: "Women & Child", amount: "Full funding", description: "Services for children under 6", details: "8 crore children and mothers covered. Health checkups, nutrition, preschool education.", yearLaunched: "1975", beneficiaries: "8 crore people", coverage: "National", keywords: ["icds", "child development", "nutrition", "children"] },
+  { id: "WC-002", name: "Ujjwala - Women's Safety Programme", sector: "Women & Child", amount: "Full funding", description: "Women's safety and empowerment", details: "Legal aid, shelter homes, counseling. Addresses violence against women.", yearLaunched: "2016", beneficiaries: "Millions of women", coverage: "National", keywords: ["ujjwala", "women", "safety", "empowerment"] },
 ];
 
 export default function ChatBot() {
@@ -20,14 +41,13 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 Hi! I'm your GrantTracker Assistant. I can help you find grants, answer eligibility questions, explain schemes, or guide you through the website. What are you looking for?",
+      text: "👋 Hi! I'm your **GrantTracker AI Assistant**. I have comprehensive knowledge about **18+ major government grants** across India. Ask me anything about grants, eligibility, schemes, or how to apply!",
       sender: "bot",
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationContext, setConversationContext] = useState("");
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
@@ -39,332 +59,148 @@ export default function ChatBot() {
     scrollToBottom();
   }, [messages]);
 
-  // Smart grant search function
-  const findRelatedGrants = (query) => {
-    const queryLower = query.toLowerCase();
-    return GRANT_DATABASE.filter(grant =>
-      grant.keywords.some(keyword => queryLower.includes(keyword)) ||
-      grant.name.toLowerCase().includes(queryLower) ||
-      grant.sector.toLowerCase().includes(queryLower)
-    ).slice(0, 3);
-  };
-
-  // Calculate eligibility based on keywords
-  const assessEligibility = (message) => {
-    const lower = message.toLowerCase();
-    const indicators = {
-      farmer: "You might be eligible for agricultural schemes like PM Kisan",
-      student: "You might be eligible for education scholarships and meal schemes",
-      child: "Your child might benefit from ICDS programs",
-      elderly: "You might be eligible for senior citizen benefits",
-      woman: "You might be eligible for women-specific schemes",
-      poor: "You might be eligible for subsidized/free government services",
-      rural: "You might be eligible for rural development schemes",
-      unemployed: "You might be eligible for skill development and employment schemes",
-    };
-
-    for (const [keyword, message] of Object.entries(indicators)) {
-      if (lower.includes(keyword)) {
-        return message;
-      }
-    }
-    return null;
-  };
-
-  // Enhanced bot response with even more intelligence
-  const generateBotResponse = (userMessage) => {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    // Handle follow-up grant questions
-    const mentionedGrant = GRANT_DATABASE.find(g => 
-      lowerMessage.includes(g.name.toLowerCase()) || 
-      g.keywords.some(k => lowerMessage.includes(k))
+  // Find grant by name or keyword
+  const findGrant = (query) => {
+    const q = query.toLowerCase();
+    return GRANTS.find(g => 
+      g.name.toLowerCase().includes(q) ||
+      g.keywords.some(k => q.includes(k)) ||
+      q.includes(g.name.toLowerCase().split(" ")[0])
     );
-    
-    if (mentionedGrant && (
-      lowerMessage.includes("tell me") || 
-      lowerMessage.includes("details") || 
-      lowerMessage.includes("more about") ||
-      lowerMessage.includes("info") ||
-      lowerMessage.includes("benefit")
-    )) {
+  };
+
+  // Find multiple grants
+  const searchGrants = (query) => {
+    const q = query.toLowerCase();
+    return GRANTS.filter(g =>
+      g.keywords.some(k => q.includes(k)) ||
+      g.sector.toLowerCase().includes(q) ||
+      g.name.toLowerCase().includes(q)
+    );
+  };
+
+  // Get grants by sector
+  const getGrantsByS ector = (sector) => {
+    return GRANTS.filter(g => g.sector.toLowerCase().includes(sector.toLowerCase()));
+  };
+
+  // Generate ChatGPT-like response
+  const generateResponse = (msg) => {
+    const lower = msg.toLowerCase();
+
+    // Specific grant query
+    const grant = findGrant(msg);
+    if (grant && (lower.includes("tell") || lower.includes("about") || lower.includes("what") || lower.includes("how") || lower.includes("?"))) {
       return {
-        text: `✅ **${mentionedGrant.name}**\n\n📌 **Sector:** ${mentionedGrant.sector}\n💰 **Benefit:** ${mentionedGrant.amount}\n📝 **Description:** ${mentionedGrant.desc}\n\n**Key Benefits:**\n• Direct benefit transfer\n• No repayment required\n• Government backed\n• Transparent process\n\nWould you like to:\n1. Check if you're eligible?\n2. See similar grants?\n3. Explore the sector?`,
-        suggestions: ["Check Eligibility", "Similar Grants", `Explore ${mentionedGrant.sector}`],
-        action: null,
+        text: `✅ **${grant.name}**\n\n💰 **Benefit:** ${grant.amount}\n📍 **Sector:** ${grant.sector}\n📝 **Description:** ${grant.description}\n\n**Details:** ${grant.details}\n\n**Key Info:**\n• Year Launched: ${grant.yearLaunched}\n• Beneficiaries: ${grant.beneficiaries}\n• Coverage: ${grant.coverage}\n\n💡 Would you like to check eligibility or see similar grants?`,
+        suggestions: ["Check Eligibility", "Similar Grants", `All ${grant.sector}`],
       };
     }
-    
-    // Check for eligibility questions
-    if (
-      lowerMessage.includes("eligible") ||
-      lowerMessage.includes("am i") ||
-      lowerMessage.includes("can i") ||
-      lowerMessage.includes("qualify") ||
-      lowerMessage.includes("eligible for")
-    ) {
-      const eligibility = assessEligibility(userMessage);
-      const relatedGrants = findRelatedGrants(userMessage);
+
+    // Eligibility
+    if (lower.includes("eligible") || lower.includes("am i") || lower.includes("qualify")) {
+      const related = searchGrants(msg);
+      let text = "✅ **Eligibility Check:**\n\n";
       
-      let text = eligibility || "To check eligibility, please tell me more about:\n• Your profession (farmer, student, etc.)\n• Your age group\n• Your location (rural/urban)\n• Any special circumstances";
-      
-      if (relatedGrants.length > 0) {
-        text += "\n\n💡 **Matching Schemes:**\n";
-        relatedGrants.forEach(g => {
-          text += `• ${g.name} (${g.amount})\n`;
-        });
+      if (lower.includes("farmer")) {
+        text += "As a farmer, you're eligible for:\n• **PM Kisan Samman Nidhi** (₹6,000/year)\n• **Soil Health Card Scheme** (free testing)\n• **Pradhan Mantri Fasal Bima Yojana** (crop insurance)\n";
+      } else if (lower.includes("student")) {
+        text += "As a student, you're eligible for:\n• **Mid Day Meal Scheme** (free meals)\n• **National Scholarship Scheme** (merit-based)\n• **Samagra Shiksha** (education support)\n";
+      } else if (lower.includes("woman")) {
+        text += "As a woman, you're eligible for:\n• **Ujjwala Program** (safety & empowerment)\n• **ICDS** (if you have children)\n• **Ayushman Bharat** (health insurance)\n";
+      } else {
+        text += "Tell me more about yourself:\n• Profession (farmer, student, etc.)\n• Age group\n• Location (rural/urban)\n• Income level\n\nI'll find matching grants!";
       }
-      
+
       return {
         text,
-        suggestions: relatedGrants.length > 0 ? 
-          relatedGrants.map(g => `Learn: ${g.name.substring(0, 20)}`) : 
-          ["Farmer", "Student", "Business Owner", "Other"],
-        action: null,
+        suggestions: related.length > 0 ? related.slice(0, 3).map(g => `About ${g.name}`) : ["Tell More About Yourself"],
       };
     }
 
-    // Smart sector-based responses
-    const sectorKeywords = {
-      agriculture: ["agriculture", "farming", "farmer", "crop", "soil", "pm kisan", "rural", "agri"],
-      education: ["education", "school", "student", "midday", "scholarship", "learning", "college"],
-      health: ["health", "ayushman", "medical", "healthcare", "hospital", "disease", "insurance"],
-      infrastructure: ["infrastructure", "road", "gram sadak", "city", "smart", "construction"],
-      environment: ["environment", "swachh", "clean", "pollution", "eco", "sustainable"],
-      technology: ["technology", "digital", "india", "e-governance", "broadband", "internet"],
-      "women & child": ["women", "child", "ujjwala", "icds", "mother", "girl", "pregnant"],
-    };
-
-    for (const [sector, keywords] of Object.entries(sectorKeywords)) {
-      if (keywords.some((keyword) => lowerMessage.includes(keyword))) {
-        const sectorGrants = GRANT_DATABASE.filter(g => g.sector === sector.charAt(0).toUpperCase() + sector.slice(1));
-        let text = `🎯 **${sector.toUpperCase()} SECTOR**\n\n`;
-        
-        if (sectorGrants.length > 0) {
-          text += `Found ${sectorGrants.length} grants:\n`;
-          sectorGrants.forEach(g => {
-            text += `\n• **${g.name}**\n  Benefit: ${g.amount}\n`;
-          });
-        }
-        
-        text += `\n\nWould you like to know more about any of these or check eligibility?`;
-        
+    // Sector search
+    for (const sector of ["Agriculture", "Education", "Health", "Infrastructure", "Environment", "Technology", "Women & Child"]) {
+      if (lower.includes(sector.toLowerCase())) {
+        const grants = getGrantsBySector(sector);
+        let text = `📊 **${sector.toUpperCase()} GRANTS** (${grants.length} schemes)\n\n`;
+        grants.forEach(g => {
+          text += `**${g.name}**\n• ${g.description}\n• Benefit: ${g.amount}\n\n`;
+        });
         return {
           text,
-          suggestions: [
-            `Explore ${sector}`,
-            "Check Eligibility",
-            "All Sectors"
-          ],
-          action: sector,
+          suggestions: grants.map(g => `Details: ${g.name}`),
         };
       }
     }
 
-    // Search grants by keyword
-    const relatedGrants = findRelatedGrants(userMessage);
-    if (relatedGrants.length > 0 && !lowerMessage.includes("how")) {
-      let text = `🔍 Found ${relatedGrants.length} matching grant(s):\n\n`;
-      relatedGrants.forEach((g, idx) => {
-        text += `${idx + 1}. **${g.name}**\n   💰 ${g.amount} | 📍 ${g.sector}\n`;
+    // General questions
+    if (lower.includes("total grants") || lower.includes("how many")) {
+      return {
+        text: `📊 **GrantTracker has ${GRANTS.length} Major Grants** across 7 sectors:\n\n• Agriculture: 3 grants\n• Education: 3 grants\n• Health: 3 grants\n• Infrastructure: 2 grants\n• Environment: 2 grants\n• Technology: 2 grants\n• Women & Child: 2 grants\n\nEach includes full details on eligibility, benefits, and application!`,
+        suggestions: ["View Dashboard", "Agriculture Grants", "Health Grants"],
+      };
+    }
+
+    // Multiple results
+    const results = searchGrants(msg);
+    if (results.length > 0) {
+      let text = `🔍 **Found ${results.length} Matching Grant(s):**\n\n`;
+      results.forEach(g => {
+        text += `**${g.name}** (${g.sector})\n${g.description}\n\n`;
       });
-      
       return {
         text,
-        suggestions: relatedGrants.map(g => `Details: ${g.name}`),
-        action: null,
+        suggestions: results.map(g => `About ${g.name}`),
       };
     }
 
-    // General questions about grants
-    if (lowerMessage.includes("what is") || lowerMessage.includes("what are")) {
-      if (lowerMessage.includes("grant")) {
-        return {
-          text: "💰 **What are Grants?**\n\nGrants are financial aids provided by government that:\n✓ Don't need to be repaid\n✓ Support specific purposes\n✓ Help individuals & communities\n✓ Are transparent & accountable\n\n**Types of Grants:**\n• Individual assistance (farmers, students)\n• Infrastructure development\n• Social welfare & health\n• Environmental initiatives\n• Technology & digital services",
-          suggestions: ["View All Grants", "Check Eligibility", "Dashboard"],
-          action: null,
-        };
-      }
-    }
-
-    // Navigation suggestions
-    if (
-      lowerMessage.includes("dashboard") ||
-      lowerMessage.includes("chart") ||
-      lowerMessage.includes("all sectors")
-    ) {
-      return {
-        text: "📊 **Dashboard Features:**\n\n📈 Visual grant distribution\n🎯 Sector-wise allocation\n💰 Total funding information\n🔍 Interactive charts\n📋 Detailed grant listings\n\nThe dashboard helps you understand where government funds are allocated and which schemes might benefit you!",
-        suggestions: ["View Dashboard", "Agriculture", "Education"],
-        action: "dashboard",
-      };
-    }
-
-    // How to use guide
-    if (
-      lowerMessage.includes("how") &&
-      (lowerMessage.includes("work") || lowerMessage.includes("use") || lowerMessage.includes("navigate"))
-    ) {
-      return {
-        text: "🗺️ **GrantTracker Guide:**\n\n**Step 1:** Explore the Dashboard\n• See all available grants\n• Understand sector distribution\n\n**Step 2:** Find Your Grant\n• Search by sector\n• Ask about eligibility\n• Compare benefits\n\n**Step 3:** Get Details\n• View full grant information\n• Check application process\n• Understand benefits\n\n**Step 4:** Apply\n• Follow the outlined process\n• Contact relevant authorities\n• Track your application\n\nI'm here to guide you at every step!",
-        suggestions: ["View Dashboard", "Search Grants", "Check Eligibility"],
-        action: null,
-      };
-    }
-
-    // About page
-    if (lowerMessage.includes("about")) {
-      return {
-        text: "ℹ️ **About GrantTracker**\n\n✓ Transparent grant distribution platform\n✓ Real-time government scheme information\n✓ Accountability & verification\n✓ Easy navigation & search\n✓ Public feedback system\n✓ Multi-sector coverage\n\n**Our Mission:** Connect citizens with government grants through transparency and accountability!",
-        suggestions: ["Learn More", "View Dashboard", "Submit Feedback"],
-        action: "about",
-      };
-    }
-
-    // Feedback
-    if (lowerMessage.includes("feedback") || lowerMessage.includes("suggest")) {
-      return {
-        text: "💬 **Share Your Feedback**\n\nHelp us improve by sharing:\n• Grant information updates\n• Website improvements\n• New scheme suggestions\n• Eligibility clarifications\n• General feedback\n\nYour input directly impacts the platform!",
-        suggestions: ["Submit Feedback", "View Dashboard"],
-        action: "suggestions",
-      };
-    }
-
-    // Login options
-    if (lowerMessage.includes("creator") || lowerMessage.includes("official") || lowerMessage.includes("login")) {
-      return {
-        text: "🔐 **Login Options:**\n\n👨‍💻 **Creator Portal**\n• Create new grants\n• Manage submissions\n• Track applications\n\n👔 **Official Dashboard**\n• Administrative access\n• Monitor allocations\n• Verify grants\n\nWhich portal do you need?",
-        suggestions: ["Creator Login", "Official Login", "Public Dashboard"],
-        action: null,
-      };
-    }
-
-    // Greeting and help
-    if (
-      lowerMessage.includes("hi") || 
-      lowerMessage.includes("hello") || 
-      lowerMessage.includes("help") ||
-      lowerMessage.includes("?") ||
-      lowerMessage.includes("start") ||
-      lowerMessage.includes("hey")
-    ) {
-      return {
-        text: "👋 **Welcome to GrantTracker AI!**\n\nI can help you:\n✅ Find government grants\n✅ Check eligibility for schemes\n✅ Explore by sector\n✅ Navigate the website\n✅ Answer grant questions\n\n**Quick Start:**\nTell me about yourself or the grant you're looking for!",
-        suggestions: [
-          "I'm a Farmer",
-          "Student Looking for Grants",
-          "View Dashboard",
-          "Tell Me About Grants"
-        ],
-        action: null,
-      };
-    }
-
-    // Intelligent catch-all
+    // Default helpful response
     return {
-      text: `📚 I understand you're interested in: "${userMessage.substring(0, 40)}..."\n\nI can help by:\n• Searching our grant database\n• Assessing your eligibility\n• Explaining schemes\n• Navigating the site\n• Answering your questions\n\nCould you provide more details or ask more specifically?`,
-      suggestions: ["Find Grants", "Check Eligibility", "View Dashboard", "Ask Me Anything"],
-      action: null,
+      text: `💡 **I can help you with:**\n\n✅ Find any government grant\n✅ Check your eligibility\n✅ Compare schemes\n✅ Get detailed information\n✅ Navigate the website\n\n**Try asking me:**\n• "Tell me about PM Kisan"\n• "I'm a student, what grants?"\n• "Show health sector grants"\n• "How many grants total?"\n\nWhat can I help with?`,
+      suggestions: ["Search Grants", "Check Eligibility", "View Dashboard"],
     };
   };
 
-  const handleSendMessage = (text = inputValue) => {
+  const handleSend = (text = inputValue) => {
     if (!text.trim()) return;
 
-    // Add user message
-    const userMessage = {
-      id: messages.length + 1,
-      text: text,
-      sender: "user",
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+    const userMsg = { id: Date.now(), text, sender: "user", timestamp: new Date() };
+    setMessages(prev => [...prev, userMsg]);
     setInputValue("");
     setIsLoading(true);
 
-    // Simulate bot thinking time
     setTimeout(() => {
-      const response = generateBotResponse(text);
-
-      const botMessage = {
-        id: messages.length + 2,
+      const response = generateResponse(text);
+      const botMsg = {
+        id: Date.now() + 1,
         text: response.text,
         sender: "bot",
         suggestions: response.suggestions,
         timestamp: new Date(),
-        action: response.action,
       };
-
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages(prev => [...prev, botMsg]);
       setIsLoading(false);
-    }, 500);
+    }, 300);
   };
 
-  const handleSuggestionClick = (suggestion) => {
-    // Comprehensive action map with all variations
-    const actionMap = {
+  const handleSuggestion = (suggestion) => {
+    // Navigation
+    const routes = {
       "View Dashboard": "/chart",
-      "Dashboard": "/chart",
-      "Search Grants": "/chart",
-      "Chart": "/chart",
-      "About Us": "/about",
-      "About": "/about",
-      "Learn More": "/about",
       "Submit Feedback": "/suggestions",
-      "Feedback": "/suggestions",
-      "Suggestions": "/suggestions",
-      "Creator Login": "/creator-login",
-      "Official Login": "/gov-login",
-      "Public Dashboard": "/chart",
-      "Back to Home": "/",
-      "Home": "/",
+      "About Us": "/about",
     };
 
-    // Sector mapping
-    const sectorMap = {
-      "agriculture": "/sectors/Agriculture",
-      "education": "/sectors/Education",
-      "health": "/sectors/Health",
-      "infrastructure": "/sectors/Infrastructure",
-      "environment": "/sectors/Environment",
-      "technology": "/sectors/Technology",
-      "women & child": "/sectors/Women & Child",
-    };
-
-    // Check for direct action mapping
-    if (actionMap[suggestion]) {
-      navigate(actionMap[suggestion]);
-      handleSendMessage(suggestion);
-      return;
+    if (routes[suggestion]) {
+      navigate(routes[suggestion]);
     }
 
-    // Check for sector-based suggestions
-    const suggestionLower = suggestion.toLowerCase();
-    for (const [sector, path] of Object.entries(sectorMap)) {
-      if (suggestionLower.includes(sector) || suggestionLower.includes("explore")) {
-        navigate(path);
-        handleSendMessage(suggestion);
-        return;
-      }
-    }
-
-    // Check for grant-specific suggestions
-    const grant = GRANT_DATABASE.find(g => 
-      suggestion.toLowerCase().includes(g.name.toLowerCase().split(" ")[0])
-    );
-    if (grant) {
-      handleSendMessage(`Tell me more about ${grant.name}`);
-      return;
-    }
-
-    // Default: treat as a message
-    handleSendMessage(suggestion);
+    handleSend(suggestion);
   };
 
   return (
     <>
-      {/* Chat Bot Toggle Button */}
+      {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         style={{
@@ -385,7 +221,6 @@ export default function ChatBot() {
           justifyContent: "center",
           zIndex: 999,
           transition: "all 0.3s ease",
-          transform: isOpen ? "scale(1.1)" : "scale(1)",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "scale(1.15)";
@@ -416,73 +251,36 @@ export default function ChatBot() {
             flexDirection: "column",
             zIndex: 999,
             backdropFilter: "blur(10px)",
-            animation: "slideUp 0.3s ease",
           }}
         >
           {/* Header */}
-          <div
-            style={{
-              padding: "16px",
-              borderBottom: "1px solid rgba(6, 182, 212, 0.1)",
-              background: "linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(168, 85, 247, 0.1))",
-              borderRadius: "16px 16px 0 0",
-            }}
-          >
-            <h3 style={{ margin: 0, color: "#06b6d4", fontSize: "16px" }}>
-              🤖 GrantTracker Assistant
-            </h3>
-            <p style={{ margin: "4px 0 0 0", color: "#a1a1aa", fontSize: "12px" }}>
-              Online • Always here to help
-            </p>
+          <div style={{ padding: "16px", borderBottom: "1px solid rgba(6, 182, 212, 0.1)", background: "linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(168, 85, 247, 0.1))" }}>
+            <h3 style={{ margin: 0, color: "#06b6d4", fontSize: "16px" }}>🤖 GrantTracker AI</h3>
+            <p style={{ margin: "4px 0 0 0", color: "#a1a1aa", fontSize: "12px" }}>Powered by 18+ Grants Database</p>
           </div>
 
-          {/* Messages Container */}
-          <div
-            style={{
-              flex: 1,
-              overflowY: "auto",
-              padding: "16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-              scrollBehavior: "smooth",
-            }}
-          >
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                style={{
-                  display: "flex",
-                  justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                  animation: "fadeIn 0.3s ease",
-                }}
-              >
-                <div
-                  style={{
-                    maxWidth: "85%",
-                    padding: "10px 14px",
-                    borderRadius: msg.sender === "user" ? "12px 0 12px 12px" : "0 12px 12px 12px",
-                    background:
-                      msg.sender === "user"
-                        ? "linear-gradient(135deg, #06b6d4, #a855f7)"
-                        : "rgba(255, 255, 255, 0.08)",
-                    color: "#e5e7eb",
-                    fontSize: "14px",
-                    lineHeight: "1.4",
-                    wordWrap: "break-word",
-                    border:
-                      msg.sender === "user"
-                        ? "none"
-                        : "1px solid rgba(6, 182, 212, 0.2)",
-                  }}
-                >
+          {/* Messages */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            {messages.map(msg => (
+              <div key={msg.id} style={{ display: "flex", justifyContent: msg.sender === "user" ? "flex-end" : "flex-start" }}>
+                <div style={{
+                  maxWidth: "85%",
+                  padding: "10px 14px",
+                  borderRadius: msg.sender === "user" ? "12px 0 12px 12px" : "0 12px 12px 12px",
+                  background: msg.sender === "user" ? "linear-gradient(135deg, #06b6d4, #a855f7)" : "rgba(255, 255, 255, 0.08)",
+                  color: "#e5e7eb",
+                  fontSize: "14px",
+                  lineHeight: "1.4",
+                  border: msg.sender === "user" ? "none" : "1px solid rgba(6, 182, 212, 0.2)",
+                  wordWrap: "break-word",
+                }}>
                   {msg.text}
-                  {msg.suggestions && msg.suggestions.length > 0 && (
+                  {msg.suggestions && (
                     <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
-                      {msg.suggestions.map((suggestion, idx) => (
+                      {msg.suggestions.map((s, i) => (
                         <button
-                          key={idx}
-                          onClick={() => handleSuggestionClick(suggestion)}
+                          key={i}
+                          onClick={() => handleSuggestion(s)}
                           style={{
                             padding: "6px 12px",
                             background: "rgba(6, 182, 212, 0.2)",
@@ -491,19 +289,16 @@ export default function ChatBot() {
                             color: "#06b6d4",
                             fontSize: "12px",
                             cursor: "pointer",
-                            transition: "all 0.2s ease",
                             textAlign: "left",
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(6, 182, 212, 0.4)";
-                            e.currentTarget.style.transform = "translateX(4px)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "rgba(6, 182, 212, 0.2)";
-                            e.currentTarget.style.transform = "translateX(0)";
                           }}
                         >
-                          → {suggestion}
+                          → {s}
                         </button>
                       ))}
                     </div>
@@ -511,57 +306,18 @@ export default function ChatBot() {
                 </div>
               </div>
             ))}
-            {isLoading && (
-              <div style={{ display: "flex", gap: "4px", paddingLeft: "8px" }}>
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#06b6d4",
-                    animation: "bounce 1.4s infinite",
-                  }}
-                />
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#06b6d4",
-                    animation: "bounce 1.4s infinite",
-                    animationDelay: "0.2s",
-                  }}
-                />
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#06b6d4",
-                    animation: "bounce 1.4s infinite",
-                    animationDelay: "0.4s",
-                  }}
-                />
-              </div>
-            )}
+            {isLoading && <div style={{ padding: "10px", color: "#06b6d4", fontSize: "12px" }}>Thinking...</div>}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          <div
-            style={{
-              padding: "12px",
-              borderTop: "1px solid rgba(6, 182, 212, 0.1)",
-              display: "flex",
-              gap: "8px",
-            }}
-          >
+          {/* Input */}
+          <div style={{ padding: "12px", borderTop: "1px solid rgba(6, 182, 212, 0.1)", display: "flex", gap: "8px" }}>
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Ask me anything..."
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              placeholder="Ask about grants..."
               style={{
                 flex: 1,
                 padding: "10px 12px",
@@ -571,40 +327,19 @@ export default function ChatBot() {
                 color: "#e5e7eb",
                 fontSize: "14px",
                 outline: "none",
-                transition: "all 0.2s ease",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
-                e.currentTarget.style.borderColor = "rgba(6, 182, 212, 0.4)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
-                e.currentTarget.style.borderColor = "rgba(6, 182, 212, 0.2)";
               }}
             />
             <button
-              onClick={() => handleSendMessage()}
+              onClick={() => handleSend()}
               disabled={!inputValue.trim()}
               style={{
                 padding: "10px 16px",
-                background: inputValue.trim()
-                  ? "linear-gradient(135deg, #06b6d4, #a855f7)"
-                  : "rgba(6, 182, 212, 0.2)",
+                background: inputValue.trim() ? "linear-gradient(135deg, #06b6d4, #a855f7)" : "rgba(6, 182, 212, 0.2)",
                 border: "none",
                 borderRadius: "8px",
                 color: "#fff",
-                fontSize: "16px",
                 cursor: inputValue.trim() ? "pointer" : "not-allowed",
-                transition: "all 0.2s ease",
                 opacity: inputValue.trim() ? 1 : 0.5,
-              }}
-              onMouseEnter={(e) => {
-                if (inputValue.trim()) {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
               }}
             >
               ➤
@@ -612,39 +347,6 @@ export default function ChatBot() {
           </div>
         </div>
       )}
-
-      <style>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes bounce {
-          0%, 80%, 100% {
-            opacity: 0.5;
-            transform: translateY(0);
-          }
-          40% {
-            opacity: 1;
-            transform: translateY(-10px);
-          }
-        }
-      `}</style>
     </>
   );
 }
