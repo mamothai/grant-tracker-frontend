@@ -278,6 +278,43 @@ export default function ChatBot() {
     handleSend(suggestion);
   };
 
+  // Format markdown text into JSX
+  const formatText = (text) => {
+    const parts = [];
+    let lastIndex = 0;
+
+    // Match **bold**, • bullets, and line breaks
+    const regex = /\*\*([^*]+)\*\*|•|(\n)/g;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before match
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+
+      if (match[1]) {
+        // Bold text
+        parts.push(<strong key={`bold-${match.index}`} style={{ color: "#06b6d4" }}>{match[1]}</strong>);
+      } else if (match[0] === "•") {
+        // Bullet
+        parts.push(<span key={`bullet-${match.index}`} style={{ color: "#a855f7" }}>• </span>);
+      } else if (match[0] === "\n") {
+        // Line break
+        parts.push(<br key={`br-${match.index}`} />);
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts;
+  };
+
   return (
     <>
       {/* Toggle Button */}
@@ -350,11 +387,11 @@ export default function ChatBot() {
                   background: msg.sender === "user" ? "linear-gradient(135deg, #06b6d4, #a855f7)" : "rgba(255, 255, 255, 0.08)",
                   color: "#e5e7eb",
                   fontSize: "14px",
-                  lineHeight: "1.4",
+                  lineHeight: "1.6",
                   border: msg.sender === "user" ? "none" : "1px solid rgba(6, 182, 212, 0.2)",
                   wordWrap: "break-word",
                 }}>
-                  {msg.text}
+                  {formatText(msg.text)}
                   {msg.suggestions && (
                     <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
                       {msg.suggestions.map((s, i) => (
