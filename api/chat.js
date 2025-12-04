@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
   // Provider chain: OpenAI → Local Ollama → Hugging Face Inference API
   const openaiKey = process.env.OPENAI_API_KEY;
   const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
-  const ollamaModel = process.env.OLLAMA_MODEL || 'mistral';
+  const ollamaModel = process.env.OLLAMA_MODEL || 'deepseek-coder';
   const hfKey = process.env.HUGGINGFACE_API_KEY;
   const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
 
