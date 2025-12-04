@@ -71,108 +71,60 @@ export default function ChatBot() {
     return null;
   };
 
-  // Enhanced bot response with intelligent matching
+  // Enhanced bot response with even more intelligence
   const generateBotResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
+    
+    // Handle follow-up grant questions
+    const mentionedGrant = GRANT_DATABASE.find(g => 
+      lowerMessage.includes(g.name.toLowerCase()) || 
+      g.keywords.some(k => lowerMessage.includes(k))
+    );
+    
+    if (mentionedGrant && (
+      lowerMessage.includes("tell me") || 
+      lowerMessage.includes("details") || 
+      lowerMessage.includes("more about") ||
+      lowerMessage.includes("info") ||
+      lowerMessage.includes("benefit")
+    )) {
+      return {
+        text: `✅ **${mentionedGrant.name}**\n\n📌 **Sector:** ${mentionedGrant.sector}\n💰 **Benefit:** ${mentionedGrant.amount}\n📝 **Description:** ${mentionedGrant.desc}\n\n**Key Benefits:**\n• Direct benefit transfer\n• No repayment required\n• Government backed\n• Transparent process\n\nWould you like to:\n1. Check if you're eligible?\n2. See similar grants?\n3. Explore the sector?`,
+        suggestions: ["Check Eligibility", "Similar Grants", `Explore ${mentionedGrant.sector}`],
+        action: null,
+      };
+    }
     
     // Check for eligibility questions
     if (
       lowerMessage.includes("eligible") ||
       lowerMessage.includes("am i") ||
       lowerMessage.includes("can i") ||
-      lowerMessage.includes("qualify")
+      lowerMessage.includes("qualify") ||
+      lowerMessage.includes("eligible for")
     ) {
       const eligibility = assessEligibility(userMessage);
       const relatedGrants = findRelatedGrants(userMessage);
       
-      let text = eligibility || "To check eligibility, tell me more about yourself (your profession, age, location, etc.)";
+      let text = eligibility || "To check eligibility, please tell me more about:\n• Your profession (farmer, student, etc.)\n• Your age group\n• Your location (rural/urban)\n• Any special circumstances";
       
       if (relatedGrants.length > 0) {
-        text += "\n\n💡 These schemes might interest you:\n";
+        text += "\n\n💡 **Matching Schemes:**\n";
         relatedGrants.forEach(g => {
-          text += `• **${g.name}** - ${g.desc}\n`;
+          text += `• ${g.name} (${g.amount})\n`;
         });
       }
       
       return {
         text,
         suggestions: relatedGrants.length > 0 ? 
-          relatedGrants.map(g => `Learn about ${g.name.split(" ")[0]}`) : 
-          ["View Dashboard", "All Sectors"],
+          relatedGrants.map(g => `Learn: ${g.name.substring(0, 20)}`) : 
+          ["Farmer", "Student", "Business Owner", "Other"],
         action: null,
       };
     }
 
-    // Search grants by keyword
-    const relatedGrants = findRelatedGrants(userMessage);
-    if (relatedGrants.length > 0 && !lowerMessage.includes("how")) {
-      let text = `🎯 I found ${relatedGrants.length} grant(s) matching your search:\n\n`;
-      relatedGrants.forEach((g, idx) => {
-        text += `${idx + 1}. **${g.name}**\n   Sector: ${g.sector}\n   Benefit: ${g.amount}\n   ${g.desc}\n\n`;
-      });
-      
-      return {
-        text,
-        suggestions: relatedGrants.map(g => `Details: ${g.name.substring(0, 20)}`),
-        action: null,
-      };
-    }
-
-    // General questions about grants
-    if (lowerMessage.includes("what is") || lowerMessage.includes("what are")) {
-      if (lowerMessage.includes("grant")) {
-        return {
-          text: "💰 **Grants** are financial aids provided by government to individuals, businesses, or organizations for specific purposes. They don't need to be repaid!\n\nCommon types:\n• Individual grants (farmers, students)\n• Development grants (infrastructure, environment)\n• Social welfare grants (health, education, women & children)\n\nWould you like to explore specific grant types?",
-          suggestions: ["View Dashboard", "Find Grants", "About Schemes"],
-          action: null,
-        };
-      }
-    }
-
-    // Navigation suggestions
-    if (
-      lowerMessage.includes("dashboard") ||
-      lowerMessage.includes("chart") ||
-      lowerMessage.includes("all sectors")
-    ) {
-      return {
-        text: "📊 The Dashboard shows all grants organized by sector with visual distribution. You can see:\n• Total grants by sector\n• Funding allocation\n• Grant breakdown\n• Sector-wise comparison",
-        suggestions: ["View Dashboard", "Specific Sector"],
-        action: "dashboard",
-      };
-    }
-
-    // How to use guide
-    if (
-      lowerMessage.includes("how") &&
-      (lowerMessage.includes("work") || lowerMessage.includes("use") || lowerMessage.includes("navigate"))
-    ) {
-      return {
-        text: "🗺️ **How to use GrantTracker:**\n\n1. **Explore Dashboard** - See all grants by sector\n2. **Search** - Ask about specific grants or sectors\n3. **Check Eligibility** - Tell me about yourself\n4. **View Details** - Click on any grant for full information\n5. **Submit Feedback** - Share your suggestions\n\nWhat would you like to do first?",
-        suggestions: ["View Dashboard", "Search Grants", "Check Eligibility"],
-        action: null,
-      };
-    }
-
-    // About page
-    if (lowerMessage.includes("about")) {
-      return {
-        text: "ℹ️ **GrantTracker** is a transparent digital platform ensuring accountability in government grant distribution. We provide:\n\n✓ Real-time grant information\n✓ Sector-wise breakdown\n✓ Eligibility guidance\n✓ Transparent allocation data\n✓ Public feedback system\n\nOur mission: Connect officials, creators, and citizens with verified grant activity.",
-        suggestions: ["About Us", "View Dashboard", "Submit Feedback"],
-        action: "about",
-      };
-    }
-
-    // Feedback
-    if (lowerMessage.includes("feedback") || lowerMessage.includes("suggest")) {
-      return {
-        text: "💬 We value your feedback! You can submit:\n• Grant improvement suggestions\n• New grant ideas\n• Website feedback\n• Eligibility concerns\n• General suggestions\n\nYour input helps us improve transparency and serve you better!",
-        suggestions: ["Submit Feedback", "View Dashboard"],
-        action: "suggestions",
-      };
-    }
-
-    // Sector navigation
+    // Smart sector-based responses
     const sectorKeywords = {
       agriculture: ["agriculture", "farming", "farmer", "crop", "soil", "pm kisan", "rural", "agri"],
       education: ["education", "school", "student", "midday", "scholarship", "learning", "college"],
@@ -185,47 +137,133 @@ export default function ChatBot() {
 
     for (const [sector, keywords] of Object.entries(sectorKeywords)) {
       if (keywords.some((keyword) => lowerMessage.includes(keyword))) {
+        const sectorGrants = GRANT_DATABASE.filter(g => g.sector === sector.charAt(0).toUpperCase() + sector.slice(1));
+        let text = `🎯 **${sector.toUpperCase()} SECTOR**\n\n`;
+        
+        if (sectorGrants.length > 0) {
+          text += `Found ${sectorGrants.length} grants:\n`;
+          sectorGrants.forEach(g => {
+            text += `\n• **${g.name}**\n  Benefit: ${g.amount}\n`;
+          });
+        }
+        
+        text += `\n\nWould you like to know more about any of these or check eligibility?`;
+        
         return {
-          text: `📌 **${sector.toUpperCase()} GRANTS**\n\nI can show you all available grants in this sector with details about:\n• Eligibility criteria\n• Funding amounts\n• Application process\n• Benefits\n\nWould you like to explore ${sector} grants?`,
-          suggestions: [`Explore ${sector}`, "Other Sectors", "Dashboard"],
+          text,
+          suggestions: [
+            `Explore ${sector}`,
+            "Check Eligibility",
+            "All Sectors"
+          ],
           action: sector,
         };
       }
     }
 
+    // Search grants by keyword
+    const relatedGrants = findRelatedGrants(userMessage);
+    if (relatedGrants.length > 0 && !lowerMessage.includes("how")) {
+      let text = `🔍 Found ${relatedGrants.length} matching grant(s):\n\n`;
+      relatedGrants.forEach((g, idx) => {
+        text += `${idx + 1}. **${g.name}**\n   💰 ${g.amount} | 📍 ${g.sector}\n`;
+      });
+      
+      return {
+        text,
+        suggestions: relatedGrants.map(g => `Details: ${g.name}`),
+        action: null,
+      };
+    }
+
+    // General questions about grants
+    if (lowerMessage.includes("what is") || lowerMessage.includes("what are")) {
+      if (lowerMessage.includes("grant")) {
+        return {
+          text: "💰 **What are Grants?**\n\nGrants are financial aids provided by government that:\n✓ Don't need to be repaid\n✓ Support specific purposes\n✓ Help individuals & communities\n✓ Are transparent & accountable\n\n**Types of Grants:**\n• Individual assistance (farmers, students)\n• Infrastructure development\n• Social welfare & health\n• Environmental initiatives\n• Technology & digital services",
+          suggestions: ["View All Grants", "Check Eligibility", "Dashboard"],
+          action: null,
+        };
+      }
+    }
+
+    // Navigation suggestions
+    if (
+      lowerMessage.includes("dashboard") ||
+      lowerMessage.includes("chart") ||
+      lowerMessage.includes("all sectors")
+    ) {
+      return {
+        text: "📊 **Dashboard Features:**\n\n📈 Visual grant distribution\n🎯 Sector-wise allocation\n💰 Total funding information\n🔍 Interactive charts\n📋 Detailed grant listings\n\nThe dashboard helps you understand where government funds are allocated and which schemes might benefit you!",
+        suggestions: ["View Dashboard", "Agriculture", "Education"],
+        action: "dashboard",
+      };
+    }
+
+    // How to use guide
+    if (
+      lowerMessage.includes("how") &&
+      (lowerMessage.includes("work") || lowerMessage.includes("use") || lowerMessage.includes("navigate"))
+    ) {
+      return {
+        text: "🗺️ **GrantTracker Guide:**\n\n**Step 1:** Explore the Dashboard\n• See all available grants\n• Understand sector distribution\n\n**Step 2:** Find Your Grant\n• Search by sector\n• Ask about eligibility\n• Compare benefits\n\n**Step 3:** Get Details\n• View full grant information\n• Check application process\n• Understand benefits\n\n**Step 4:** Apply\n• Follow the outlined process\n• Contact relevant authorities\n• Track your application\n\nI'm here to guide you at every step!",
+        suggestions: ["View Dashboard", "Search Grants", "Check Eligibility"],
+        action: null,
+      };
+    }
+
+    // About page
+    if (lowerMessage.includes("about")) {
+      return {
+        text: "ℹ️ **About GrantTracker**\n\n✓ Transparent grant distribution platform\n✓ Real-time government scheme information\n✓ Accountability & verification\n✓ Easy navigation & search\n✓ Public feedback system\n✓ Multi-sector coverage\n\n**Our Mission:** Connect citizens with government grants through transparency and accountability!",
+        suggestions: ["Learn More", "View Dashboard", "Submit Feedback"],
+        action: "about",
+      };
+    }
+
+    // Feedback
+    if (lowerMessage.includes("feedback") || lowerMessage.includes("suggest")) {
+      return {
+        text: "💬 **Share Your Feedback**\n\nHelp us improve by sharing:\n• Grant information updates\n• Website improvements\n• New scheme suggestions\n• Eligibility clarifications\n• General feedback\n\nYour input directly impacts the platform!",
+        suggestions: ["Submit Feedback", "View Dashboard"],
+        action: "suggestions",
+      };
+    }
+
     // Login options
     if (lowerMessage.includes("creator") || lowerMessage.includes("official") || lowerMessage.includes("login")) {
       return {
-        text: "🔐 **Login Options:**\n\n👨‍💻 **Creator Login** - Create and manage grants\n👔 **Official Login** - Government dashboard access\n\nWhich portal are you interested in?",
+        text: "🔐 **Login Options:**\n\n👨‍💻 **Creator Portal**\n• Create new grants\n• Manage submissions\n• Track applications\n\n👔 **Official Dashboard**\n• Administrative access\n• Monitor allocations\n• Verify grants\n\nWhich portal do you need?",
         suggestions: ["Creator Login", "Official Login", "Public Dashboard"],
         action: null,
       };
     }
 
-    // Default helpful response
+    // Greeting and help
     if (
       lowerMessage.includes("hi") || 
       lowerMessage.includes("hello") || 
       lowerMessage.includes("help") ||
       lowerMessage.includes("?") ||
-      lowerMessage.includes("start")
+      lowerMessage.includes("start") ||
+      lowerMessage.includes("hey")
     ) {
       return {
-        text: "👋 **Welcome to GrantTracker!** I'm here to help you:\n\n💡 **Ask me about:**\n• Grant searches (e.g., \"agriculture grants\")\n• Eligibility (e.g., \"I'm a student\")\n• Website navigation\n• Specific schemes\n\n🎯 **Popular actions:**",
+        text: "👋 **Welcome to GrantTracker AI!**\n\nI can help you:\n✅ Find government grants\n✅ Check eligibility for schemes\n✅ Explore by sector\n✅ Navigate the website\n✅ Answer grant questions\n\n**Quick Start:**\nTell me about yourself or the grant you're looking for!",
         suggestions: [
-          "Find Grants",
-          "Check Eligibility",
+          "I'm a Farmer",
+          "Student Looking for Grants",
           "View Dashboard",
-          "About Schemes"
+          "Tell Me About Grants"
         ],
         action: null,
       };
     }
 
-    // Catch-all intelligent response
+    // Intelligent catch-all
     return {
-      text: `🤔 I understand you're looking for information about "${userMessage.substring(0, 30)}..."\n\nI can help you with:\n• Grant searches and details\n• Eligibility checks\n• Sector information\n• Website navigation\n• General grant questions\n\nCould you be more specific?`,
-      suggestions: ["View Dashboard", "Search Grants", "Check Eligibility", "Help"],
+      text: `📚 I understand you're interested in: "${userMessage.substring(0, 40)}..."\n\nI can help by:\n• Searching our grant database\n• Assessing your eligibility\n• Explaining schemes\n• Navigating the site\n• Answering your questions\n\nCould you provide more details or ask more specifically?`,
+      suggestions: ["Find Grants", "Check Eligibility", "View Dashboard", "Ask Me Anything"],
       action: null,
     };
   };
@@ -264,35 +302,64 @@ export default function ChatBot() {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    // Route based on suggestion
+    // Comprehensive action map with all variations
     const actionMap = {
       "View Dashboard": "/chart",
       "Dashboard": "/chart",
       "Search Grants": "/chart",
+      "Chart": "/chart",
       "About Us": "/about",
       "About": "/about",
+      "Learn More": "/about",
       "Submit Feedback": "/suggestions",
+      "Feedback": "/suggestions",
       "Suggestions": "/suggestions",
       "Creator Login": "/creator-login",
       "Official Login": "/gov-login",
+      "Public Dashboard": "/chart",
       "Back to Home": "/",
+      "Home": "/",
     };
 
-    // Handle sector navigation
-    for (const sector of Object.keys(sectorKeywords)) {
-      if (suggestion.toLowerCase().includes(sector.toLowerCase())) {
-        navigate(`/sectors/${sector}`);
-        setInputValue("");
+    // Sector mapping
+    const sectorMap = {
+      "agriculture": "/sectors/Agriculture",
+      "education": "/sectors/Education",
+      "health": "/sectors/Health",
+      "infrastructure": "/sectors/Infrastructure",
+      "environment": "/sectors/Environment",
+      "technology": "/sectors/Technology",
+      "women & child": "/sectors/Women & Child",
+    };
+
+    // Check for direct action mapping
+    if (actionMap[suggestion]) {
+      navigate(actionMap[suggestion]);
+      handleSendMessage(suggestion);
+      return;
+    }
+
+    // Check for sector-based suggestions
+    const suggestionLower = suggestion.toLowerCase();
+    for (const [sector, path] of Object.entries(sectorMap)) {
+      if (suggestionLower.includes(sector) || suggestionLower.includes("explore")) {
+        navigate(path);
+        handleSendMessage(suggestion);
         return;
       }
     }
 
-    if (actionMap[suggestion]) {
-      navigate(actionMap[suggestion]);
-      setInputValue("");
-    } else {
-      handleSendMessage(suggestion);
+    // Check for grant-specific suggestions
+    const grant = GRANT_DATABASE.find(g => 
+      suggestion.toLowerCase().includes(g.name.toLowerCase().split(" ")[0])
+    );
+    if (grant) {
+      handleSendMessage(`Tell me more about ${grant.name}`);
+      return;
     }
+
+    // Default: treat as a message
+    handleSendMessage(suggestion);
   };
 
   return (
