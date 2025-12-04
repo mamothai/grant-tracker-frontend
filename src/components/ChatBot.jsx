@@ -231,24 +231,41 @@ export default function ChatBot() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, history: messages.slice(-6) }),
     }).then(async (r) => {
-      if (!r.ok) throw new Error('remote error');
+      // If remote returns non-OK, try to read an error message then fall through to fallback
+      if (!r.ok) {
+        let errText = 'remote error';
+        try {
+          const errData = await r.json();
+          if (errData?.error) errText = errData.error;
+        } catch (e) {
+          // ignore
+        }
+        throw new Error(errText);
+      }
+
       const data = await r.json();
-      const botMsg = {
-        id: Date.now() + 1,
-        text: data.reply || 'Sorry, no response from the remote model.',
-        sender: 'bot',
-        suggestions: data.suggestions || [],
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, botMsg]);
-      setIsLoading(false);
+      if (data?.reply) {
+        const botMsg = {
+          id: Date.now() + 1,
+          text: data.reply,
+          sender: 'bot',
+          suggestions: data.suggestions || [],
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, botMsg]);
+        setIsLoading(false);
+      } else {
+        // No reply in successful response — treat as failure and fallback
+        throw new Error('no reply from remote');
+      }
     }).catch((err) => {
-      // Remote AI failed — inform user and provide guidance (no local fallback to keep responses consistent)
+      // Remote AI failed — use local generator as a graceful fallback
+      const local = generateResponse(text);
       const botMsg = {
         id: Date.now() + 1,
-        text: `⚠️ Remote AI unavailable. Please ensure the server has an OPENAI_API_KEY configured. Error: ${err?.message || 'network error'}`,
+        text: (local?.text || 'Sorry, I could not generate a response.') + `\n\n⚠️ (Using local fallback because remote AI is unavailable: ${err?.message || 'network error'})`,
         sender: 'bot',
-        suggestions: ["Try again later", "Contact support"],
+        suggestions: local?.suggestions || ["Try again later"],
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, botMsg]);
