@@ -10,7 +10,7 @@ const schemesData = [
     launchDate: "22 January 2015",
     objectives: "Address declining child sex ratio, promote education and empowerment of girls.",
     benefits: ["Awareness campaigns", "Inter-ministerial coordination", "Girls' education support"],
-    moreInfoLink: "https://www.wcd.nic.in/schemes/beti-bachao-beti-padhao"
+    moreInfoLink: "https://www.wcd.nic.in/"
   },
   {
     schemeName: "Sukanya Samriddhi Yojana",
@@ -28,7 +28,7 @@ const schemesData = [
     launchDate: "2010 (renamed 2017)",
     objectives: "Provide maternity benefit to pregnant & lactating women for first live birth.",
     benefits: ["Cash transfer for women", "Improved health & nutrition", "Encourage institutional delivery"],
-    moreInfoLink: "https://www.wcd.nic.in/schemes/pradhan-mantri-matru-vandana-yojana"
+    moreInfoLink: "https://www.wcd.nic.in/"
   },
   {
     schemeName: "Integrated Child Protection Scheme (ICPS)",
@@ -37,7 +37,7 @@ const schemesData = [
     launchDate: "2009",
     objectives: "Provide institutional & non-institutional care to children in need of protection.",
     benefits: ["Child protection services", "Shelter homes", "Rehabilitation of vulnerable children"],
-    moreInfoLink: "https://www.wcd.nic.in/schemes/integrated-child-protection-scheme-icps"
+    moreInfoLink: "https://www.wcd.nic.in/"
   },
   {
     schemeName: "PM CARES for Children",
@@ -82,7 +82,7 @@ const schemesData = [
     launchDate: "2001",
     objectives: "Universalise elementary education for children 6-14 years.",
     benefits: ["Free textbooks & uniforms", "New schools & teacher training", "Bridge courses for excluded children"],
-    moreInfoLink: "https://www.education.gov.in/ssa"
+    moreInfoLink: "https://www.education.gov.in/"
   },
   {
     schemeName: "Chief Minister's Girl Child Protection Scheme (Tamil Nadu)",
@@ -215,7 +215,7 @@ const schemesData = [
     launchDate: "2015",
     objectives: "Enable Indian youth to take up industry-relevant skill training.",
     benefits: ["Short term training", "Recognition of prior learning", "Placement assistance"],
-    moreInfoLink: "https://www.pmkvyofficial.org/"
+    moreInfoLink: "https://www.skillindia.gov.in/"
   },
   {
     schemeName: "National Programme for Control of Blindness (NPCB)",
@@ -242,7 +242,7 @@ const schemesData = [
     launchDate: "2016",
     objectives: "Provide LPG connections to women from below poverty line families.",
     benefits: ["Free LPG connection", "Subsidized cooking gas", "Health and environmental benefits"],
-    moreInfoLink: "https://www.pmujjwalayojana.com/"
+    moreInfoLink: "https://www.pmujjwalayojana.in/"
   }
 ];
 
