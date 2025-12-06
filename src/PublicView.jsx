@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { GRANTS } from './data/grants'
 import './App.css'
 
 export default function PublicView() {
@@ -9,35 +10,21 @@ export default function PublicView() {
 
   // Load grant data and updates
   useEffect(() => {
-    // Try to load from localStorage
-    const grants = JSON.parse(localStorage.getItem('grants') || '[]')
-    const foundGrant = grants.find(g => g.id === id)
+    // First try to find in GRANTS data
+    const grantData = GRANTS.find(g => g.id === id)
     
-    if (foundGrant) {
-      setGrant(foundGrant)
-      
-      // Use updates from localStorage if they exist
-      if (foundGrant.updates && Array.isArray(foundGrant.updates) && foundGrant.updates.length > 0) {
-        const formattedUpdates = foundGrant.updates.map(update => ({
-          ...update,
-          date: update.date ? (typeof update.date === 'string' ? new Date(update.date) : new Date(update.date)) : new Date()
-        }))
-        setUpdates(formattedUpdates)
-      } else {
-        // Default mock updates if none exist
-        const mockUpdates = [
-          { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
-          { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
-        ]
-        setUpdates(mockUpdates)
-      }
-    } else {
-      // Default fallback
+    if (grantData) {
       setGrant({
-        id,
-        title: 'Grant Details',
-        amount: 50000,
-        field: 'General'
+        id: grantData.id,
+        title: grantData.name,
+        amount: grantData.amount,
+        field: grantData.sector,
+        description: grantData.description,
+        details: grantData.details,
+        yearLaunched: grantData.yearLaunched,
+        beneficiaries: grantData.beneficiaries,
+        coverage: grantData.coverage,
+        officialLink: grantData.officialLink
       })
       
       // Default mock updates
@@ -46,6 +33,45 @@ export default function PublicView() {
         { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
       ]
       setUpdates(mockUpdates)
+    } else {
+      // Try to load from localStorage
+      const grants = JSON.parse(localStorage.getItem('grants') || '[]')
+      const foundGrant = grants.find(g => g.id === id)
+      
+      if (foundGrant) {
+        setGrant(foundGrant)
+        
+        // Use updates from localStorage if they exist
+        if (foundGrant.updates && Array.isArray(foundGrant.updates) && foundGrant.updates.length > 0) {
+          const formattedUpdates = foundGrant.updates.map(update => ({
+            ...update,
+            date: update.date ? (typeof update.date === 'string' ? new Date(update.date) : new Date(update.date)) : new Date()
+          }))
+          setUpdates(formattedUpdates)
+        } else {
+          // Default mock updates if none exist
+          const mockUpdates = [
+            { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
+            { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
+          ]
+          setUpdates(mockUpdates)
+        }
+      } else {
+        // Default fallback
+        setGrant({
+          id,
+          title: 'Grant Details',
+          amount: 50000,
+          field: 'General'
+        })
+        
+        // Default mock updates
+        const mockUpdates = [
+          { title: '₹50,000 Released', date: new Date(), image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop' },
+          { title: 'Site Visit Completed', date: new Date(), image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop' },
+        ]
+        setUpdates(mockUpdates)
+      }
     }
   }, [id])
 
@@ -180,6 +206,39 @@ export default function PublicView() {
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Official Government Link */}
+            {grant.officialLink && (
+              <div style={{ marginTop: '24px', textAlign: 'center' }}>
+                <a
+                  href={grant.officialLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-block',
+                    padding: '12px 24px',
+                    background: 'linear-gradient(135deg, #06b6d4, #a855f7)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '12px',
+                    fontWeight: '600',
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 12px rgba(6, 182, 212, 0.3)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(6, 182, 212, 0.5)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(6, 182, 212, 0.3)';
+                  }}
+                >
+                  🔗 Visit Official Government Website
+                </a>
               </div>
             )}
           </div>

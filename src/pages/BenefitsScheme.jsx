@@ -1,114 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { GRANTS } from "../data/grants";
 import "../App.css";
 
-const schemesData = [
-  {
-    schemeName: "Beti Bachao Beti Padhao",
-    category: "Women & Girl Child",
-    launchedBy: "Government of India",
-    launchDate: "22 January 2015",
-    objectives: "Address declining child sex ratio, promote education and empowerment of girls.",
-    benefits: ["Awareness campaigns", "Inter-ministerial coordination", "Girls' education support"],
-    moreInfoLink: "https://www.highcourt.jharkhand.gov.in/jdc/sc.html"
-  },
-  {
-    schemeName: "Sukanya Samriddhi Yojana",
-    category: "Girl Child / Savings",
-    launchedBy: "Government of India",
-    launchDate: "22 January 2015",
-    objectives: "Encourage parents of girl children to build a fund for her education/marriage.",
-    benefits: ["High interest savings account", "Tax benefits", "For girl child up to age 10"],
-    moreInfoLink: "https://cleartax.in/s/women-empowerment-schemes-in-india"
-  },
-  {
-    schemeName: "Pradhan Mantri Matru Vandana Yojana (PMMVY)",
-    category: "Women – Maternity & Health",
-    launchedBy: "Government of India",
-    launchDate: "2010 (renamed 2017)",
-    objectives: "Provide maternity benefit to pregnant & lactating women for first live birth.",
-    benefits: ["Cash transfer for women", "Improved health & nutrition", "Encourage institutional delivery"],
-    moreInfoLink: "https://en.wikipedia.org/wiki/Pradhan_Mantri_Matri_Vandana_Yojana"
-  },
-  {
-    schemeName: "Integrated Child Protection Scheme (ICPS)",
-    category: "Children – Protection & Welfare",
-    launchedBy: "Government of India",
-    launchDate: "2009",
-    objectives: "Provide institutional & non-institutional care to children in need of protection.",
-    benefits: ["Child protection services", "Shelter homes", "Rehabilitation of vulnerable children"],
-    moreInfoLink: "https://en.wikipedia.org/wiki/Integrated_Child_Protection_Scheme"
-  },
-  {
-    schemeName: "PM CARES for Children",
-    category: "Children – Welfare",
-    launchedBy: "Government of India",
-    launchDate: "29 May 2021",
-    objectives: "Support children who lost parent/guardian to COVID-19 with health, education & financial security.",
-    benefits: ["Financial support up to ₹10 lakh", "Health insurance cover", "Scholarship support"],
-    moreInfoLink: "https://pmcaresforchildren.in/"
-  },
-  {
-    schemeName: "Women Entrepreneurship Platform (WEP)",
-    category: "Women – Entrepreneurship & Skill",
-    launchedBy: "Government of India",
-    launchDate: "—",
-    objectives: "Enable women entrepreneurs via training, networking & funding support.",
-    benefits: ["Skill upgradation", "Access to markets", "Funding & mentoring support"],
-    moreInfoLink: "https://startupindia.gov.in/content/sih/en/women_entrepreneurs.html"
-  },
-  {
-    schemeName: "Pradhan Mantri Suraksha Bima Yojana (PMSBY)",
-    category: "General Welfare – Insurance",
-    launchedBy: "Government of India",
-    launchDate: "2015",
-    objectives: "Provide affordable accident insurance cover to people in bank accounts.",
-    benefits: ["Insurance cover ₹2 lakh for accidental death/full disability", "Low premium (₹20/year)"],
-    moreInfoLink: "https://eshram.gov.in/social-security-welfare-schemes"
-  },
-  {
-    schemeName: "Atal Pension Yojana (APY)",
-    category: "General Welfare – Pension",
-    launchedBy: "Government of India",
-    launchDate: "2015",
-    objectives: "Provide pension to citizens in unorganised sector post 60 years of age.",
-    benefits: ["Guaranteed pension of ₹1,000-₹5,000/month", "Low contribution starting early age"],
-    moreInfoLink: "https://eshram.gov.in/social-security-welfare-schemes"
-  },
-  {
-    schemeName: "Sarva Shiksha Abhiyan (SSA)",
-    category: "Children – Education",
-    launchedBy: "Government of India",
-    launchDate: "2001",
-    objectives: "Universalise elementary education for children 6-14 years.",
-    benefits: ["Free textbooks & uniforms", "New schools & teacher training", "Bridge courses for excluded children"],
-    moreInfoLink: "https://en.wikipedia.org/wiki/Sarva_Shiksha_Abhiyan"
-  },
-  {
-    schemeName: "Chief Minister's Girl Child Protection Scheme (Tamil Nadu)",
-    category: "Girl Child Welfare",
-    launchedBy: "Government of Tamil Nadu",
-    launchDate: "1992",
-    objectives: "Prevent gender discrimination, enforce later marriage for girls and encourage education.",
-    benefits: ["Financial incentives for girls", "Education upto intermediate", "Promote family planning norms"],
-    moreInfoLink: "https://www.tnsocialwelfare.tn.gov.in/website-345/en/specilisationschild-welfare/chief-ministers-girl-child-protection-scheme"
-  },
-  {
-    schemeName: "MSME Scheme (Micro, Small & Medium Enterprises)",
-    category: "General Welfare – Business/Entrepreneurs",
-    launchedBy: "Government of India – Ministry of MSME",
-    launchDate: "Ongoing scheme (various sub-schemes)",
-    objectives: "Support micro, small and medium enterprises through registration, access to credit, subsidies, technology upgrades, market access and infrastructure.",
-    benefits: [
-      "Easier access to business loans at lower interest rates and collateral-free loans",
-      "Subsidies and incentives for technology upgradation, ISO certification, bar-code registration, etc.",
-      "Registration under the Udyam Registration Portal gives priority access to schemes, bank credit, and procurement benefits",
-      "Protection from delayed payments from buyers (as per MSMED Act)",
-      "Support for innovation, design, and export competitiveness (via sub-schemes like ZED certification)"
-    ],
-    moreInfoLink: "https://msme.gov.in/sites/default/files/MSME_Schemes_English_0.pdf"
-  }
-];
+// Transform GRANTS data to match the expected format
+const schemesData = GRANTS.map(grant => ({
+  schemeName: grant.name,
+  category: grant.sector,
+  launchedBy: "Government of India",
+  launchDate: grant.yearLaunched || "Ongoing",
+  objectives: grant.description,
+  benefits: [grant.amount, grant.details].filter(Boolean),
+  moreInfoLink: grant.officialLink || "#"
+}));
 
 export default function BenefitsScheme() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -185,11 +89,13 @@ export default function BenefitsScheme() {
               <div key={index} className="benefits-scheme-card glassy">
                 <div className="scheme-card-header">
                   <div className="scheme-card-icon">
-                    {scheme.category.includes("Women") ? "👩" : 
-                     scheme.category.includes("Girl") ? "👧" : 
-                     scheme.category.includes("Children") ? "🧒" : 
-                     scheme.category.includes("Business") || scheme.category.includes("Entrepreneurs") ? "💼" :
-                     scheme.category.includes("General") ? "🤝" : "📋"}
+                    {scheme.category.includes("Agriculture") ? "🌾" : 
+                     scheme.category.includes("Education") ? "📚" : 
+                     scheme.category.includes("Health") ? "⚕️" : 
+                     scheme.category.includes("Infrastructure") ? "🏗️" : 
+                     scheme.category.includes("Environment") ? "🌱" : 
+                     scheme.category.includes("Technology") ? "💻" : 
+                     scheme.category.includes("Women & Child") ? "👨‍👩‍👧" : "📋"}
                   </div>
                   <div className="scheme-card-badge">{scheme.category}</div>
                 </div>
@@ -229,6 +135,25 @@ export default function BenefitsScheme() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="scheme-card-link"
+                  style={{
+                    display: 'inline-block',
+                    padding: '8px 16px',
+                    background: 'linear-gradient(135deg, #06b6d4, #a855f7)',
+                    color: 'white',
+                    textDecoration: 'none',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    marginTop: '16px',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(6, 182, 212, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
                 >
                   Learn More →
                 </a>
@@ -253,4 +178,3 @@ export default function BenefitsScheme() {
     </div>
   );
 }
-
