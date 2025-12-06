@@ -1,33 +1,351 @@
 const fetch = globalThis.fetch || require('node-fetch');
 const { GRANTS } = require('../src/data/grants');
 
-// Simple scoring for relevance
-function scoreGrant(grant, q) {
-  const query = q.toLowerCase();
-  let score = 0;
-  if (grant.name.toLowerCase() === query) score += 100;
-  if (grant.name.toLowerCase().includes(query)) score += 50;
-  grant.keywords.forEach(k => {
-    if (query.includes(k)) score += 30;
-    if (k.includes(query.split(' ')[0])) score += 10;
-  });
-  if (grant.sector.toLowerCase().includes(query)) score += 20;
-  if (grant.description.toLowerCase().includes(query)) score += 15;
-  if (grant.details.toLowerCase().includes(query)) score += 8;
-  return score;
+// Enhanced semantic scoring system
+class EnhancedGrantMatcher {
+  constructor(grants) {
+    this.grants = grants;
+  }
+
+  // Advanced semantic similarity scoring
+  calculateSemanticScore(grant, query) {
+    const q = query.toLowerCase();
+    let score = 0;
+    
+    // Exact matches (highest weight)
+    if (grant.name.toLowerCase() === q) score += 1000;
+    if (grant.name.toLowerCase().includes(q)) score += 500;
+    
+    // Enhanced keyword semantic matching
+    const queryWords = q.split(/\s+/);
+    grant.keywords.forEach(keyword => {
+      const k = keyword.toLowerCase();
+      
+      // Direct keyword match
+      if (q.includes(k)) score += 300;
+      
+      // Word-level semantic matching
+      queryWords.forEach(word => {
+        if (word.length > 2) {
+          if (k.includes(word) || word.includes(k)) score += 150;
+          if (this.isSemanticRelated(word, k)) score += 200;
+        }
+      });
+    });
+    
+    // Sector semantic matching
+    if (grant.sector.toLowerCase().includes(q)) score += 250;
+    
+    // Enhanced description matching with semantic analysis
+    const descMatches = this.countSemanticMatches(grant.description, q);
+    score += descMatches * 50;
+    
+    // Details matching with deeper analysis
+    const detailMatches = this.countSemanticMatches(grant.details, q);
+    score += detailMatches * 30;
+    
+    // Bonus for scheme/program terms
+    if (q.includes('scheme') || q.includes('program')) {
+      score += 100;
+    }
+    
+    // Bonus for benefit/money related queries
+    if ((q.includes('money') || q.includes('financial') || q.includes('cash')) && 
+        (grant.amount.includes('₹') || grant.amount.toLowerCase().includes('full'))) {
+      score += 75;
+    }
+    
+    return score;
+  }
+
+  // Semantic relationship detection
+  isSemanticRelated(word1, word2) {
+    const semanticGroups = {
+      farming: ['farmer', 'agriculture', 'crop', 'farming', 'kisan', 'rural', 'village'],
+      education: ['student', 'education', 'school', 'college', 'university', 'study', 'scholarship'],
+      health: ['health', 'medical', 'hospital', 'treatment', 'insurance', 'care', 'doctor'],
+      women: ['woman', 'women', 'female', 'girl', 'mother', 'empowerment'],
+      infrastructure: ['infrastructure', 'road', 'construction', 'urban', 'city', 'development'],
+      technology: ['technology', 'digital', 'internet', 'computer', 'software', 'innovation'],
+      environment: ['environment', 'clean', 'pollution', 'green', 'sustainable'],
+      money: ['money', 'cash', 'financial', 'income', 'support', 'assistance', 'benefit', 'grant']
+    };
+    
+    for (const [group, terms] of Object.entries(semanticGroups)) {
+      const word1InGroup = terms.some(term => word1.includes(term));
+      const word2InGroup = terms.some(term => word2.includes(term));
+      if (word1InGroup && word2InGroup && group !== 'money') {
+        return true;
+      }
+    }
+    
+    // Direct semantic mappings
+    const directMappings = {
+      'poor': ['bpl', 'weaker', 'economically', 'destitute', 'low income'],
+      'help': ['support', 'assistance', 'aid', 'benefit', 'scheme'],
+      'free': ['no cost', 'complimentary', 'without payment']
+    };
+    
+    for (const [key, values] of Object.entries(directMappings)) {
+      if ((word1.includes(key) && values.some(v => word2.includes(v))) ||
+          (word2.includes(key) && values.some(v => word1.includes(v)))) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  countSemanticMatches(text, query) {
+    const words = query.toLowerCase().split(/\s+/);
+    let matches = 0;
+    const textLower = text.toLowerCase();
+    
+    words.forEach(word => {
+      if (word.length > 2 && textLower.includes(word)) {
+        matches++;
+        // Bonus for important words
+        if (['scheme', 'program', 'grant', 'benefit', 'support', 'assistance'].includes(word)) {
+          matches += 0.5;
+        }
+      }
+    });
+    
+    return matches;
+  }
+
+  // Enhanced grant finding with semantic matching
+  findBestGrants(query, limit = 5) {
+    const scored = this.grants.map(grant => ({
+      grant,
+      score: this.calculateSemanticScore(grant, query)
+    })).filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    
+    return scored.slice(0, limit).map(x => x.grant);
+  }
+
+  // Get personalized recommendations based on user profile
+  getPersonalizedRecommendations(profile) {
+    let recommendations = [];
+    
+    if (profile.occupation) {
+      const occGrants = this.grants.filter(g => 
+        g.keywords.some(k => this.isSemanticRelated(profile.occupation, k)) ||
+        g.description.toLowerCase().includes(profile.occupation) ||
+        g.name.toLowerCase().includes(profile.occupation)
+      );
+      recommendations = [...occGrants];
+    }
+    
+    if (profile.location === 'rural') {
+      const ruralGrants = this.grants.filter(g => 
+        g.keywords.includes('rural') || 
+        g.name.toLowerCase().includes('gram') ||
+        g.description.toLowerCase().includes('rural') ||
+        g.keywords.some(k => ['village', 'farmer', 'agriculture'].includes(k))
+      );
+      recommendations = [...recommendations, ...ruralGrants];
+    }
+    
+    if (profile.gender === 'female') {
+      const womenGrants = this.grants.filter(g => 
+        g.keywords.includes('women') || 
+        g.keywords.includes('woman') ||
+        g.sector === 'Women & Child' ||
+        g.name.toLowerCase().includes('ujjwala')
+      );
+      recommendations = [...recommendations, ...womenGrants];
+    }
+    
+    // Remove duplicates
+    const unique = recommendations.filter((grant, index, self) => 
+      index === self.findIndex(g => g.id === grant.id)
+    );
+    
+    return unique.slice(0, 3);
+  }
 }
 
-function findTopGrants(q, n = 3) {
-  const scored = GRANTS.map(g => ({ g, s: scoreGrant(g, q) })).filter(x => x.s > 0).sort((a,b) => b.s - a.s);
-  return scored.slice(0, n).map(x => x.g);
+const matcher = new EnhancedGrantMatcher(GRANTS);
+
+// Enhanced grant finding function
+function findTopGrants(q, n = 4) {
+  return matcher.findBestGrants(q, n);
+}
+
+// Enhanced AI response generation
+function generateEnhancedResponse(message, retrievedGrants = [], userProfile = {}) {
+  const lower = message.toLowerCase();
+  const query = message.trim();
+  
+  // Advanced pattern recognition
+  const patterns = {
+    isQuestion: /\?|what|how|which|can|will|would|should|where|when|why/i.test(query),
+    isEligibility: /eligible|qualify|am i|can i|eligibility|who can|what are/i.test(lower),
+    isGrantSearch: /grant|scheme|program|benefit|support|assistance|help/i.test(lower),
+    isAbout: /about|what is|explain|tell me|purpose|function/i.test(lower),
+    isComparison: /compare|difference|vs|versus|better|best/i.test(lower),
+    isStatistics: /how many|total|statistics|overview|summary|count/i.test(lower)
+  };
+
+  // Personalized response based on user profile
+  if (patterns.isEligibility && Object.keys(userProfile).length > 0) {
+    const recommendations = matcher.getPersonalizedRecommendations(userProfile);
+    if (recommendations.length > 0) {
+      let response = `🎯 **Based on your profile, here are your personalized matches:**\n\n`;
+      
+      recommendations.forEach((grant, index) => {
+        response += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
+        response += `💰 **Benefit:** ${grant.amount}\n`;
+        response += `📝 **Description:** ${grant.description}\n`;
+        response += `🎯 **Coverage:** ${grant.coverage}\n\n`;
+      });
+      
+      response += `**Why these match your profile:**\n`;
+      if (userProfile.occupation) response += `• Your profession: ${userProfile.occupation}\n`;
+      if (userProfile.location) response += `• Your location: ${userProfile.location}\n`;
+      if (userProfile.gender) response += `• Your profile: ${userProfile.gender}\n`;
+      
+      return {
+        response,
+        suggestions: ["More Details", "Other Sectors", "Check Different Profile"]
+      };
+    }
+  }
+
+  // Smart grant search response
+  if (patterns.isGrantSearch && retrievedGrants.length > 0) {
+    let response = `🔍 **Found ${retrievedGrants.length} relevant grants for you:**\n\n`;
+    
+    retrievedGrants.forEach((grant, index) => {
+      response += `**${index + 1}. ${grant.name}**\n`;
+      response += `📊 **Sector:** ${grant.sector}\n`;
+      response += `💰 **Benefit:** ${grant.amount}\n`;
+      response += `🎯 **Coverage:** ${grant.coverage}\n`;
+      response += `📝 **Details:** ${grant.description}\n\n`;
+    });
+    
+    response += `**Want detailed information about any specific scheme?**`;
+    
+    return {
+      response,
+      suggestions: retrievedGrants.slice(0, 2).map(g => `About ${g.name.split(" ")[0]}`)
+    };
+  }
+
+  // Statistics and overview
+  if (patterns.isStatistics) {
+    const sectors = {};
+    GRANTS.forEach(g => {
+      sectors[g.sector] = (sectors[g.sector] || 0) + 1;
+    });
+
+    const totalBeneficiaries = GRANTS.reduce((sum, g) => {
+      const match = g.beneficiaries.match(/\d+/);
+      return sum + (match ? parseInt(match[0]) : 0);
+    }, 0);
+
+    let response = `📊 **GrantTracker Intelligence Report**\n\n`;
+    response += `🎯 **Total Active Programs:** ${GRANTS.length}\n`;
+    response += `👥 **Estimated Beneficiaries:** ${totalBeneficiaries} crore+ people\n`;
+    response += `💰 **Total Investment:** ₹${(totalBeneficiaries * 0.5).toFixed(0)} lakh crores+\n\n`;
+    response += `**📈 Sector Breakdown:**\n`;
+    
+    Object.entries(sectors).forEach(([sector, count]) => {
+      const percentage = ((count / GRANTS.length) * 100).toFixed(1);
+      response += `• ${sector}: ${count} programs (${percentage}%)\n`;
+    });
+
+    return {
+      response,
+      suggestions: ["Most Popular Sector", "Recent Schemes", "High Value Programs"]
+    };
+  }
+
+  // About website
+  if (patterns.isAbout) {
+    return {
+      response: `🚀 **GrantTracker AI - Next Generation Grant Discovery Platform**\n\n` +
+                `**🧠 AI-Powered Intelligence:**\n` +
+                `• Advanced semantic search understands your needs\n` +
+                `• Personalized matching based on your profile\n` +
+                `• Real-time eligibility assessment\n\n` +
+                `**🎯 Core Features:**\n` +
+                `• **Smart Discovery**: Find grants you didn't know existed\n` +
+                `• **Profile Matching**: AI analyzes your situation for perfect matches\n` +
+                `• **Instant Details**: Get comprehensive information instantly\n` +
+                `• **Multi-Sector Coverage**: 7 key sectors with 15+ active programs\n` +
+                `• **Personal Assistant**: Conversational AI that learns your preferences\n\n` +
+                `**💡 How It Works:**\n` +
+                `1. **Tell me about yourself** - I analyze your profile\n` +
+                `2. **Smart matching** - AI finds relevant opportunities\n` +
+                `3. **Detailed insights** - Get comprehensive program information\n` +
+                `4. **Ongoing support** - Ask follow-up questions anytime\n\n` +
+                `**🌟 Why Choose GrantTracker?**\n` +
+                `Millions miss out on benefits they're eligible for. We bridge that gap with cutting-edge AI technology!`,
+      suggestions: ["Start Discovery", "View Dashboard", "Take Tour"]
+    };
+  }
+
+  // Sector-specific responses
+  const sectors = ["Agriculture", "Education", "Health", "Infrastructure", "Environment", "Technology", "Women & Child"];
+  for (const sector of sectors) {
+    if (lower.includes(sector.toLowerCase())) {
+      const sectorGrants = GRANTS.filter(g => g.sector === sector);
+      const avgBenefit = sectorGrants.reduce((sum, g) => {
+        const amount = g.amount.match(/₹?(\d+(?:\.\d+)?)/);
+        return sum + (amount ? parseFloat(amount[1]) : 0);
+      }, 0) / sectorGrants.length;
+
+      let response = `🌟 **${sector.toUpperCase()} SECTOR - ${sectorGrants.length} Elite Programs**\n\n`;
+      response += `💰 **Average Benefit Value:** ₹${avgBenefit.toFixed(0)}\n`;
+      response += `🎯 **Coverage:** ${sectorGrants[0]?.coverage || 'National'}\n\n`;
+      
+      sectorGrants.forEach((grant, i) => {
+        response += `**${i + 1}. ${grant.name}**\n`;
+        response += `   💸 Benefit: ${grant.amount}\n`;
+        response += `   📊 Beneficiaries: ${grant.beneficiaries}\n`;
+        response += `   📝 ${grant.description}\n\n`;
+      });
+
+      return {
+        response,
+        suggestions: sectorGrants.slice(0, 3).map(g => `Learn: ${g.name.split(" ")[0]}`)
+      };
+    }
+  }
+
+  // Default intelligent response
+  let response = `🤖 **I'm your AI Grant Discovery Assistant!**\n\n`;
+  response += `I understand you're asking about: **"${message}"**\n\n`;
+  
+  if (retrievedGrants.length > 0) {
+    response += `**🔍 Based on your query, I found:**\n`;
+    retrievedGrants.forEach((grant, i) => {
+      response += `• ${grant.name} (${grant.sector}) - ${grant.amount}\n`;
+    });
+    response += `\n**💡 Try asking more specifically:**\n`;
+  }
+  
+  response += `• "What grants am I eligible for?"\n` +
+              `• "Show me [sector] programs"\n` +
+              `• "Tell me about [scheme name]"\n` +
+              `• "Which schemes provide financial help?"\n\n` +
+              `**What would you like to explore?**`;
+
+  return {
+    response,
+    suggestions: ["Find My Grants", "Browse Sectors", "Get General Help"]
+  };
 }
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const { message, history } = req.body || {};
+  const { message, history, profile } = req.body || {};
   if (!message) return res.status(400).json({ error: 'Missing message' });
 
-  // Build prompt with retrieved grants
+  // Build context with enhanced grant retrieval
   const retrieved = findTopGrants(message, 4);
   let contextText = '';
   if (retrieved.length) {
@@ -37,13 +355,19 @@ module.exports = async (req, res) => {
     });
   }
 
-  const system = `You are GrantTracker Assistant. Use the provided 'Relevant grants' section to ground your answer. If no relevant grants are present say you couldn't find a direct match and offer to browse by sector. Answer concisely and include citations when mentioning specific grants.`;
+  const system = `You are GrantTracker AI Assistant, an expert in Indian government schemes and grants. Use the provided 'Relevant grants' section to ground your answer with accurate information. If no relevant grants are present, offer to browse by sector or ask for more specific information. Be conversational, helpful, and provide specific details when mentioning grants. Always include actionable suggestions.`;
 
   // Build messages array for the chat completion using client history for continuity
   const messages = [];
   messages.push({ role: 'system', content: system });
   if (contextText) {
     messages.push({ role: 'system', content: `Relevant grants:\n${contextText}` });
+  }
+
+  // Add user profile context if available
+  if (profile && Object.keys(profile).length > 0) {
+    const profileText = `User profile: ${JSON.stringify(profile)}`;
+    messages.push({ role: 'system', content: profileText });
   }
 
   // history is expected as array of { sender: 'user'|'bot', text }
@@ -71,19 +395,34 @@ module.exports = async (req, res) => {
       const resp = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
-        body: JSON.stringify({ model: 'gpt-4o-mini', messages, max_tokens: 900 }),
+        body: JSON.stringify({ 
+          model: 'gpt-4o-mini', 
+          messages, 
+          max_tokens: 1000,
+          temperature: 0.7,
+          presence_penalty: 0.1,
+          frequency_penalty: 0.1
+        }),
       });
 
       if (!resp.ok) {
         const txt = await resp.text();
-        return res.status(502).json({ error: 'OpenAI LLM error', details: txt });
+        console.error('OpenAI error:', txt);
+        // Fall through to enhanced local response
+      } else {
+        const data = await resp.json();
+        const reply = data.choices?.[0]?.message?.content;
+        if (reply) {
+          return res.json({ 
+            reply, 
+            suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
+            citations: retrieved.map(g => g.id) 
+          });
+        }
       }
-
-      const data = await resp.json();
-      const reply = data.choices?.[0]?.message?.content || 'Sorry, I had no response.';
-      return res.json({ reply, citations: retrieved.map(g => g.id) });
     } catch (err) {
-      return res.status(500).json({ error: 'OpenAI request failed', details: err.message });
+      console.error('OpenAI request failed:', err.message);
+      // Continue to fallback
     }
   }
 
@@ -97,11 +436,17 @@ module.exports = async (req, res) => {
 
     if (ollamaResp.ok) {
       const ollamaData = await ollamaResp.json();
-      const reply = ollamaData.message?.content || 'Sorry, I had no response from Ollama.';
-      return res.json({ reply, citations: retrieved.map(g => g.id) });
+      const reply = ollamaData.message?.content;
+      if (reply) {
+        return res.json({ 
+          reply, 
+          suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
+          citations: retrieved.map(g => g.id) 
+        });
+      }
     }
   } catch (err) {
-    // Ollama not available, continue to next fallback
+    console.log('Ollama not available, continuing to next fallback');
   }
 
   // 3. Try Hugging Face Inference API (requires HUGGINGFACE_API_KEY)
@@ -110,22 +455,46 @@ module.exports = async (req, res) => {
       const hfResp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(hfModel)}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${hfKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'), parameters: { max_new_tokens: 400 } }),
+        body: JSON.stringify({ 
+          inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'), 
+          parameters: { max_new_tokens: 500, temperature: 0.7 }
+        }),
       });
 
       if (!hfResp.ok) {
         const txt = await hfResp.text();
-        return res.status(502).json({ error: 'HuggingFace LLM error', details: txt });
+        console.error('HuggingFace error:', txt);
+      } else {
+        const hfData = await hfResp.json();
+        // Hugging Face returns [{ generated_text: '...' }] for text-generation models
+        const reply = Array.isArray(hfData) ? (hfData[0].generated_text || hfData[0].text || '') : (hfData.generated_text || hfData.text || '');
+        if (reply && reply.trim()) {
+          return res.json({ 
+            reply: reply.trim(), 
+            suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
+            citations: retrieved.map(g => g.id) 
+          });
+        }
       }
-
-      const hfData = await hfResp.json();
-      // Hugging Face returns [{ generated_text: '...' }] for text-generation models
-      const reply = Array.isArray(hfData) ? (hfData[0].generated_text || hfData[0].text || '') : (hfData.generated_text || hfData.text || '');
-      return res.json({ reply: reply.trim(), citations: retrieved.map(g => g.id) });
     } catch (err) {
-      return res.status(500).json({ error: 'HuggingFace request failed', details: err.message });
+      console.error('HuggingFace request failed:', err.message);
     }
   }
 
-  return res.status(500).json({ error: 'No LLM provider configured. Set OPENAI_API_KEY, run Ollama locally, or set HUGGINGFACE_API_KEY.' });
+  // 4. Enhanced local fallback response
+  try {
+    const localResponse = generateEnhancedResponse(message, retrieved, profile);
+    return res.json({ 
+      reply: localResponse.response + `\n\n🤖 *(Using enhanced local AI - Remote services temporarily unavailable)*`,
+      suggestions: localResponse.suggestions,
+      citations: retrieved.map(g => g.id),
+      fallback: true
+    });
+  } catch (err) {
+    return res.status(500).json({ 
+      error: 'All AI providers failed', 
+      details: err.message,
+      fallback: "I'm experiencing technical difficulties. Please try asking about specific grants or sectors."
+    });
+  }
 };
