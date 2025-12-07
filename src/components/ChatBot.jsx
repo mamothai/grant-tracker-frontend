@@ -914,18 +914,18 @@ export default function ChatBot() {
         )}
       </button>
 
-      {/* Premium Modern Chat Window */}
+      {/* Optimized Chat Window */}
       {isOpen && (
         <div
           style={{
             position: "fixed",
-            bottom: "110px",
-            right: "25px",
-            width: "clamp(360px, 90vw, 520px)",
-            height: "700px",
+            bottom: "100px",
+            right: "20px",
+            width: "clamp(320px, 85vw, 400px)",
+            height: "500px",
             background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))",
             border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "24px",
+            borderRadius: "20px",
             boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
             display: "flex",
             flexDirection: "column",
@@ -935,9 +935,9 @@ export default function ChatBot() {
             overflow: "hidden"
           }}
         >
-          {/* Premium Header with Glass Morphism */}
+          {/* Compact Header */}
           <div style={{ 
-            padding: "24px", 
+            padding: "16px 20px", 
             borderBottom: "1px solid rgba(255, 255, 255, 0.08)", 
             background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02))",
             position: "relative",
@@ -1020,16 +1020,16 @@ export default function ChatBot() {
             <div style={{ position: "relative", zIndex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <div style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "16px",
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "12px",
                   background: "linear-gradient(135deg, #667eea, #764ba2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "22px",
+                  fontSize: "18px",
                   animation: "pulse 3s infinite",
-                  boxShadow: "0 8px 32px rgba(102, 126, 234, 0.4)",
+                  boxShadow: "0 6px 24px rgba(102, 126, 234, 0.4)",
                   border: "2px solid rgba(255, 255, 255, 0.2)",
                   backdropFilter: "blur(10px)"
                 }}>
@@ -1039,9 +1039,9 @@ export default function ChatBot() {
                   <h3 style={{ 
                     margin: 0, 
                     color: "#ffffff", 
-                    fontSize: "20px",
-                    fontWeight: "700",
-                    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
                     background: "linear-gradient(135deg, #667eea, #764ba2)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -1050,74 +1050,50 @@ export default function ChatBot() {
                     GrantTracker AI
                   </h3>
                   <p style={{ 
-                    margin: "6px 0 0 0", 
+                    margin: "2px 0 0 0", 
                     color: "rgba(255, 255, 255, 0.8)", 
-                    fontSize: "13px",
+                    fontSize: "11px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "8px",
+                    gap: "6px",
                     fontWeight: "500"
                   }}>
                     <span style={{
-                      width: "10px",
-                      height: "10px",
+                      width: "8px",
+                      height: "8px",
                       background: isListening ? "#ff6b6b" : fastMode ? "#51cf66" : "#ffd43b",
                       borderRadius: "50%",
                       animation: isListening ? "pulse 0.5s infinite" : "pulse 2s infinite",
-                      boxShadow: `0 0 8px ${isListening ? '#ff6b6b' : fastMode ? '#51cf66' : '#ffd43b'}`
+                      boxShadow: `0 0 6px ${isListening ? '#ff6b6b' : fastMode ? '#51cf66' : '#ffd43b'}`
                     }} />
-                    {isListening ? "Listening..." : fastMode ? "⚡ Lightning-Fast AI" : "AI Assistant Online"}
+                    {isListening ? "Listening..." : fastMode ? "⚡ Fast AI" : "AI Online"}
                   </p>
                   
-                  {/* Enhanced Keyboard Shortcuts */}
+                  {/* Compact Keyboard Shortcuts */}
                   <div style={{
-                    marginTop: "6px",
-                    fontSize: "10px",
+                    marginTop: "3px",
+                    fontSize: "9px",
                     color: "rgba(255, 255, 255, 0.5)",
                     display: "flex",
-                    gap: "12px"
+                    gap: "6px"
                   }}>
-                    <span title="Alt+V for voice input" style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      padding: "2px 6px",
-                      background: "rgba(255, 255, 255, 0.05)",
-                      borderRadius: "8px",
-                      border: "1px solid rgba(255, 255, 255, 0.1)"
-                    }}>🎤 Alt+V</span>
-                    <span title="Alt+T to toggle chat" style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      padding: "2px 6px",
-                      background: "rgba(255, 255, 255, 0.05)",
-                      borderRadius: "8px",
-                      border: "1px solid rgba(255, 255, 255, 0.1)"
-                    }}>💬 Alt+T</span>
-                    <span title="Esc to close" style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      padding: "2px 6px",
-                      background: "rgba(255, 255, 255, 0.05)",
-                      borderRadius: "8px",
-                      border: "1px solid rgba(255, 255, 255, 0.1)"
-                    }}>✕ Esc</span>
+                    <span title="Alt+V for voice input">🎤 Alt+V</span>
+                    <span title="Alt+T to toggle chat">💬 Alt+T</span>
+                    <span title="Esc to close">✕ Esc</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Messages Container */}
+          {/* Compact Messages Container */}
           <div style={{ 
             flex: 1, 
             overflowY: "auto", 
-            padding: "20px", 
+            padding: "16px", 
             display: "flex", 
             flexDirection: "column", 
-            gap: "16px",
+            gap: "12px",
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(6, 182, 212, 0.3) transparent"
           }}>
@@ -1127,29 +1103,30 @@ export default function ChatBot() {
                 style={{ 
                   display: "flex", 
                   justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                  animation: "slideIn 0.3s ease-out"
+                  animation: "slideIn 0.3s ease-out",
+                  marginBottom: "8px"
                 }}
               >
                 <div style={{
                   maxWidth: "88%",
-                  padding: "16px 20px",
+                  padding: "12px 16px",
                   borderRadius: msg.sender === "user" 
-                    ? "20px 4px 20px 20px" 
-                    : "4px 20px 20px 20px",
+                    ? "18px 4px 18px 18px" 
+                    : "4px 18px 18px 18px",
                   background: msg.sender === "user" 
                     ? "linear-gradient(135deg, #667eea, #764ba2)" 
                     : "rgba(255, 255, 255, 0.08)",
                   color: "#ffffff",
-                  fontSize: "14px",
-                  lineHeight: "1.7",
+                  fontSize: "13px",
+                  lineHeight: "1.5",
                   border: msg.sender === "user" 
                     ? "none" 
                     : "1px solid rgba(255, 255, 255, 0.1)",
                   wordWrap: "break-word",
                   backdropFilter: msg.sender === "user" ? "none" : "blur(12px)",
                   boxShadow: msg.sender === "user" 
-                    ? "0 8px 32px rgba(102, 126, 234, 0.3)" 
-                    : "0 4px 16px rgba(0, 0, 0, 0.15)",
+                    ? "0 6px 24px rgba(102, 126, 234, 0.3)" 
+                    : "0 3px 12px rgba(0, 0, 0, 0.15)",
                   position: "relative",
                   overflow: "hidden"
                 }}>
@@ -1189,13 +1166,13 @@ export default function ChatBot() {
                     {formatText(msg.text)}
                   </div>
                   
-                  {/* Enhanced Suggestions */}
+                  {/* Compact Suggestions */}
                   {msg.suggestions && msg.suggestions.length > 0 && (
                     <div style={{ 
-                      marginTop: "12px", 
+                      marginTop: "8px", 
                       display: "flex", 
                       flexDirection: "column", 
-                      gap: "8px",
+                      gap: "6px",
                       animation: "slideUp 0.3s ease-out"
                     }}>
                       {msg.suggestions.map((s, i) => (
@@ -1203,12 +1180,12 @@ export default function ChatBot() {
                           key={i}
                           onClick={() => handleSuggestion(s)}
                           style={{
-                            padding: "8px 12px",
+                            padding: "6px 10px",
                             background: "rgba(6, 182, 212, 0.15)",
                             border: "1px solid rgba(6, 182, 212, 0.4)",
-                            borderRadius: "8px",
+                            borderRadius: "6px",
                             color: "#06b6d4",
-                            fontSize: "12px",
+                            fontSize: "11px",
                             cursor: "pointer",
                             textAlign: "left",
                             transition: "all 0.2s ease",
@@ -1216,8 +1193,8 @@ export default function ChatBot() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "rgba(6, 182, 212, 0.3)";
-                            e.currentTarget.style.transform = "translateX(4px)";
-                            e.currentTarget.style.boxShadow = "0 4px 12px rgba(6, 182, 212, 0.3)";
+                            e.currentTarget.style.transform = "translateX(2px)";
+                            e.currentTarget.style.boxShadow = "0 3px 8px rgba(6, 182, 212, 0.3)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "rgba(6, 182, 212, 0.15)";
@@ -1231,10 +1208,10 @@ export default function ChatBot() {
                     </div>
                   )}
                   
-                  {/* Timestamp */}
+                  {/* Compact Timestamp */}
                   <div style={{
-                    marginTop: "8px",
-                    fontSize: "10px",
+                    marginTop: "6px",
+                    fontSize: "9px",
                     color: "rgba(255, 255, 255, 0.4)",
                     textAlign: msg.sender === "user" ? "right" : "left"
                   }}>
@@ -1289,12 +1266,12 @@ export default function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Enhanced Input Section */}
+          {/* Compact Input Section */}
           <div style={{ 
-            padding: "16px", 
-            borderTop: "2px solid rgba(6, 182, 212, 0.1)", 
+            padding: "12px", 
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)", 
             display: "flex", 
-            gap: "10px",
+            gap: "8px",
             background: "rgba(15, 23, 42, 0.8)",
             backdropFilter: "blur(10px)"
           }}>
@@ -1304,23 +1281,23 @@ export default function ChatBot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask about grants, eligibility, or any scheme..."
+                placeholder="Ask about grants..."
                 style={{
                   width: "100%",
-                  padding: "12px 16px",
-                  paddingRight: "40px",
+                  padding: "10px 12px",
+                  paddingRight: "36px",
                   background: "rgba(255, 255, 255, 0.05)",
-                  border: "2px solid rgba(6, 182, 212, 0.2)",
-                  borderRadius: "12px",
+                  border: "1px solid rgba(6, 182, 212, 0.2)",
+                  borderRadius: "10px",
                   color: "#e5e7eb",
-                  fontSize: "14px",
+                  fontSize: "13px",
                   outline: "none",
                   transition: "all 0.2s ease",
                   backdropFilter: "blur(10px)"
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = "#06b6d4";
-                  e.target.style.boxShadow = "0 0 20px rgba(6, 182, 212, 0.2)";
+                  e.target.style.boxShadow = "0 0 15px rgba(6, 182, 212, 0.2)";
                 }}
                 onBlur={(e) => {
                   e.target.style.borderColor = "rgba(6, 182, 212, 0.2)";
@@ -1328,7 +1305,7 @@ export default function ChatBot() {
                 }}
               />
               
-              {/* Enhanced Voice input with accessibility */}
+              {/* Compact Voice input */}
               <button
                 onClick={toggleVoiceInput}
                 disabled={!recognition}
@@ -1336,20 +1313,20 @@ export default function ChatBot() {
                 role="button"
                 style={{
                   position: "absolute",
-                  right: "8px",
+                  right: "6px",
                   top: "50%",
                   transform: "translateY(-50%)",
                   background: isListening 
                     ? "linear-gradient(135deg, #ef4444, #dc2626)"
                     : "rgba(6, 182, 212, 0.1)",
-                  border: `2px solid ${isListening ? "#ef4444" : "#06b6d4"}`,
+                  border: `1px solid ${isListening ? "#ef4444" : "#06b6d4"}`,
                   color: isListening ? "#fff" : "#06b6d4",
                   cursor: recognition ? "pointer" : "not-allowed",
-                  padding: "6px",
+                  padding: "4px",
                   borderRadius: "50%",
                   transition: "all 0.3s ease",
-                  width: "32px",
-                  height: "32px",
+                  width: "28px",
+                  height: "28px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -1358,7 +1335,7 @@ export default function ChatBot() {
                 }}
                 onMouseEnter={(e) => {
                   if (recognition) {
-                    e.target.style.transform = "translateY(-50%) scale(1.1)";
+                    e.target.style.transform = "translateY(-50%) scale(1.05)";
                     e.target.style.background = isListening 
                       ? "linear-gradient(135deg, #dc2626, #b91c1c)"
                       : "rgba(6, 182, 212, 0.2)";
@@ -1378,9 +1355,9 @@ export default function ChatBot() {
                 }
               >
                 {isListening ? (
-                  <span style={{ fontSize: "14px", animation: "blink 1s infinite" }}>🔴</span>
+                  <span style={{ fontSize: "12px", animation: "blink 1s infinite" }}>🔴</span>
                 ) : (
-                  <span style={{ fontSize: "14px" }}>🎤</span>
+                  <span style={{ fontSize: "12px" }}>🎤</span>
                 )}
               </button>
             </div>
@@ -1389,40 +1366,40 @@ export default function ChatBot() {
               onClick={() => handleSend()}
               disabled={!inputValue.trim()}
               style={{
-                padding: "12px 20px",
+                padding: "10px 16px",
                 background: inputValue.trim() 
                   ? "linear-gradient(135deg, #06b6d4, #a855f7)" 
                   : "rgba(6, 182, 212, 0.2)",
                 border: "none",
-                borderRadius: "12px",
+                borderRadius: "10px",
                 color: "#fff",
                 cursor: inputValue.trim() ? "pointer" : "not-allowed",
                 opacity: inputValue.trim() ? 1 : 0.5,
                 transition: "all 0.2s ease",
                 boxShadow: inputValue.trim() 
-                  ? "0 4px 12px rgba(6, 182, 212, 0.3)" 
+                  ? "0 3px 10px rgba(6, 182, 212, 0.3)" 
                   : "none",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                minWidth: "48px"
+                minWidth: "40px"
               }}
               onMouseEnter={(e) => {
                 if (inputValue.trim()) {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow = "0 6px 16px rgba(6, 182, 212, 0.4)";
+                  e.target.style.transform = "translateY(-1px)";
+                  e.target.style.boxShadow = "0 4px 12px rgba(6, 182, 212, 0.4)";
                 }
               }}
               onMouseLeave={(e) => {
                 e.target.style.transform = "translateY(0)";
                 e.target.style.boxShadow = inputValue.trim() 
-                  ? "0 4px 12px rgba(6, 182, 212, 0.3)" 
+                  ? "0 3px 10px rgba(6, 182, 212, 0.3)" 
                   : "none";
               }}
             >
               <span style={{
                 transition: "transform 0.2s ease",
-                transform: inputValue.trim() ? "scale(1.1)" : "scale(1)"
+                transform: inputValue.trim() ? "scale(1.05)" : "scale(1)"
               }}>
                 ➤
               </span>
