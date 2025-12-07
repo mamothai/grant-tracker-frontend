@@ -796,53 +796,77 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Enhanced Toggle Button with Animations */}
+      {/* Premium Modern Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
         style={{
           position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          width: "64px",
-          height: "64px",
+          bottom: "25px",
+          right: "25px",
+          width: "72px",
+          height: "72px",
           padding: 0,
           borderRadius: "50%",
           background: isOpen 
-            ? "linear-gradient(135deg, #ef4444, #dc2626)"
-            : "linear-gradient(135deg, #06b6d4, #a855f7)",
-          border: "none",
+            ? "linear-gradient(135deg, #ff6b6b, #ee5a52)"
+            : "linear-gradient(135deg, #667eea, #764ba2)",
+          border: "3px solid rgba(255, 255, 255, 0.2)",
           cursor: "pointer",
-          boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
+          boxShadow: isOpen 
+            ? "0 8px 32px rgba(255, 107, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+            : "0 8px 32px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 999,
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           transform: isOpen ? "scale(1)" : "scale(1)",
           animation: !isOpen ? "float 3s ease-in-out infinite" : "none",
+          backdropFilter: "blur(10px)",
+          overflow: "hidden",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-4px) scale(1.1)";
-          e.currentTarget.style.boxShadow = "0 12px 28px rgba(0,0,0,0.35)";
+          e.currentTarget.style.transform = "translateY(-6px) scale(1.05)";
+          e.currentTarget.style.boxShadow = isOpen 
+            ? "0 16px 48px rgba(255, 107, 107, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)"
+            : "0 16px 48px rgba(102, 126, 234, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = "translateY(0) scale(1)";
-          e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.25)";
+          e.currentTarget.style.boxShadow = isOpen 
+            ? "0 8px 32px rgba(255, 107, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+            : "0 8px 32px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)";
         }}
       >
+        {/* Animated background effect */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: isOpen 
+            ? "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent)"
+            : "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent)",
+          transition: "all 0.3s ease"
+        }} />
+        
         {isOpen ? (
           <div style={{ 
-            width: 36, 
-            height: 36, 
-            borderRadius: 8, 
-            background: "rgba(255,255,255,0.15)", 
+            width: 40, 
+            height: 40, 
+            borderRadius: "12px", 
+            background: "rgba(255,255,255,0.2)", 
             display: "flex", 
             alignItems: "center", 
             justifyContent: "center", 
             color: "#fff", 
-            fontSize: 18,
-            fontWeight: "bold"
+            fontSize: 20,
+            fontWeight: "bold",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            animation: "scaleIn 0.3s ease-out"
           }}>
             ✕
           </div>
@@ -852,144 +876,234 @@ export default function ChatBot() {
               src={santaImg} 
               alt="AI Assistant" 
               style={{ 
-                width: 48, 
-                height: 48, 
+                width: 52, 
+                height: 52, 
                 borderRadius: "50%", 
                 display: "block",
-                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.3))",
-                animation: "bounce 2s infinite"
+                filter: "drop-shadow(0 0 15px rgba(255,255,255,0.4))",
+                animation: "bounce 2s infinite",
+                border: "2px solid rgba(255, 255, 255, 0.2)"
               }} 
             />
-            {/* Notification dot for new messages */}
+            {/* Enhanced notification dot */}
             <div style={{
               position: "absolute",
-              top: -2,
-              right: -2,
-              width: 16,
-              height: 16,
-              background: "#ef4444",
+              top: -3,
+              right: -3,
+              width: 20,
+              height: 20,
+              background: "linear-gradient(135deg, #ff4757, #ff3838)",
               borderRadius: "50%",
-              border: "2px solid white",
-              animation: "pulse 1.5s infinite"
-            }} />
+              border: "3px solid white",
+              animation: "pulse 1.5s infinite",
+              boxShadow: "0 4px 12px rgba(255, 71, 87, 0.4)"
+            }}>
+              <div style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 6,
+                height: 6,
+                background: "white",
+                borderRadius: "50%",
+                animation: "blink 1s infinite"
+              }} />
+            </div>
           </div>
         )}
       </button>
 
-      {/* Enhanced Chat Window */}
+      {/* Premium Modern Chat Window */}
       {isOpen && (
         <div
           style={{
             position: "fixed",
-            bottom: "100px",
-            right: "20px",
-            width: "clamp(320px, 90vw, 480px)",
-            height: "650px",
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98))",
-            border: "2px solid rgba(6, 182, 212, 0.3)",
-            borderRadius: "20px",
-            boxShadow: "0 20px 40px rgba(6, 182, 212, 0.3)",
+            bottom: "110px",
+            right: "25px",
+            width: "clamp(360px, 90vw, 520px)",
+            height: "700px",
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "24px",
+            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
             display: "flex",
             flexDirection: "column",
             zIndex: 999,
-            backdropFilter: "blur(15px)",
-            animation: "slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            animation: "slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             overflow: "hidden"
           }}
         >
-          {/* Enhanced Header with Status */}
+          {/* Premium Header with Glass Morphism */}
           <div style={{ 
-            padding: "20px", 
-            borderBottom: "2px solid rgba(6, 182, 212, 0.2)", 
-            background: "linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(168, 85, 247, 0.15))",
+            padding: "24px", 
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)", 
+            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02))",
             position: "relative",
             overflow: "hidden"
           }}>
-            {/* Chat Stats */}
-            <div style={{
-              position: "absolute",
-              top: "8px",
-              right: "12px",
-              display: "flex",
-              gap: "8px",
-              fontSize: "10px",
-              color: "rgba(255, 255, 255, 0.6)"
-            }}>
-              <span title={`${messages.length} messages`}>
-                💬 {messages.length}
-              </span>
-              {isListening && (
-                <span title="Voice input active" style={{ color: "#ef4444" }}>
-                  🎤 Live
-                </span>
-              )}
-            </div>
-            {/* Background pattern */}
+            {/* Enhanced background pattern */}
             <div style={{
               position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              background: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='m0 40v-40h40v40z'/%3E%3C/g%3E%3C/svg%3E")`,
+              background: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
               zIndex: 0
             }} />
             
+            {/* Floating orbs for visual appeal */}
+            <div style={{
+              position: "absolute",
+              top: "20%",
+              right: "15%",
+              width: "80px",
+              height: "80px",
+              background: "radial-gradient(circle, rgba(102, 126, 234, 0.1), transparent)",
+              borderRadius: "50%",
+              animation: "float 6s ease-in-out infinite",
+              zIndex: 0
+            }} />
+            <div style={{
+              position: "absolute",
+              bottom: "30%",
+              left: "10%",
+              width: "60px",
+              height: "60px",
+              background: "radial-gradient(circle, rgba(118, 75, 162, 0.1), transparent)",
+              borderRadius: "50%",
+              animation: "float 8s ease-in-out infinite reverse",
+              zIndex: 0
+            }} />
+            
+            {/* Chat Stats */}
+            <div style={{
+              position: "absolute",
+              top: "12px",
+              right: "16px",
+              display: "flex",
+              gap: "12px",
+              fontSize: "11px",
+              color: "rgba(255, 255, 255, 0.7)",
+              zIndex: 2
+            }}>
+              <span title={`${messages.length} messages`} style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                padding: "4px 8px",
+                background: "rgba(255, 255, 255, 0.05)",
+                borderRadius: "12px",
+                border: "1px solid rgba(255, 255, 255, 0.1)"
+              }}>
+                💬 {messages.length}
+              </span>
+              {isListening && (
+                <span title="Voice input active" style={{ 
+                  color: "#ff6b6b",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "4px 8px",
+                  background: "rgba(255, 107, 107, 0.1)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(255, 107, 107, 0.2)",
+                  animation: "pulse 0.5s infinite"
+                }}>
+                  🎤 Live
+                </span>
+              )}
+            </div>
+            
             <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <div style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #06b6d4, #a855f7)",
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "16px",
+                  background: "linear-gradient(135deg, #667eea, #764ba2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "18px",
-                  animation: "pulse 2s infinite",
-                  boxShadow: "0 0 20px rgba(6, 182, 212, 0.4)"
+                  fontSize: "22px",
+                  animation: "pulse 3s infinite",
+                  boxShadow: "0 8px 32px rgba(102, 126, 234, 0.4)",
+                  border: "2px solid rgba(255, 255, 255, 0.2)",
+                  backdropFilter: "blur(10px)"
                 }}>
                   🤖
                 </div>
                 <div>
                   <h3 style={{ 
                     margin: 0, 
-                    color: "#06b6d4", 
-                    fontSize: "18px",
-                    fontWeight: "600",
-                    textShadow: "0 0 10px rgba(6, 182, 212, 0.5)"
+                    color: "#ffffff", 
+                    fontSize: "20px",
+                    fontWeight: "700",
+                    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+                    background: "linear-gradient(135deg, #667eea, #764ba2)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text"
                   }}>
                     GrantTracker AI
                   </h3>
                   <p style={{ 
-                    margin: "4px 0 0 0", 
-                    color: "#a1a1aa", 
-                    fontSize: "12px",
+                    margin: "6px 0 0 0", 
+                    color: "rgba(255, 255, 255, 0.8)", 
+                    fontSize: "13px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "5px"
+                    gap: "8px",
+                    fontWeight: "500"
                   }}>
                     <span style={{
-                      width: 8,
-                      height: 8,
-                      background: isListening ? "#ef4444" : fastMode ? "#10b981" : "#f59e0b",
+                      width: "10px",
+                      height: "10px",
+                      background: isListening ? "#ff6b6b" : fastMode ? "#51cf66" : "#ffd43b",
                       borderRadius: "50%",
-                      animation: isListening ? "pulse 0.5s infinite" : "pulse 1.5s infinite"
+                      animation: isListening ? "pulse 0.5s infinite" : "pulse 2s infinite",
+                      boxShadow: `0 0 8px ${isListening ? '#ff6b6b' : fastMode ? '#51cf66' : '#ffd43b'}`
                     }} />
                     {isListening ? "Listening..." : fastMode ? "⚡ Lightning-Fast AI" : "AI Assistant Online"}
                   </p>
                   
-                  {/* Keyboard Shortcuts Info */}
+                  {/* Enhanced Keyboard Shortcuts */}
                   <div style={{
-                    marginTop: "4px",
+                    marginTop: "6px",
                     fontSize: "10px",
-                    color: "rgba(255, 255, 255, 0.4)",
+                    color: "rgba(255, 255, 255, 0.5)",
                     display: "flex",
-                    gap: "8px"
+                    gap: "12px"
                   }}>
-                    <span title="Alt+V for voice input">🎤 Alt+V</span>
-                    <span title="Alt+T to toggle chat">💬 Alt+T</span>
-                    <span title="Esc to close">✕ Esc</span>
+                    <span title="Alt+V for voice input" style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      padding: "2px 6px",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderRadius: "8px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)"
+                    }}>🎤 Alt+V</span>
+                    <span title="Alt+T to toggle chat" style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      padding: "2px 6px",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderRadius: "8px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)"
+                    }}>💬 Alt+T</span>
+                    <span title="Esc to close" style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      padding: "2px 6px",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderRadius: "8px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)"
+                    }}>✕ Esc</span>
                   </div>
                 </div>
               </div>
@@ -1017,26 +1131,60 @@ export default function ChatBot() {
                 }}
               >
                 <div style={{
-                  maxWidth: "85%",
-                  padding: "12px 16px",
+                  maxWidth: "88%",
+                  padding: "16px 20px",
                   borderRadius: msg.sender === "user" 
-                    ? "18px 0 18px 18px" 
-                    : "0 18px 18px 18px",
+                    ? "20px 4px 20px 20px" 
+                    : "4px 20px 20px 20px",
                   background: msg.sender === "user" 
-                    ? "linear-gradient(135deg, #06b6d4, #a855f7)" 
-                    : "rgba(255, 255, 255, 0.1)",
-                  color: "#e5e7eb",
+                    ? "linear-gradient(135deg, #667eea, #764ba2)" 
+                    : "rgba(255, 255, 255, 0.08)",
+                  color: "#ffffff",
                   fontSize: "14px",
-                  lineHeight: "1.6",
+                  lineHeight: "1.7",
                   border: msg.sender === "user" 
                     ? "none" 
-                    : "1px solid rgba(6, 182, 212, 0.2)",
+                    : "1px solid rgba(255, 255, 255, 0.1)",
                   wordWrap: "break-word",
-                  backdropFilter: msg.sender === "user" ? "none" : "blur(10px)",
+                  backdropFilter: msg.sender === "user" ? "none" : "blur(12px)",
                   boxShadow: msg.sender === "user" 
-                    ? "0 4px 12px rgba(6, 182, 212, 0.3)" 
-                    : "0 2px 8px rgba(0, 0, 0, 0.1)"
+                    ? "0 8px 32px rgba(102, 126, 234, 0.3)" 
+                    : "0 4px 16px rgba(0, 0, 0, 0.15)",
+                  position: "relative",
+                  overflow: "hidden"
                 }}>
+                  {/* Subtle gradient overlay for depth */}
+                  {msg.sender !== "user" && (
+                    <div style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))",
+                      pointerEvents: "none"
+                    }} />
+                  )}
+                  
+                  {/* Message tail effect */}
+                  <div style={{
+                    position: "absolute",
+                    bottom: "8px",
+                    right: msg.sender === "user" ? "-2px" : "auto",
+                    left: msg.sender === "user" ? "auto" : "-2px",
+                    width: "12px",
+                    height: "12px",
+                    background: msg.sender === "user" 
+                      ? "linear-gradient(135deg, #667eea, #764ba2)" 
+                      : "rgba(255, 255, 255, 0.08)",
+                    transform: `rotate(45deg)`,
+                    borderRadius: "0 0 0 2px",
+                    border: msg.sender === "user" 
+                      ? "none" 
+                      : "1px solid rgba(255, 255, 255, 0.1)",
+                    borderTop: "none",
+                    borderLeft: "none"
+                  }} />
                   <div style={{ animation: "fadeIn 0.4s ease-in" }}>
                     {formatText(msg.text)}
                   </div>
