@@ -4,7 +4,7 @@ import "../App.css";
 import santaImg from "../assets/santa.svg";
 import { GRANTS } from "../data/grants";
 
-// Enhanced Grant Matching with Semantic Search
+// Ultra-fast Grant Matching with Caching
 class GrantMatcher {
   constructor(grants) {
     this.grants = grants;
@@ -14,6 +14,9 @@ class GrantMatcher {
       needs: new Set(),
       previousQueries: []
     };
+    // Cache for performance
+    this.searchCache = new Map();
+    this.cacheExpiry = 5 * 60 * 1000; // 5 minutes
   }
 
   // Semantic similarity scoring using word embeddings concept
@@ -166,15 +169,75 @@ class GrantMatcher {
     return profile;
   }
 
-  // Find best matching grants with enhanced scoring
+  // Ultra-fast grant finding with intelligent caching
   findBestGrants(query, limit = 5) {
-    const scored = this.grants.map(grant => ({
-      grant,
-      score: this.calculateSemanticScore(grant, query)
-    })).filter(x => x.score > 0)
-      .sort((a, b) => b.score - a.score);
+    const cacheKey = `${query.toLowerCase()}_${limit}`;
+    const now = Date.now();
     
-    return scored.slice(0, limit).map(x => x.grant);
+    // Check cache first
+    if (this.searchCache.has(cacheKey)) {
+      const cached = this.searchCache.get(cacheKey);
+      if (now - cached.timestamp < this.cacheExpiry) {
+        return cached.results;
+      }
+    }
+    
+    // Optimized scoring with early exits
+    const scored = [];
+    const queryLower = query.toLowerCase();
+    const queryWords = queryLower.split(/\s+/).filter(w => w.length > 2);
+    
+    for (const grant of this.grants) {
+      let score = 0;
+      const grantName = grant.name.toLowerCase();
+      const grantDesc = grant.description.toLowerCase();
+      
+      // Fast exact matches
+      if (grantName === queryLower) score += 1000;
+      else if (grantName.includes(queryLower)) score += 500;
+      
+      // Quick sector match
+      if (grant.sector.toLowerCase().includes(queryLower)) score += 250;
+      
+      // Fast keyword matching
+      for (const keyword of grant.keywords) {
+        const k = keyword.toLowerCase();
+        if (queryLower.includes(k)) score += 300;
+        
+        // Word-level matching
+        for (const word of queryWords) {
+          if (k.includes(word) || word.includes(k)) {
+            score += 150;
+            break;
+          }
+        }
+        
+        // Early exit for high scores
+        if (score > 600) break;
+      }
+      
+      // Text matching
+      if ((grantDesc.includes(queryLower)) || 
+          (queryWords.some(word => grantDesc.includes(word)))) {
+        score += 100;
+      }
+      
+      if (score > 0) {
+        scored.push({ grant, score });
+      }
+    }
+    
+    // Fast sorting and limiting
+    scored.sort((a, b) => b.score - a.score);
+    const results = scored.slice(0, limit).map(x => x.grant);
+    
+    // Cache results
+    this.searchCache.set(cacheKey, {
+      results,
+      timestamp: now
+    });
+    
+    return results;
   }
 
   // Personalized recommendations based on user profile
@@ -238,6 +301,7 @@ export default function ChatBot() {
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState(null);
   const [accessibilityMode, setAccessibilityMode] = useState(false);
+  const [fastMode, setFastMode] = useState(true);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const navigate = useNavigate();
@@ -346,7 +410,7 @@ export default function ChatBot() {
         setCurrentTypingText("");
         callback?.();
       }
-    }, 20); // Typing speed
+    }, 8); // Ultra-fast typing speed (20ms -> 8ms)
   }, []);
 
   // Enhanced response generation with AI-like intelligence
@@ -550,7 +614,7 @@ export default function ChatBot() {
         };
         setMessages(prev => [...prev, instantResponse]);
         setIsLoading(false);
-      }, 100);
+      }, 50);
       return;
     }
 
@@ -566,7 +630,7 @@ export default function ChatBot() {
         };
         setMessages(prev => [...prev, thanksResponse]);
         setIsLoading(false);
-      }, 100);
+      }, 50);
       return;
     }
 
@@ -577,7 +641,7 @@ export default function ChatBot() {
     try {
       // Try remote AI first with faster timeout
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 1200); // 1.2 second timeout
       
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -908,11 +972,11 @@ export default function ChatBot() {
                     <span style={{
                       width: 8,
                       height: 8,
-                      background: isListening ? "#ef4444" : "#10b981",
+                      background: isListening ? "#ef4444" : fastMode ? "#10b981" : "#f59e0b",
                       borderRadius: "50%",
                       animation: isListening ? "pulse 0.5s infinite" : "pulse 1.5s infinite"
                     }} />
-                    {isListening ? "Listening..." : "AI Assistant Online"}
+                    {isListening ? "Listening..." : fastMode ? "⚡ Lightning-Fast AI" : "AI Assistant Online"}
                   </p>
                   
                   {/* Keyboard Shortcuts Info */}
@@ -1059,7 +1123,7 @@ export default function ChatBot() {
                         borderRadius: "50%",
                         animation: "spin 0.8s linear infinite"
                       }} />
-                      ⚡ Lightning-fast AI processing...
+                      ⚡ Ultra-fast AI processing...
                     </div>
                   ) : (
                     <div style={{ color: "#06b6d4", fontSize: "14px" }}>

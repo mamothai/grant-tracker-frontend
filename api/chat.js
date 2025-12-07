@@ -1,59 +1,66 @@
 const fetch = globalThis.fetch || require('node-fetch');
 const { GRANTS } = require('../src/data/grants');
 
-// Enhanced semantic scoring system
+// Performance optimization: Cache for grant processing
+const grantCache = new Map();
+const CACHE_EXPIRY = 5 * 60 * 1000; // 5 minutes
+
+// Pre-process grants for faster lookups
+const PROCESSED_GRANTS = GRANTS.map(grant => ({
+  ...grant,
+  _searchText: `${grant.name} ${grant.description} ${grant.details} ${grant.sector} ${grant.keywords.join(' ')}`.toLowerCase(),
+  _sector: grant.sector.toLowerCase(),
+  _name: grant.name.toLowerCase()
+}));
+
+// Enhanced semantic scoring system with caching
 class EnhancedGrantMatcher {
   constructor(grants) {
-    this.grants = grants;
+    this.grants = PROCESSED_GRANTS; // Use pre-processed grants
   }
 
-  // Advanced semantic similarity scoring
+  // Ultra-fast semantic similarity scoring with pre-processed data
   calculateSemanticScore(grant, query) {
     const q = query.toLowerCase();
     let score = 0;
     
-    // Exact matches (highest weight)
-    if (grant.name.toLowerCase() === q) score += 1000;
-    if (grant.name.toLowerCase().includes(q)) score += 500;
+    // Use pre-processed search text for faster operations
+    const searchText = grant._searchText;
     
-    // Enhanced keyword semantic matching
-    const queryWords = q.split(/\s+/);
+    // Exact matches (highest weight) - optimized
+    if (grant._name === q) score += 1000;
+    if (grant._name.includes(q)) score += 500;
+    
+    // Fast keyword matching - using pre-processed keywords
+    const queryWords = q.split(/\s+/).filter(w => w.length > 2);
+    
+    // Quick sector match
+    if (grant._sector.includes(q)) score += 250;
+    
+    // Optimized keyword semantic matching
     grant.keywords.forEach(keyword => {
       const k = keyword.toLowerCase();
       
-      // Direct keyword match
+      // Direct keyword match - faster check
       if (q.includes(k)) score += 300;
       
-      // Word-level semantic matching
-      queryWords.forEach(word => {
-        if (word.length > 2) {
-          if (k.includes(word) || word.includes(k)) score += 150;
+      // Word-level semantic matching - optimized
+      for (let word of queryWords) {
+        if (k.includes(word) || word.includes(k)) {
+          score += 150;
           if (this.isSemanticRelated(word, k)) score += 200;
+          break; // Early exit for performance
         }
-      });
+      }
     });
     
-    // Sector semantic matching
-    if (grant.sector.toLowerCase().includes(q)) score += 250;
+    // Fast text matching using pre-processed text
+    const textMatches = this.countSemanticMatches(searchText, q);
+    score += textMatches * 40;
     
-    // Enhanced description matching with semantic analysis
-    const descMatches = this.countSemanticMatches(grant.description, q);
-    score += descMatches * 50;
-    
-    // Details matching with deeper analysis
-    const detailMatches = this.countSemanticMatches(grant.details, q);
-    score += detailMatches * 30;
-    
-    // Bonus for scheme/program terms
-    if (q.includes('scheme') || q.includes('program')) {
-      score += 100;
-    }
-    
-    // Bonus for benefit/money related queries
-    if ((q.includes('money') || q.includes('financial') || q.includes('cash')) && 
-        (grant.amount.includes('₹') || grant.amount.toLowerCase().includes('full'))) {
-      score += 75;
-    }
+    // Quick bonus checks
+    if (q.includes('scheme') || q.includes('program')) score += 100;
+    if ((q.includes('money') || q.includes('financial')) && grant.amount.includes('₹')) score += 75;
     
     return score;
   }
@@ -114,15 +121,43 @@ class EnhancedGrantMatcher {
     return matches;
   }
 
-  // Enhanced grant finding with semantic matching
+  // Ultra-fast grant finding with intelligent caching
   findBestGrants(query, limit = 5) {
-    const scored = this.grants.map(grant => ({
-      grant,
-      score: this.calculateSemanticScore(grant, query)
-    })).filter(x => x.score > 0)
-      .sort((a, b) => b.score - a.score);
+    // Check cache first for performance
+    const cacheKey = `${query.toLowerCase()}_${limit}`;
+    const now = Date.now();
     
-    return scored.slice(0, limit).map(x => x.grant);
+    if (grantCache.has(cacheKey)) {
+      const cached = grantCache.get(cacheKey);
+      if (now - cached.timestamp < CACHE_EXPIRY) {
+        return cached.results;
+      }
+    }
+    
+    // Optimized scoring with early exits
+    const scored = [];
+    for (const grant of this.grants) {
+      const score = this.calculateSemanticScore(grant, query);
+      if (score > 0) {
+        scored.push({ grant, score });
+        // Early exit if we have enough high-scoring results
+        if (scored.length > limit * 2 && score > 500) {
+          break;
+        }
+      }
+    }
+    
+    // Fast sorting and limiting
+    scored.sort((a, b) => b.score - a.score);
+    const results = scored.slice(0, limit).map(x => x.grant);
+    
+    // Cache the results
+    grantCache.set(cacheKey, {
+      results,
+      timestamp: now
+    });
+    
+    return results;
   }
 
   // Get personalized recommendations based on user profile
@@ -169,9 +204,176 @@ class EnhancedGrantMatcher {
 
 const matcher = new EnhancedGrantMatcher(GRANTS);
 
-// Enhanced grant finding function
+// Enhanced grant finding function with caching
 function findTopGrants(q, n = 4) {
   return matcher.findBestGrants(q, n);
+}
+
+// Parallel API calls for maximum speed
+async function callAPIsInParallel(message, history, profile, retrieved) {
+  const promises = [];
+  const openaiKey = process.env.OPENAI_API_KEY;
+  const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+  const ollamaModel = process.env.OLLAMA_MODEL || 'deepseek-coder';
+  const hfKey = process.env.HUGGINGFACE_API_KEY;
+  const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
+
+  // Build messages once for all APIs
+  const messages = buildMessages(message, history, profile, retrieved);
+
+  // OpenAI promise
+  if (openaiKey) {
+    promises.push(callOpenAI(messages, openaiKey));
+  }
+
+  // Ollama promise
+  promises.push(callOllama(messages, ollamaUrl, ollamaModel));
+
+  // Hugging Face promise
+  if (hfKey) {
+    promises.push(callHuggingFace(messages, hfKey, hfModel));
+  }
+
+  try {
+    const results = await Promise.race(promises.map(p => p.catch(() => null)));
+    if (results && results.reply) {
+      return results;
+    }
+  } catch (error) {
+    // Continue to local AI fallback
+  }
+
+  // Fast local AI fallback
+  const fastResponse = generateLightningResponse(message, retrieved, profile);
+  return {
+    reply: fastResponse.response,
+    suggestions: fastResponse.suggestions,
+    citations: retrieved.map(g => g.id),
+    fast: true
+  };
+}
+
+function buildMessages(message, history, profile, retrieved) {
+  const retrieved = findTopGrants(message, 4);
+  let contextText = '';
+  if (retrieved.length) {
+    contextText = 'Relevant grants:\n';
+    retrieved.forEach(g => {
+      contextText += `- ${g.name} (${g.sector}): ${g.description} Benefit: ${g.amount} Coverage: ${g.coverage}\n`;
+    });
+  }
+
+  const system = `You are GrantTracker AI Assistant, an expert in Indian government schemes and grants. Use the provided 'Relevant grants' section to ground your answer with accurate information. If no relevant grants are present, offer to browse by sector or ask for more specific information. Be conversational, helpful, and provide specific details when mentioning grants. Always include actionable suggestions.`;
+
+  const messages = [];
+  messages.push({ role: 'system', content: system });
+  if (contextText) {
+    messages.push({ role: 'system', content: `Relevant grants:\n${contextText}` });
+  }
+
+  if (profile && Object.keys(profile).length > 0) {
+    messages.push({ role: 'system', content: `User profile: ${JSON.stringify(profile)}` });
+  }
+
+  if (Array.isArray(history)) {
+    history.forEach(h => {
+      if (!h || !h.sender || !h.text) return;
+      const role = h.sender === 'user' ? 'user' : 'assistant';
+      messages.push({ role, content: String(h.text) });
+    });
+  }
+
+  messages.push({ role: 'user', content: String(message) });
+  return messages;
+}
+
+async function callOpenAI(messages, apiKey) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 800);
+
+  try {
+    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages,
+        max_tokens: 600,
+        temperature: 0.6
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (resp.ok) {
+      const data = await resp.json();
+      const reply = data.choices?.[0]?.message?.content;
+      if (reply) {
+        return { reply, fast: true };
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+  throw new Error('OpenAI failed');
+}
+
+async function callOllama(messages, url, model) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 600);
+
+  try {
+    const resp = await fetch(`${url}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, stream: false }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (resp.ok) {
+      const data = await resp.json();
+      const reply = data.message?.content;
+      if (reply) {
+        return { reply, fast: true };
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+  throw new Error('Ollama failed');
+}
+
+async function callHuggingFace(messages, apiKey, model) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 700);
+
+  try {
+    const resp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(model)}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'),
+        parameters: { max_new_tokens: 400, temperature: 0.6 }
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (resp.ok) {
+      const data = await resp.json();
+      const reply = Array.isArray(data) ? (data[0].generated_text || data[0].text || '') : (data.generated_text || data.text || '');
+      if (reply && reply.trim()) {
+        return { reply: reply.trim(), fast: true };
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+  throw new Error('HuggingFace failed');
 }
 
 // Ultra-fast AI response generation with enhanced intelligence
@@ -364,169 +566,25 @@ module.exports = async (req, res) => {
   const { message, history, profile } = req.body || {};
   if (!message) return res.status(400).json({ error: 'Missing message' });
 
-  // Build context with enhanced grant retrieval
-  const retrieved = findTopGrants(message, 4);
-  let contextText = '';
-  if (retrieved.length) {
-    contextText = 'Relevant grants:\n';
-    retrieved.forEach(g => {
-      contextText += `- ${g.name} (${g.sector}): ${g.description} Benefit: ${g.amount} Coverage: ${g.coverage}\n`;
-    });
-  }
-
-  const system = `You are GrantTracker AI Assistant, an expert in Indian government schemes and grants. Use the provided 'Relevant grants' section to ground your answer with accurate information. If no relevant grants are present, offer to browse by sector or ask for more specific information. Be conversational, helpful, and provide specific details when mentioning grants. Always include actionable suggestions.`;
-
-  // Build messages array for the chat completion using client history for continuity
-  const messages = [];
-  messages.push({ role: 'system', content: system });
-  if (contextText) {
-    messages.push({ role: 'system', content: `Relevant grants:\n${contextText}` });
-  }
-
-  // Add user profile context if available
-  if (profile && Object.keys(profile).length > 0) {
-    const profileText = `User profile: ${JSON.stringify(profile)}`;
-    messages.push({ role: 'system', content: profileText });
-  }
-
-  // history is expected as array of { sender: 'user'|'bot', text }
-  if (Array.isArray(history)) {
-    history.forEach(h => {
-      if (!h || !h.sender || !h.text) return;
-      const role = h.sender === 'user' ? 'user' : 'assistant';
-      messages.push({ role, content: String(h.text) });
-    });
-  }
-
-  // Add the current user message
-  messages.push({ role: 'user', content: String(message) });
-
-  // Provider chain: OpenAI → Local Ollama → Hugging Face Inference API
-  const openaiKey = process.env.OPENAI_API_KEY;
-  const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
-  const ollamaModel = process.env.OLLAMA_MODEL || 'deepseek-coder';
-  const hfKey = process.env.HUGGINGFACE_API_KEY;
-  const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
-
-  // 1. Try OpenAI with fast timeout
-  if (openaiKey) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-      
-      const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
-        body: JSON.stringify({ 
-          model: 'gpt-4o-mini', 
-          messages, 
-          max_tokens: 800,
-          temperature: 0.6,
-          presence_penalty: 0.1,
-          frequency_penalty: 0.1
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (resp.ok) {
-        const data = await resp.json();
-        const reply = data.choices?.[0]?.message?.content;
-        if (reply) {
-          return res.json({ 
-            reply, 
-            suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-            citations: retrieved.map(g => g.id),
-            fast: true
-          });
-        }
-      }
-    } catch (err) {
-      console.log('OpenAI timeout/failed, using fast local AI');
-      // Continue to fallback immediately
-    }
-  }
-
-  // 2. Try local Ollama (if running) with fast timeout
+  // Ultra-fast parallel API calls with intelligent fallback
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 1500); // 1.5 second timeout
+    const retrieved = findTopGrants(message, 4);
+    const result = await callAPIsInParallel(message, history, profile, retrieved);
     
-    const ollamaResp = await fetch(`${ollamaUrl}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: ollamaModel, messages, stream: false }),
-      signal: controller.signal
+    return res.json({
+      reply: result.reply,
+      suggestions: result.suggestions || ["More Details", "Check Eligibility", "Browse Sectors"],
+      citations: retrieved.map(g => g.id),
+      fast: result.fast || true
     });
-
-    clearTimeout(timeoutId);
-
-    if (ollamaResp.ok) {
-      const ollamaData = await ollamaResp.json();
-      const reply = ollamaData.message?.content;
-      if (reply) {
-        return res.json({ 
-          reply, 
-          suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-          citations: retrieved.map(g => g.id),
-          fast: true
-        });
-      }
-    }
-  } catch (err) {
-    console.log('Ollama timeout/unavailable, using fast local AI');
-  }
-
-  // 3. Try Hugging Face Inference API with fast timeout
-  if (hfKey) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-      
-      const hfResp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(hfModel)}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${hfKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'), 
-          parameters: { max_new_tokens: 400, temperature: 0.6 }
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (hfResp.ok) {
-        const hfData = await hfResp.json();
-        const reply = Array.isArray(hfData) ? (hfData[0].generated_text || hfData[0].text || '') : (hfData.generated_text || hfData.text || '');
-        if (reply && reply.trim()) {
-          return res.json({ 
-            reply: reply.trim(), 
-            suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-            citations: retrieved.map(g => g.id),
-            fast: true
-          });
-        }
-      }
-    } catch (err) {
-      console.log('HuggingFace timeout/failed, using fast local AI');
-    }
-  }
-
-  // 4. Lightning-fast local AI fallback
-  try {
+  } catch (error) {
+    // Emergency fallback
+    const retrieved = findTopGrants(message, 4);
     const fastResponse = generateLightningResponse(message, retrieved, profile);
-    return res.json({ 
+    return res.json({
       reply: fastResponse.response,
       suggestions: fastResponse.suggestions,
       citations: retrieved.map(g => g.id),
-      fast: true
-    });
-  } catch (err) {
-    return res.json({ 
-      reply: `⚡ **I'm here to help!** Ask me about grants, eligibility, or any government scheme. What would you like to know?`,
-      suggestions: ["Check Eligibility", "Browse Grants", "Popular Schemes"],
-      citations: [],
       fast: true
     });
   }
