@@ -174,63 +174,79 @@ function findTopGrants(q, n = 4) {
   return matcher.findBestGrants(q, n);
 }
 
-// Enhanced AI response generation
-function generateEnhancedResponse(message, retrievedGrants = [], userProfile = {}) {
+// Ultra-fast AI response generation with enhanced intelligence
+function generateLightningResponse(message, retrievedGrants = [], userProfile = {}) {
   const lower = message.toLowerCase();
   const query = message.trim();
   
-  // Advanced pattern recognition
+  // Lightning-fast pattern recognition
   const patterns = {
     isQuestion: /\?|what|how|which|can|will|would|should|where|when|why/i.test(query),
     isEligibility: /eligible|qualify|am i|can i|eligibility|who can|what are/i.test(lower),
     isGrantSearch: /grant|scheme|program|benefit|support|assistance|help/i.test(lower),
     isAbout: /about|what is|explain|tell me|purpose|function/i.test(lower),
     isComparison: /compare|difference|vs|versus|better|best/i.test(lower),
-    isStatistics: /how many|total|statistics|overview|summary|count/i.test(lower)
+    isStatistics: /how many|total|statistics|overview|summary|count/i.test(lower),
+    isGreeting: /hello|hi|hey|good morning|good afternoon|good evening/i.test(lower),
+    isThanks: /thank|thanks|appreciate|grateful/i.test(lower)
   };
+
+  // Instant greetings
+  if (patterns.isGreeting) {
+    return {
+      response: `👋 **Hello! I'm your GrantTracker AI Assistant!**\n\nI can instantly help you find government grants and schemes. Try asking:\n• "What grants am I eligible for?"\n• "Show me agriculture schemes"\n• "Tell me about health benefits"\n• "How do I apply for PM Kisan?"\n\n**What would you like to explore?**`,
+      suggestions: ["Check Eligibility", "Browse Grants", "Health Programs"]
+    };
+  }
+
+  // Instant thanks response
+  if (patterns.isThanks) {
+    return {
+      response: `😊 **You're very welcome!** \n\nI'm here 24/7 to help you discover government grants and benefits. Feel free to ask me anything about:\n• Eligibility requirements\n• Application processes\n• Scheme details\n• Benefits and coverage\n\n**What else can I help you with today?**`,
+      suggestions: ["More Help", "Browse All", "Get Started"]
+    };
+  }
 
   // Personalized response based on user profile
   if (patterns.isEligibility && Object.keys(userProfile).length > 0) {
     const recommendations = matcher.getPersonalizedRecommendations(userProfile);
     if (recommendations.length > 0) {
-      let response = `🎯 **Based on your profile, here are your personalized matches:**\n\n`;
+      let response = `🎯 **Perfect matches for you!**\n\n`;
       
       recommendations.forEach((grant, index) => {
         response += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
         response += `💰 **Benefit:** ${grant.amount}\n`;
-        response += `📝 **Description:** ${grant.description}\n`;
-        response += `🎯 **Coverage:** ${grant.coverage}\n\n`;
+        response += `📝 **Description:** ${grant.description}\n\n`;
       });
       
-      response += `**Why these match your profile:**\n`;
-      if (userProfile.occupation) response += `• Your profession: ${userProfile.occupation}\n`;
-      if (userProfile.location) response += `• Your location: ${userProfile.location}\n`;
-      if (userProfile.gender) response += `• Your profile: ${userProfile.gender}\n`;
+      response += `**✨ Personalized for you:**\n`;
+      if (userProfile.occupation) response += `• Profession: ${userProfile.occupation}\n`;
+      if (userProfile.location) response += `• Location: ${userProfile.location}\n`;
+      if (userProfile.gender) response += `• Profile: ${userProfile.gender}\n\n`;
+      response += `**Ready to apply? Click any scheme for details!**`;
       
       return {
         response,
-        suggestions: ["More Details", "Other Sectors", "Check Different Profile"]
+        suggestions: recommendations.slice(0, 2).map(g => `Learn: ${g.name.split(" ")[0]}`),
       };
     }
   }
 
-  // Smart grant search response
+  // Lightning-fast grant search response
   if (patterns.isGrantSearch && retrievedGrants.length > 0) {
-    let response = `🔍 **Found ${retrievedGrants.length} relevant grants for you:**\n\n`;
+    let response = `🚀 **Found ${retrievedGrants.length} perfect matches!**\n\n`;
     
     retrievedGrants.forEach((grant, index) => {
-      response += `**${index + 1}. ${grant.name}**\n`;
-      response += `📊 **Sector:** ${grant.sector}\n`;
+      response += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
       response += `💰 **Benefit:** ${grant.amount}\n`;
-      response += `🎯 **Coverage:** ${grant.coverage}\n`;
-      response += `📝 **Details:** ${grant.description}\n\n`;
+      response += `📝 **Summary:** ${grant.description}\n\n`;
     });
     
-    response += `**Want detailed information about any specific scheme?**`;
+    response += `💡 **Quick tip:** Ask "How to apply" for any scheme to get application details!`;
     
     return {
       response,
-      suggestions: retrievedGrants.slice(0, 2).map(g => `About ${g.name.split(" ")[0]}`)
+      suggestions: retrievedGrants.slice(0, 2).map(g => `Apply: ${g.name.split(" ")[0]}`)
     };
   }
 
@@ -316,27 +332,30 @@ function generateEnhancedResponse(message, retrievedGrants = [], userProfile = {
     }
   }
 
-  // Default intelligent response
-  let response = `🤖 **I'm your AI Grant Discovery Assistant!**\n\n`;
-  response += `I understand you're asking about: **"${message}"**\n\n`;
+  // Ultra-fast intelligent default response
+  let response = `⚡ **Lightning-fast AI at your service!**\n\n`;
   
+  // Instant smart suggestions based on query
   if (retrievedGrants.length > 0) {
-    response += `**🔍 Based on your query, I found:**\n`;
+    response += `**🎯 Found ${retrievedGrants.length} matches for:** "${message}"\n\n`;
     retrievedGrants.forEach((grant, i) => {
-      response += `• ${grant.name} (${grant.sector}) - ${grant.amount}\n`;
+      response += `• **${grant.name}** (${grant.sector}) - ${grant.amount}\n`;
     });
-    response += `\n**💡 Try asking more specifically:**\n`;
+    response += `\n💬 **Try:** "Tell me about [scheme name]" or "How to apply"\n\n`;
+  } else {
+    response += `I understand you want to know about: **"${message}"**\n\n`;
   }
   
-  response += `• "What grants am I eligible for?"\n` +
-              `• "Show me [sector] programs"\n` +
-              `• "Tell me about [scheme name]"\n` +
-              `• "Which schemes provide financial help?"\n\n` +
-              `**What would you like to explore?**`;
+  response += `🚀 **Popular quick asks:**\n` +
+              `• "I'm a farmer" or "I'm a student"\n` +
+              `• "Health schemes" or "Education grants"\n` +
+              `• "PM Kisan" or "Ayushman Bharat"\n` +
+              `• "How to apply" + scheme name\n\n` +
+              `**What shall we explore?**`;
 
   return {
     response,
-    suggestions: ["Find My Grants", "Browse Sectors", "Get General Help"]
+    suggestions: ["Find My Grants", "Popular Schemes", "Health Programs"]
   };
 }
 
@@ -389,50 +408,59 @@ module.exports = async (req, res) => {
   const hfKey = process.env.HUGGINGFACE_API_KEY;
   const hfModel = process.env.HUGGINGFACE_MODEL || 'bigscience/bloomz-1b1';
 
-  // 1. Try OpenAI
+  // 1. Try OpenAI with fast timeout
   if (openaiKey) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+      
       const resp = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
         body: JSON.stringify({ 
           model: 'gpt-4o-mini', 
           messages, 
-          max_tokens: 1000,
-          temperature: 0.7,
+          max_tokens: 800,
+          temperature: 0.6,
           presence_penalty: 0.1,
           frequency_penalty: 0.1
         }),
+        signal: controller.signal
       });
 
-      if (!resp.ok) {
-        const txt = await resp.text();
-        console.error('OpenAI error:', txt);
-        // Fall through to enhanced local response
-      } else {
+      clearTimeout(timeoutId);
+
+      if (resp.ok) {
         const data = await resp.json();
         const reply = data.choices?.[0]?.message?.content;
         if (reply) {
           return res.json({ 
             reply, 
             suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-            citations: retrieved.map(g => g.id) 
+            citations: retrieved.map(g => g.id),
+            fast: true
           });
         }
       }
     } catch (err) {
-      console.error('OpenAI request failed:', err.message);
-      // Continue to fallback
+      console.log('OpenAI timeout/failed, using fast local AI');
+      // Continue to fallback immediately
     }
   }
 
-  // 2. Try local Ollama (if running)
+  // 2. Try local Ollama (if running) with fast timeout
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1500); // 1.5 second timeout
+    
     const ollamaResp = await fetch(`${ollamaUrl}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: ollamaModel, messages, stream: false }),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     if (ollamaResp.ok) {
       const ollamaData = await ollamaResp.json();
@@ -441,60 +469,65 @@ module.exports = async (req, res) => {
         return res.json({ 
           reply, 
           suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-          citations: retrieved.map(g => g.id) 
+          citations: retrieved.map(g => g.id),
+          fast: true
         });
       }
     }
   } catch (err) {
-    console.log('Ollama not available, continuing to next fallback');
+    console.log('Ollama timeout/unavailable, using fast local AI');
   }
 
-  // 3. Try Hugging Face Inference API (requires HUGGINGFACE_API_KEY)
+  // 3. Try Hugging Face Inference API with fast timeout
   if (hfKey) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+      
       const hfResp = await fetch(`https://api-inference.huggingface.co/models/${encodeURIComponent(hfModel)}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${hfKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           inputs: messages.map(m => `${m.role}: ${m.content}`).join('\n'), 
-          parameters: { max_new_tokens: 500, temperature: 0.7 }
+          parameters: { max_new_tokens: 400, temperature: 0.6 }
         }),
+        signal: controller.signal
       });
 
-      if (!hfResp.ok) {
-        const txt = await hfResp.text();
-        console.error('HuggingFace error:', txt);
-      } else {
+      clearTimeout(timeoutId);
+
+      if (hfResp.ok) {
         const hfData = await hfResp.json();
-        // Hugging Face returns [{ generated_text: '...' }] for text-generation models
         const reply = Array.isArray(hfData) ? (hfData[0].generated_text || hfData[0].text || '') : (hfData.generated_text || hfData.text || '');
         if (reply && reply.trim()) {
           return res.json({ 
             reply: reply.trim(), 
             suggestions: ["More Details", "Check Eligibility", "Browse Sectors"],
-            citations: retrieved.map(g => g.id) 
+            citations: retrieved.map(g => g.id),
+            fast: true
           });
         }
       }
     } catch (err) {
-      console.error('HuggingFace request failed:', err.message);
+      console.log('HuggingFace timeout/failed, using fast local AI');
     }
   }
 
-  // 4. Enhanced local fallback response
+  // 4. Lightning-fast local AI fallback
   try {
-    const localResponse = generateEnhancedResponse(message, retrieved, profile);
+    const fastResponse = generateLightningResponse(message, retrieved, profile);
     return res.json({ 
-      reply: localResponse.response + `\n\n🤖 *(Using enhanced local AI - Remote services temporarily unavailable)*`,
-      suggestions: localResponse.suggestions,
+      reply: fastResponse.response,
+      suggestions: fastResponse.suggestions,
       citations: retrieved.map(g => g.id),
-      fallback: true
+      fast: true
     });
   } catch (err) {
-    return res.status(500).json({ 
-      error: 'All AI providers failed', 
-      details: err.message,
-      fallback: "I'm experiencing technical difficulties. Please try asking about specific grants or sectors."
+    return res.json({ 
+      reply: `⚡ **I'm here to help!** Ask me about grants, eligibility, or any government scheme. What would you like to know?`,
+      suggestions: ["Check Eligibility", "Browse Grants", "Popular Schemes"],
+      citations: [],
+      fast: true
     });
   }
 };

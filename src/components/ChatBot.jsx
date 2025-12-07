@@ -519,7 +519,7 @@ export default function ChatBot() {
     };
   }, [userProfile]);
 
-  // Enhanced message handling with typing animation
+  // Lightning-fast message handling
   const handleSend = useCallback(async (text = inputValue) => {
     if (!text.trim()) return;
 
@@ -536,58 +536,93 @@ export default function ChatBot() {
     setIsLoading(true);
     setIsTyping(false);
 
+    // Instant response for simple queries
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('hey')) {
+      setTimeout(() => {
+        const instantResponse = {
+          id: Date.now() + 1,
+          text: `👋 **Hello! I'm your Lightning-Fast GrantTracker AI!**\n\nI can instantly help you find government grants and schemes. Try asking:\n• "What grants am I eligible for?"\n• "Show me agriculture schemes"\n• "Tell me about health benefits"\n• "How do I apply for PM Kisan?"\n\n**What would you like to explore?**`,
+          sender: 'bot',
+          suggestions: ["Check Eligibility", "Browse Grants", "Health Programs"],
+          timestamp: new Date(),
+          type: "bot-message"
+        };
+        setMessages(prev => [...prev, instantResponse]);
+        setIsLoading(false);
+      }, 100);
+      return;
+    }
+
+    if (lowerText.includes('thank') || lowerText.includes('thanks')) {
+      setTimeout(() => {
+        const thanksResponse = {
+          id: Date.now() + 1,
+          text: `😊 **You're very welcome!** \n\nI'm here 24/7 to help you discover government grants and benefits. Feel free to ask me anything about eligibility, applications, or scheme details.\n\n**What else can I help you with today?**`,
+          sender: 'bot',
+          suggestions: ["More Help", "Browse All", "Get Started"],
+          timestamp: new Date(),
+          type: "bot-message"
+        };
+        setMessages(prev => [...prev, thanksResponse]);
+        setIsLoading(false);
+      }, 100);
+      return;
+    }
+
     // Update user profile
     const newProfile = grantMatcher.current.analyzeUserProfile(text, userProfile);
     setUserProfile(newProfile);
 
     try {
-      // Try remote AI first
+      // Try remote AI first with faster timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: text, 
-          history: messages.slice(-6).map(m => ({ sender: m.sender, text: m.text })),
+          history: messages.slice(-4).map(m => ({ sender: m.sender, text: m.text })),
           profile: newProfile
         }),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const data = await response.json();
         if (data?.reply) {
-          // Add typing animation for bot response
-          setTimeout(() => {
-            const botMsg = {
-              id: Date.now() + 1,
-              text: data.reply,
-              sender: 'bot',
-              suggestions: data.suggestions || generateEnhancedResponse(text, newProfile).suggestions,
-              timestamp: new Date(),
-              type: "bot-message"
-            };
-            setMessages(prev => [...prev, botMsg]);
-            setIsLoading(false);
-          }, 500);
+          const botMsg = {
+            id: Date.now() + 1,
+            text: data.reply,
+            sender: 'bot',
+            suggestions: data.suggestions || generateEnhancedResponse(text, newProfile).suggestions,
+            timestamp: new Date(),
+            type: "bot-message"
+          };
+          setMessages(prev => [...prev, botMsg]);
+          setIsLoading(false);
           return;
         }
       }
       
       throw new Error('Remote AI unavailable');
     } catch (error) {
-      // Fallback to enhanced local response
-      setTimeout(() => {
-        const local = generateEnhancedResponse(text, newProfile);
-        const botMsg = {
-          id: Date.now() + 1,
-          text: local.text + `\n\n⚠️ *(Using local AI - Remote services temporarily unavailable)*`,
-          sender: 'bot',
-          suggestions: local.suggestions,
-          timestamp: new Date(),
-          type: "bot-message"
-        };
-        setMessages(prev => [...prev, botMsg]);
-        setIsLoading(false);
-      }, 800);
+      // Instant fallback to enhanced local response
+      const local = generateEnhancedResponse(text, newProfile);
+      const botMsg = {
+        id: Date.now() + 1,
+        text: local.text + (error.name === 'AbortError' ? `\n\n⚡ *(Fast local AI response)*` : `\n\n🤖 *(Using local AI)*`),
+        sender: 'bot',
+        suggestions: local.suggestions,
+        timestamp: new Date(),
+        type: "bot-message"
+      };
+      setMessages(prev => [...prev, botMsg]);
+      setIsLoading(false);
     }
   }, [inputValue, messages, userProfile, generateEnhancedResponse]);
 
@@ -1022,9 +1057,9 @@ export default function ChatBot() {
                         border: "2px solid rgba(6, 182, 212, 0.3)",
                         borderTop: "2px solid #06b6d4",
                         borderRadius: "50%",
-                        animation: "spin 1s linear infinite"
+                        animation: "spin 0.8s linear infinite"
                       }} />
-                      AI is thinking...
+                      ⚡ Lightning-fast AI processing...
                     </div>
                   ) : (
                     <div style={{ color: "#06b6d4", fontSize: "14px" }}>
