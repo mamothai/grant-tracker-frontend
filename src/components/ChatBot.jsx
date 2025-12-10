@@ -559,10 +559,10 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "🧠 **Welcome to GrantTracker's Ultra-Intelligent AI Assistant!** 🤖\n\nI'm powered by advanced conversational AI that understands context, learns from our conversation, and provides ChatGPT-level intelligence.\n\n🎯 **What makes me extraordinary:**\n• **Deep Context Understanding** - I remember our entire conversation\n• **Advanced Reasoning** - I can explain my thinking process\n• **Adaptive Learning** - I improve with each interaction\n• **Multi-turn Conversations** - I understand follow-up questions\n• **Intelligent Responses** - I adapt to your communication style\n\n💡 **Try advanced queries:**\n• \"I'm a farmer in rural India, what grants should I consider and why?\"\n• \"Compare the top 3 health schemes for families with children\"\n• \"Explain the eligibility criteria step by step\"\n• \"What if I'm a working professional but my spouse is a student?\"\n\n**Let's have an intelligent conversation!**",
+      text: "Hello! I'm your Grant Assistant. How can I help you find information about government grants and schemes today?",
       sender: "bot",
       timestamp: new Date(),
-      suggestions: ["Advanced Eligibility Check", "Compare Top Schemes", "Step-by-Step Guide", "What-if Scenarios"]
+      suggestions: ["Check my eligibility", "Browse available grants", "Tell me about health schemes"]
     },
   ]);
   const [inputValue, setInputValue] = useState("");
@@ -710,15 +710,15 @@ export default function ChatBot() {
     setIsLoading(true);
     setIsTyping(false);
 
-    // Instant responses for greetings and thanks
+    // Casual greeting responses
     const lowerText = text.toLowerCase();
     if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('hey')) {
       setTimeout(() => {
         const instantResponse = {
           id: Date.now() + 1,
-          text: `👋 **Hello! I'm your Ultra-Intelligent GrantTracker AI!**\n\nI use advanced conversational AI to understand your needs deeply. I can:\n• Remember our entire conversation\n• Explain my reasoning process\n• Adapt to your communication style\n• Provide step-by-step guidance\n• Handle complex follow-up questions\n\n**What would you like to explore?**`,
+          text: `Hello! How can I assist you with government grants and schemes today?`,
           sender: 'bot',
-          suggestions: ["Advanced Eligibility Check", "Complex Query", "Step-by-Step Guide", "Reasoning Example"],
+          suggestions: ["Check my eligibility", "Browse available grants", "Tell me about health schemes"],
           timestamp: new Date(),
           type: "bot-message"
         };
@@ -1006,111 +1006,76 @@ export default function ChatBot() {
         )}
       </button>
 
-      {/* Enhanced Chat Window */}
+      {/* Improved Compact Chat Window */}
       {isOpen && (
         <div
           style={{
             position: "fixed",
             bottom: "100px",
             right: "20px",
-            width: "clamp(320px, 85vw, 450px)",
-            height: "600px",
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))",
+            width: "clamp(300px, 80vw, 400px)",
+            height: "500px",
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98))",
             border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
+            borderRadius: "16px",
+            boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)",
             display: "flex",
             flexDirection: "column",
             zIndex: 999,
-            backdropFilter: "blur(20px)",
-            animation: "slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+            backdropFilter: "blur(15px)",
+            animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             overflow: "hidden"
           }}
         >
-          {/* Enhanced Header */}
-          <div style={{ 
-            padding: "16px 20px", 
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)", 
-            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02))",
-            position: "relative"
+          {/* Simplified Clean Header */}
+          <div style={{
+            padding: "12px 16px",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            background: "rgba(255, 255, 255, 0.05)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
           }}>
-            <div style={{
-              position: "absolute",
-              top: "12px",
-              right: "16px",
-              display: "flex",
-              gap: "8px",
-              fontSize: "10px",
-              color: "rgba(255, 255, 255, 0.7)"
-            }}>
-              <span style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                padding: "3px 6px",
-                background: "rgba(81, 207, 102, 0.1)",
-                borderRadius: "8px",
-                color: "#51cf66"
-              }}>
-                🧠 Ultra-AI
-              </span>
-              {isListening && (
-                <span style={{ 
-                  color: "#ff6b6b",
-                  animation: "pulse 0.5s infinite"
-                }}>
-                  🎤 Live
-                </span>
-              )}
-            </div>
-            
-            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <div style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "12px",
+                width: "32px",
+                height: "32px",
+                borderRadius: "8px",
                 background: "linear-gradient(135deg, #667eea, #764ba2)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "18px",
-                animation: "pulse 3s infinite"
+                fontSize: "16px"
               }}>
-                🧠
+                🤖
               </div>
               <div>
-                <h3 style={{ 
-                  margin: 0, 
-                  color: "#ffffff", 
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  background: "linear-gradient(135deg, #667eea, #764ba2)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent"
+                <h3 style={{
+                  margin: 0,
+                  color: "#ffffff",
+                  fontSize: "14px",
+                  fontWeight: "500"
                 }}>
-                  Ultra-Intelligent AI
+                  Grant Assistant
                 </h3>
-                <p style={{ 
-                  margin: "2px 0 0 0", 
-                  color: "rgba(255, 255, 255, 0.8)", 
-                  fontSize: "11px"
+                <p style={{
+                  margin: "2px 0 0 0",
+                  color: "rgba(255, 255, 255, 0.6)",
+                  fontSize: "10px"
                 }}>
-                  {isListening ? "Listening..." : `ChatGPT-Level AI (${conversationMode})`}
+                  {isListening ? "Listening..." : "Ready to help"}
                 </p>
-                
-                <div style={{
-                  marginTop: "3px",
-                  fontSize: "9px",
-                  color: "rgba(255, 255, 255, 0.5)",
-                  display: "flex",
-                  gap: "6px"
-                }}>
-                  <span title="Alt+V for voice input">🎤 Alt+V</span>
-                  <span title="Alt+C for conversation mode">🧠 Alt+C</span>
-                  <span title="Alt+T to toggle chat">💬 Alt+T</span>
-                </div>
               </div>
             </div>
+            {isListening && (
+              <div style={{
+                color: "#ff6b6b",
+                fontSize: "12px",
+                animation: "pulse 0.5s infinite"
+              }}>
+                🎤
+              </div>
+            )}
           </div>
 
           {/* Enhanced Messages Container */}
