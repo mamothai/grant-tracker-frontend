@@ -1932,8 +1932,152 @@ function generateLightningResponse(message, retrievedGrants = [], userProfile = 
     return generateWebsiteResponse(message, retrievedGrants, userProfile);
   }
 
-  // Generate website-related responses
-  function generateWebsiteResponse(message, retrievedGrants, userProfile) {
+  // Intelligent context analysis for enhanced understanding
+  function analyzeConversationContext(message, userProfile, retrievedGrants) {
+    const lower = message.toLowerCase();
+    const analysis = {
+      hasPersonalInfo: false,
+      userIntent: 'general',
+      complexity: 'medium',
+      urgency: 'normal',
+      domain: 'general',
+      sentiment: 'neutral',
+      confidence: 0.7
+    };
+
+    // Analyze personal information
+    if (userProfile.occupation || userProfile.location || userProfile.age || userProfile.income) {
+      analysis.hasPersonalInfo = true;
+    }
+
+    // Detect personal pronouns and context
+    if (lower.includes('i am') || lower.includes('i\'m') || lower.includes('my') || lower.includes('me')) {
+      analysis.hasPersonalInfo = true;
+    }
+
+    // Analyze complexity
+    const wordCount = message.split(/\s+/).length;
+    if (wordCount <= 3) analysis.complexity = 'simple';
+    else if (wordCount > 10) analysis.complexity = 'complex';
+
+    // Analyze urgency
+    if (lower.includes('urgent') || lower.includes('asap') || lower.includes('immediately')) {
+      analysis.urgency = 'high';
+    }
+
+    // Analyze domain
+    if (lower.includes('grant') || lower.includes('scheme')) analysis.domain = 'grants';
+    else if (lower.includes('health') || lower.includes('medical')) analysis.domain = 'healthcare';
+    else if (lower.includes('education') || lower.includes('student')) analysis.domain = 'education';
+    else if (lower.includes('agriculture') || lower.includes('farmer')) analysis.domain = 'agriculture';
+
+    // Analyze sentiment
+    const positiveWords = ['good', 'great', 'excellent', 'helpful', 'thank', 'appreciate', 'love'];
+    const negativeWords = ['bad', 'terrible', 'confusing', 'frustrated', 'annoyed', 'problem', 'hate'];
+
+    const positiveCount = positiveWords.filter(word => lower.includes(word)).length;
+    const negativeCount = negativeWords.filter(word => lower.includes(word)).length;
+
+    if (positiveCount > negativeCount) analysis.sentiment = 'positive';
+    else if (negativeCount > positiveCount) analysis.sentiment = 'negative';
+
+    return analysis;
+  }
+
+  // Determine intelligent intent with context awareness
+  function determineIntelligentIntent(message, patterns, contextAnalysis) {
+    const lower = message.toLowerCase();
+    const intent = {
+      primary: 'information_seeking',
+      secondary: [],
+      confidence: 0.7,
+      reasoning: '',
+      context: contextAnalysis
+    };
+
+    // Intelligent intent determination based on patterns and context
+    if (patterns.isEligibility && contextAnalysis.hasPersonalInfo) {
+      intent.primary = 'personal_eligibility_check';
+      intent.confidence = 0.9;
+      intent.reasoning = 'User is asking about eligibility with personal context';
+    } else if (patterns.isGrantSearch && contextAnalysis.domain !== 'general') {
+      intent.primary = 'domain_specific_search';
+      intent.confidence = 0.85;
+      intent.reasoning = `User is searching for ${contextAnalysis.domain} related grants`;
+    } else if (patterns.isComparison) {
+      intent.primary = 'comparison_analysis';
+      intent.confidence = 0.8;
+      intent.reasoning = 'User wants to compare options';
+    } else if (patterns.isWebsiteQuery) {
+      intent.primary = 'platform_information';
+      intent.confidence = 0.95;
+      intent.reasoning = 'User is asking about the platform/website';
+    }
+
+    return intent;
+  }
+
+  // Generate personalized responses based on user context
+  function generatePersonalizedResponse(message, retrievedGrants, userProfile, contextAnalysis) {
+    const lower = message.toLowerCase();
+
+    // Extract personal information from message
+    let occupation = userProfile.occupation;
+    let location = userProfile.location;
+
+    // Try to extract from current message
+    if (lower.includes('i am a') || lower.includes('i\'m a')) {
+      const occMatch = lower.match(/(?:i am a|i'm a)\s+(\w+)/i);
+      if (occMatch) occupation = occMatch[1];
+    }
+
+    if (lower.includes('from') || lower.includes('in')) {
+      const locMatch = lower.match(/(?:from|in)\s+([a-z\s]+)/i);
+      if (locMatch) location = locMatch[1].trim();
+    }
+
+    // Generate personalized recommendations
+    if (occupation && retrievedGrants.length > 0) {
+      const relevantGrants = retrievedGrants.filter(grant =>
+        grant.keywords.some(keyword =>
+          keyword.toLowerCase().includes(occupation.toLowerCase()) ||
+          grant.description.toLowerCase().includes(occupation.toLowerCase())
+        )
+      );
+
+      if (relevantGrants.length > 0) {
+        let response = `🎯 **Perfect matches for you as a ${occupation}!**\n\n`;
+
+        relevantGrants.slice(0, 3).forEach((grant, index) => {
+          response += `**${index + 1}. ${grant.name}**\n`;
+          response += `💰 **Benefit:** ${grant.amount}\n`;
+          response += `📝 **Why it fits you:** ${grant.description}\n\n`;
+        });
+
+        if (location) {
+          response += `**✨ Personalized for ${location} residents:**\n`;
+          response += `• Location-specific benefits may apply\n`;
+          response += `• Regional eligibility criteria considered\n\n`;
+        }
+
+        response += `**Ready to apply? I can guide you through the process!**`;
+
+        return {
+          response,
+          suggestions: relevantGrants.slice(0, 2).map(g => `Apply for ${g.name.split(' ')[0]}`),
+        };
+      }
+    }
+
+    // Default personalized response
+    return {
+      response: `I understand you're sharing personal information. To provide you with the most relevant government grants and schemes, could you tell me:\n\n• **Your occupation** (farmer, student, business owner, etc.)\n• **Your location** (rural/urban, state)\n• **Your specific needs** (financial support, education, healthcare, etc.)\n\nWith this information, I can recommend the most suitable programs for you!`,
+      suggestions: ["I'm a farmer", "I'm a student", "I need financial help", "I need health support"]
+    };
+  }
+
+  // Generate intelligent website responses
+  function generateIntelligentWebsiteResponse(message, retrievedGrants, userProfile, contextAnalysis) {
     const lower = message.toLowerCase();
 
     // Handle different types of website queries

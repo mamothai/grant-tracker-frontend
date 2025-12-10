@@ -1027,55 +1027,67 @@ export default function ChatBot() {
             overflow: "hidden"
           }}
         >
-          {/* Simplified Clean Header */}
+          {/* Modern Clean Header */}
           <div style={{
-            padding: "12px 16px",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-            background: "rgba(255, 255, 255, 0.05)",
+            padding: "16px 20px",
+            borderBottom: "1px solid rgba(148, 163, 184, 0.1)",
+            background: "linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between"
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
               <div style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "8px",
-                background: "linear-gradient(135deg, #667eea, #764ba2)",
+                width: "40px",
+                height: "40px",
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "16px"
+                fontSize: "18px",
+                boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)"
               }}>
                 🤖
               </div>
               <div>
                 <h3 style={{
                   margin: 0,
-                  color: "#ffffff",
-                  fontSize: "14px",
-                  fontWeight: "500"
+                  color: "#1e293b",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
                 }}>
                   Grant Assistant
                 </h3>
                 <p style={{
-                  margin: "2px 0 0 0",
-                  color: "rgba(255, 255, 255, 0.6)",
-                  fontSize: "10px"
+                  margin: "4px 0 0 0",
+                  color: "#64748b",
+                  fontSize: "12px",
+                  fontWeight: "400"
                 }}>
-                  {isListening ? "Listening..." : "Ready to help"}
+                  {isListening ? "🎤 Listening..." : "💡 Ready to help"}
                 </p>
               </div>
             </div>
-            {isListening && (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div style={{
-                color: "#ff6b6b",
-                fontSize: "12px",
-                animation: "pulse 0.5s infinite"
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "#10b981",
+                animation: "pulse 2s infinite"
+              }} />
+              <span style={{
+                color: "#10b981",
+                fontSize: "11px",
+                fontWeight: "500"
               }}>
-                🎤
-              </div>
-            )}
+                Online
+              </span>
+            </div>
           </div>
 
           {/* Enhanced Messages Container */}
@@ -1097,18 +1109,24 @@ export default function ChatBot() {
                 }}
               >
                 <div style={{
-                  maxWidth: "88%",
-                  padding: "12px 16px",
-                  borderRadius: msg.sender === "user" 
-                    ? "18px 4px 18px 18px" 
-                    : "4px 18px 18px 18px",
-                  background: msg.sender === "user" 
-                    ? "linear-gradient(135deg, #667eea, #764ba2)" 
-                    : "rgba(255, 255, 255, 0.08)",
-                  color: "#ffffff",
-                  fontSize: "13px",
-                  lineHeight: "1.5",
-                  wordWrap: "break-word"
+                  maxWidth: "85%",
+                  padding: "14px 18px",
+                  borderRadius: msg.sender === "user"
+                    ? "20px 4px 20px 20px"
+                    : "4px 20px 20px 20px",
+                  background: msg.sender === "user"
+                    ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
+                    : "linear-gradient(135deg, rgba(241, 245, 249, 0.9), rgba(241, 245, 249, 0.7))",
+                  color: msg.sender === "user" ? "#ffffff" : "#1e293b",
+                  fontSize: "14px",
+                  lineHeight: "1.6",
+                  wordWrap: "break-word",
+                  boxShadow: msg.sender === "user"
+                    ? "0 4px 12px rgba(99, 102, 241, 0.3)"
+                    : "0 2px 8px rgba(0, 0, 0, 0.08)",
+                  border: msg.sender === "user"
+                    ? "none"
+                    : "1px solid rgba(148, 163, 184, 0.1)"
                 }}>
                   <div style={{ animation: "fadeIn 0.4s ease-in" }}>
                     {formatText(msg.text)}
