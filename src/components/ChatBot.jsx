@@ -556,6 +556,7 @@ class AdvancedGrantMatcher {
 // Enhanced ChatGPT-Level ChatBot Component
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -583,6 +584,17 @@ export default function ChatBot() {
 
   // Initialize grant matcher (existing)
   const grantMatcher = useRef(new AdvancedGrantMatcher(GRANTS));
+
+  // Mobile detection and responsive design
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -649,10 +661,10 @@ export default function ChatBot() {
     const handleKeyDown = (event) => {
       if (event.altKey && event.key === 'v') {
         event.preventDefault();
-        toggleVoiceInput();
-      }
+             }
       
-      if (event.altKey && event.key === 't') {
+      toggleVoiceInput();
+ if (event.altKey && event.key === 't') {
         event.preventDefault();
         setIsOpen(!isOpen);
       }
@@ -913,14 +925,15 @@ export default function ChatBot() {
       {/* Enhanced Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close chat" : "Open chat"}
         style={{
           position: "fixed",
-          bottom: "25px",
-          right: "25px",
-          width: "72px",
-          height: "72px",
+          bottom: "clamp(15px, 4vw, 25px)",
+          right: "clamp(15px, 4vw, 25px)",
+          width: "clamp(56px, 12vw, 72px)",
+          height: "clamp(56px, 12vw, 72px)",
           borderRadius: "50%",
-          background: isOpen 
+          background: isOpen
             ? "linear-gradient(135deg, #ff6b6b, #ee5a52)"
             : "linear-gradient(135deg, #667eea, #764ba2)",
           border: "3px solid rgba(255, 255, 255, 0.2)",
@@ -930,8 +943,13 @@ export default function ChatBot() {
           alignItems: "center",
           justifyContent: "center",
           zIndex: 999,
-          transition: "all 0.4s ease",
-          animation: !isOpen ? "float 3s ease-in-out infinite" : "none"
+          transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+          animation: !isOpen ? "float 3s ease-in-out infinite" : "none",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          touchAction: "manipulation",
+          userSelect: "none",
+          WebkitUserSelect: "none"
         }}
       >
         {isOpen ? (
@@ -1006,25 +1024,36 @@ export default function ChatBot() {
         )}
       </button>
 
-      {/* Improved Compact Chat Window */}
+      {/* Improved Responsive Chat Window */}
       {isOpen && (
         <div
+          role="dialog"
+          aria-label="Chat Assistant"
+          aria-modal="false"
           style={{
             position: "fixed",
-            bottom: "100px",
-            right: "20px",
-            width: "clamp(300px, 80vw, 400px)",
-            height: "500px",
+            bottom: "clamp(80px, 20vh, 120px)",
+            right: "clamp(10px, 4vw, 25px)",
+            left: isMobile ? "10px" : "auto",
+            width: isMobile
+              ? "calc(100vw - 20px)"
+              : "clamp(320px, 90vw, 420px)",
+            height: "clamp(400px, 70vh, 600px)",
+            maxHeight: "85vh",
             background: "linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98))",
             border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "16px",
-            boxShadow: "0 15px 30px rgba(0, 0, 0, 0.2)",
+            borderRadius: "clamp(12px, 3vw, 20px)",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
             display: "flex",
             flexDirection: "column",
             zIndex: 999,
-            backdropFilter: "blur(15px)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
             animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-            overflow: "hidden"
+            overflow: "hidden",
+            touchAction: "manipulation",
+            userSelect: "none",
+            WebkitUserSelect: "none"
           }}
         >
           {/* Modern Clean Header */}
@@ -1165,7 +1194,8 @@ export default function ChatBot() {
                             color: "#06b6d4",
                             fontSize: "11px",
                             cursor: "pointer",
-                            textAlign: "left"
+                            textAlign: "left",
+                            transition: "all 0.2s ease"
                           }}
                         >
                           → {s}
@@ -1210,13 +1240,14 @@ export default function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Enhanced Input Section */}
+          {/* Enhanced Mobile-Friendly Input Section */}
           <div style={{ 
-            padding: "12px", 
+            padding: isMobile ? "8px" : "12px", 
             borderTop: "1px solid rgba(255, 255, 255, 0.1)", 
             display: "flex", 
-            gap: "8px",
-            background: "rgba(15, 23, 42, 0.8)"
+            gap: isMobile ? "6px" : "8px",
+            background: "rgba(15, 23, 42, 0.8)",
+            paddingBottom: isMobile ? "12px" : "12px"
           }}>
             <div style={{ position: "relative", flex: 1 }}>
               <input
@@ -1224,37 +1255,46 @@ export default function ChatBot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask me anything about grants..."
+                placeholder={isMobile ? "Type your question..." : "Ask me anything about grants..."}
+                aria-label="Chat input field"
                 style={{
                   width: "100%",
-                  padding: "10px 12px",
-                  paddingRight: "36px",
+                  padding: isMobile ? "12px 40px 12px 12px" : "10px 36px 10px 12px",
                   background: "rgba(255, 255, 255, 0.05)",
                   border: "1px solid rgba(6, 182, 212, 0.2)",
-                  borderRadius: "10px",
+                  borderRadius: isMobile ? "12px" : "10px",
                   color: "#e5e7eb",
-                  fontSize: "13px",
-                  outline: "none"
+                  fontSize: isMobile ? "16px" : "13px",
+                  outline: "none",
+                  WebkitAppearance: "none",
+                  appearance: "none",
+                  touchAction: "manipulation"
                 }}
               />
               
               <button
                 onClick={toggleVoiceInput}
+                aria-label={isListening ? "Stop voice input" : "Start voice input"}
                 style={{
                   position: "absolute",
-                  right: "6px",
+                  right: isMobile ? "8px" : "6px",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  background: "rgba(6, 182, 212, 0.1)",
-                  border: "1px solid #06b6d4",
-                  color: "#06b6d4",
-                  padding: "4px",
+                  background: isListening 
+                    ? "linear-gradient(135deg, #ff6b6b, #ee5a52)" 
+                    : "rgba(6, 182, 212, 0.1)",
+                  border: `1px solid ${isListening ? '#ff6b6b' : '#06b6d4'}`,
+                  color: isListening ? "#fff" : "#06b6d4",
+                  padding: isMobile ? "8px" : "4px",
                   borderRadius: "50%",
-                  width: "28px",
-                  height: "28px",
+                  width: isMobile ? "32px" : "28px",
+                  height: isMobile ? "32px" : "28px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  touchAction: "manipulation"
                 }}
               >
                 🎤
@@ -1264,16 +1304,23 @@ export default function ChatBot() {
             <button
               onClick={() => handleSend()}
               disabled={!inputValue.trim()}
+              aria-label="Send message"
               style={{
-                padding: "10px 16px",
+                padding: isMobile ? "12px 16px" : "10px 16px",
                 background: inputValue.trim() 
                   ? "linear-gradient(135deg, #06b6d4, #a855f7)" 
                   : "rgba(6, 182, 212, 0.2)",
                 border: "none",
-                borderRadius: "10px",
+                borderRadius: isMobile ? "12px" : "10px",
                 color: "#fff",
                 cursor: inputValue.trim() ? "pointer" : "not-allowed",
-                minWidth: "40px"
+                minWidth: isMobile ? "48px" : "40px",
+                fontSize: isMobile ? "16px" : "14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s ease",
+                touchAction: "manipulation"
               }}
             >
               ➤
@@ -1323,6 +1370,13 @@ export default function ChatBot() {
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+          .chatbot-input {
+            font-size: 16px !important; /* Prevents zoom on iOS */
+          }
         }
       `}</style>
     </>
