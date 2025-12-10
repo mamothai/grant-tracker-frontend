@@ -1906,22 +1906,78 @@ async function callHuggingFace(messages, apiKey, model) {
   throw new Error('HuggingFace failed');
 }
 
-// Ultra-fast AI response generation with enhanced intelligence
+// Ultra-fast AI response generation with enhanced intelligence and typo tolerance
 function generateLightningResponse(message, retrievedGrants = [], userProfile = {}) {
-  const lower = message.toLowerCase();
+  // Normalize message for better typo handling
+  const lower = message.toLowerCase().trim();
   const query = message.trim();
-  
-  // Lightning-fast pattern recognition
+
+  // Enhanced pattern recognition with typo tolerance
   const patterns = {
     isQuestion: /\?|what|how|which|can|will|would|should|where|when|why/i.test(query),
-    isEligibility: /eligible|qualify|am i|can i|eligibility|who can|what are/i.test(lower),
-    isGrantSearch: /grant|scheme|program|benefit|support|assistance|help/i.test(lower),
-    isAbout: /about|what is|explain|tell me|purpose|function/i.test(lower),
-    isComparison: /compare|difference|vs|versus|better|best/i.test(lower),
-    isStatistics: /how many|total|statistics|overview|summary|count/i.test(lower),
-    isGreeting: /hello|hi|hey|good morning|good afternoon|good evening/i.test(lower),
-    isThanks: /thank|thanks|appreciate|grateful/i.test(lower)
+    isEligibility: /eligible|qualify|am i|can i|eligibility|who can|what are|eligible|qualif|eligibl|qualifi/i.test(lower),
+    isGrantSearch: /grant|scheme|program|benefit|support|assistance|help|grnt|schem|prog|benefit|suport|assis/i.test(lower),
+    isAbout: /about|what is|explain|tell me|purpose|function|info|information|detail|explain|describe/i.test(lower),
+    isComparison: /compare|difference|vs|versus|better|best|which one|compar|differ|bettr|bestt/i.test(lower),
+    isStatistics: /how many|total|statistics|overview|summary|count|stat|overv|summar|countt/i.test(lower),
+    isGreeting: /hello|hi|hey|good morning|good afternoon|good evening|helo|hii|heyy|morning|evening/i.test(lower),
+    isThanks: /thank|thanks|appreciate|grateful|thank you|thankx|thnx|thanku|appreciat|gratef/i.test(lower),
+    isWebsiteQuery: /website|site|platform|service|app|application|web|online|portal|websit|webapp/i.test(lower),
+    isFeatureQuery: /feature|function|capability|ability|option|service|tool|funct|capabil|abilit|servic/i.test(lower),
+    isHelpQuery: /help|assist|support|guide|aid|assistance|helpp|assistt|suport|guidd/i.test(lower)
   };
+
+  // Handle website-related queries
+  if (patterns.isWebsiteQuery || patterns.isFeatureQuery || patterns.isHelpQuery) {
+    return generateWebsiteResponse(message, retrievedGrants, userProfile);
+  }
+
+  // Generate website-related responses
+  function generateWebsiteResponse(message, retrievedGrants, userProfile) {
+    const lower = message.toLowerCase();
+
+    // Handle different types of website queries
+    if (lower.includes('about') || lower.includes('what is') || lower.includes('explain') || lower.includes('info')) {
+      return {
+        response: `**About GrantTracker:**\n\nGrantTracker is a comprehensive platform that helps individuals discover and understand government grants and schemes. We provide:\n\n• **Grant Discovery**: Find grants you may be eligible for\n• **Detailed Information**: Learn about each scheme's benefits and requirements\n• **Application Guidance**: Get help with the application process\n• **Personalized Recommendations**: Receive suggestions based on your profile\n\nOur mission is to help people access the government benefits they're entitled to.`,
+        suggestions: ["How to use this platform", "Available features", "Contact information"]
+      };
+    }
+
+    if (lower.includes('feature') || lower.includes('function') || lower.includes('capability') || lower.includes('what can')) {
+      return {
+        response: `**GrantTracker Features:**\n\n🔍 **Smart Search**: Find relevant grants using natural language\n🎯 **Eligibility Checker**: See which schemes you qualify for\n📊 **Comparison Tool**: Compare different grant options\n📝 **Application Guide**: Step-by-step application assistance\n🤖 **AI Assistant**: Get personalized help and recommendations\n\nAll features are designed to be user-friendly and accessible to everyone.`,
+        suggestions: ["How to check eligibility", "Compare grants", "Get application help"]
+      };
+    }
+
+    if (lower.includes('how to use') || lower.includes('how does') || lower.includes('how work') || lower.includes('guide')) {
+      return {
+        response: `**How to Use GrantTracker:**\n\n1. **Start with a Search**: Type what you're looking for (e.g., \"health grants\")\n2. **Browse Results**: View available schemes and their details\n3. **Check Eligibility**: See if you qualify for specific programs\n4. **Get Help**: Use our AI assistant for personalized guidance\n5. **Apply**: Follow our step-by-step application guides\n\nIt's simple and intuitive! Try asking: \"What grants am I eligible for?\"`,
+        suggestions: ["Search for grants", "Check my eligibility", "Get started"]
+      };
+    }
+
+    if (lower.includes('contact') || lower.includes('support') || lower.includes('help') || lower.includes('assist')) {
+      return {
+        response: `**Contact and Support:**\n\n📧 **Email**: support@granttracker.com\n🌐 **Website**: www.granttracker.com\n📞 **Phone**: +91-1800-123-4567 (Toll-free)\n\nFor immediate assistance, you can:\n• Use the chatbot for quick answers\n• Visit our Help Center for guides\n• Contact us via email for detailed support\n\nWe're here to help you access government benefits!`,
+        suggestions: ["Help Center", "FAQ", "Live Chat"]
+      };
+    }
+
+    if (lower.includes('problem') || lower.includes('issue') || lower.includes('error') || lower.includes('not work')) {
+      return {
+        response: `**Troubleshooting Help:**\n\nIf you're experiencing issues, try these steps:\n\n1. **Refresh the page** - Often solves temporary problems\n2. **Check your internet connection** - Ensure you're online\n3. **Try a different browser** - Chrome, Firefox, or Edge work best\n4. **Clear browser cache** - Can resolve display issues\n5. **Contact support** - We're happy to help\n\nFor specific errors, please describe what happened and we'll assist you.`,
+        suggestions: ["Contact support", "Report issue", "FAQ"]
+      };
+    }
+
+    // Default website response
+    return {
+      response: `**Welcome to GrantTracker!**\n\nI can help you with:\n• Finding government grants and schemes\n• Checking your eligibility for programs\n• Understanding application processes\n• Comparing different options\n• Getting personalized recommendations\n\nWhat would you like to know about our platform?`,
+      suggestions: ["About GrantTracker", "Available features", "How to use", "Contact support"]
+    };
+  }
 
   // Instant greetings
   if (patterns.isGreeting) {
