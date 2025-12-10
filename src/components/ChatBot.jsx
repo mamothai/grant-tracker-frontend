@@ -1,8 +1,36 @@
+
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import santaImg from "../assets/santa.svg";
 import { GRANTS } from "../data/grants";
+
+// Enhanced message types for better UX
+const MESSAGE_TYPES = {
+  TEXT: 'text',
+  SUGGESTION: 'suggestion',
+  REACTION: 'reaction',
+  SYSTEM: 'system'
+};
+
+// Enhanced user preferences and settings
+const USER_PREFERENCES = {
+  themes: {
+    light: 'light',
+    dark: 'dark',
+    auto: 'auto'
+  },
+  responseStyles: {
+    detailed: 'detailed',
+    concise: 'concise',
+    balanced: 'balanced'
+  },
+  notifications: {
+    sound: true,
+    visual: true,
+    typing: true
+  }
+};
 
 // ChatGPT-Level Advanced Conversation Intelligence
 class UltraIntelligentConversationEngine {
