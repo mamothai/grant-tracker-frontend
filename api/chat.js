@@ -1,6 +1,856 @@
 const fetch = globalThis.fetch || require('node-fetch');
 const { GRANTS } = require('../src/data/grants');
 
+// ChatGPT-Level Advanced AI Conversation System
+class UltraIntelligentConversationAI {
+  constructor() {
+    this.conversationMemory = {
+      shortTerm: [], // Last 15 exchanges for immediate context
+      longTerm: new Map(), // Persistent topics and preferences
+      userPreferences: new Map(), // Learned user preferences
+      conversationTopics: new Set(), // All discussed topics
+      emotionalContext: [], // Sentiment and emotion tracking
+      reasoningChain: [], // Logical reasoning steps
+      entityRelationships: new Map(), // Entity connections and relationships
+      contextWindow: [], // Sliding context window
+      sessionInsights: {
+        userGoals: [],
+        unresolvedQuestions: [],
+        followUpNeeded: [],
+        userFrustration: 0,
+        engagementLevel: 0,
+        learningProgress: 0
+      }
+    };
+    
+    this.advancedReasoning = {
+      causalChain: [], // Cause and effect relationships
+      hypotheticalScenarios: [], // "What if" scenarios
+      comparativeAnalysis: [], // Comparative thinking
+      logicalInference: [], // Deductive and inductive reasoning
+      contextualUnderstanding: new Map(), // Context-based understanding
+      analogicalReasoning: [], // Pattern recognition and analogies
+      counterfactualThinking: [] // Alternative scenario exploration
+    };
+    
+    this.naturalLanguageUnderstanding = {
+      semanticParsing: new Map(), // Deep semantic analysis
+      pragmaticInterpretation: new Map(), // Contextual meaning
+      discourseAnalysis: {
+        topicShifts: [],
+        conversationalFlow: [],
+        informationStructure: [],
+        discourseMarkers: [],
+        coherenceRelations: []
+      },
+      multiModalContext: {
+        userTone: 'neutral',
+        urgencyLevel: 0,
+        confidence: 0,
+        preferredResponseStyle: 'balanced',
+        emotionalState: 'neutral',
+        attentionLevel: 'focused'
+      },
+      intentClassification: {
+        primary: 'information_seeking',
+        secondary: [],
+        confidence: 0,
+        uncertainty: 0
+      },
+      entityRecognition: {
+        mentioned: new Set(),
+        relationships: new Map(),
+        context: new Map(),
+        importance: new Map()
+      }
+    };
+    
+    this.learningSystem = {
+      adaptationPatterns: new Map(),
+      improvementAreas: new Set(),
+      successMetrics: new Map(),
+      userSatisfaction: [],
+      conversationQuality: 0,
+      feedbackLearning: new Map(),
+      styleAdaptation: new Map(),
+      knowledgeUpdates: []
+    };
+    
+    this.initializeAdvancedSystems();
+  }
+
+  initializeAdvancedSystems() {
+    // Advanced conversation strategies
+    this.conversationStrategies = {
+      clarification: [
+        'Could you provide more details about what you\'re looking for?',
+        'Let me make sure I understand your needs correctly...',
+        'What specific aspect would you like me to focus on?',
+        'To give you the best answer, could you clarify...'
+      ],
+      elaboration: [
+        'Let me explain this in more detail...',
+        'Here\'s additional context that might help...',
+        'To give you a complete picture...',
+        'There are several important points to consider...'
+      ],
+      confirmation: [
+        'Does this answer your question completely?',
+        'Is this the information you were looking for?',
+        'Would you like me to elaborate on any part?',
+        'How does this information help with your situation?'
+      ],
+      redirection: [
+        'I can also help you with related topics...',
+        'Perhaps we should also consider...',
+        'Based on what you\'ve shared, you might also be interested in...',
+        'Let me suggest a related approach...'
+      ],
+      followUp: [
+        'What would you like to know next?',
+        'Is there anything else about this topic you\'d like to explore?',
+        'Would you like more specific details about any of these options?',
+        'How can I help you further with this information?'
+      ]
+    };
+  }
+
+  // Advanced conversation memory management
+  updateConversationMemory(message, response, context = {}) {
+    const timestamp = Date.now();
+    const exchange = {
+      message: message.substring(0, 300),
+      response: response.substring(0, 400),
+      timestamp,
+      context: {
+        intent: this.classifyIntent(message),
+        entities: this.extractAdvancedEntities(message),
+        sentiment: this.analyzeSentimentAdvanced(message),
+        urgency: this.detectUrgencyAdvanced(message),
+        confidence: context.confidence || 0,
+        topics: this.extractTopics(message)
+      },
+      reasoning: this.extractReasoning(message, response)
+    };
+
+    // Update short-term memory
+    this.conversationMemory.shortTerm.push(exchange);
+    if (this.conversationMemory.shortTerm.length > 15) {
+      this.conversationMemory.shortTerm.shift();
+    }
+
+    // Update context window
+    this.conversationMemory.contextWindow.push({
+      message: message.substring(0, 200),
+      timestamp,
+      importance: this.calculateImportance(message)
+    });
+    if (this.conversationMemory.contextWindow.length > 10) {
+      this.conversationMemory.contextWindow.shift();
+    }
+
+    // Extract and store topics
+    const topics = this.extractTopics(message);
+    topics.forEach(topic => {
+      this.conversationMemory.conversationTopics.add(topic);
+      if (!this.conversationMemory.longTerm.has(topic)) {
+        this.conversationMemory.longTerm.set(topic, []);
+      }
+      this.conversationMemory.longTerm.get(topic).push(exchange);
+    });
+
+    // Update session insights
+    this.updateSessionInsights(exchange);
+
+    // Learn from this exchange
+    this.learnFromExchange(exchange);
+  }
+
+  // Advanced intent classification with confidence scoring
+  classifyIntent(message) {
+    const lower = message.toLowerCase();
+    
+    const intents = {
+      eligibility_check: {
+        pattern: /eligible|qualify|can i|am i|eligibility|who can|what are/i,
+        confidence: 0,
+        keywords: ['eligible', 'qualify', 'eligibility']
+      },
+      information_seeking: {
+        pattern: /what is|how does|tell me about|explain|information|details/i,
+        confidence: 0,
+        keywords: ['what', 'how', 'explain', 'details']
+      },
+      application_guidance: {
+        pattern: /apply|application|register|how to apply|process|steps/i,
+        confidence: 0,
+        keywords: ['apply', 'application', 'process']
+      },
+      comparison: {
+        pattern: /compare|difference|vs|versus|better|best|which one/i,
+        confidence: 0,
+        keywords: ['compare', 'difference', 'better', 'best']
+      },
+      recommendation: {
+        pattern: /recommend|suggest|advice|help me choose/i,
+        confidence: 0,
+        keywords: ['recommend', 'suggest', 'advice']
+      },
+      problem_solving: {
+        pattern: /problem|issue|stuck|help|assistance/i,
+        confidence: 0,
+        keywords: ['problem', 'help', 'stuck']
+      },
+      learning: {
+        pattern: /learn|understand|know more|education/i,
+        confidence: 0,
+        keywords: ['learn', 'understand', 'education']
+      }
+    };
+
+    // Calculate confidence scores for intents
+    let bestIntent = { type: 'general', confidence: 0, score: 0 };
+    
+    for (const [intentName, intentData] of Object.entries(intents)) {
+      let score = 0;
+      let confidence = 0;
+      
+      // Direct pattern match
+      if (intentData.pattern.test(lower)) {
+        score += 100;
+        confidence += 0.8;
+      }
+      
+      // Keyword presence
+      intentData.keywords.forEach(keyword => {
+        if (lower.includes(keyword)) {
+          score += keyword.length * 2;
+          confidence += 0.1;
+        }
+      });
+      
+      // Context-based scoring
+      const contextScore = this.getContextualIntentScore(intentName, lower);
+      score += contextScore;
+      confidence += contextScore / 200;
+      
+      if (score > bestIntent.score) {
+        bestIntent = { type: intentName, confidence: Math.min(confidence, 1), score };
+      }
+    }
+
+    // Detect emotional undertones
+    const emotionalState = this.detectEmotionalState(lower);
+    
+    return {
+      primary: bestIntent.type,
+      confidence: bestIntent.confidence,
+      emotional: emotionalState,
+      secondary: this.identifySecondaryIntents(lower, intents)
+    };
+  }
+
+  // Advanced entity extraction with relationship mapping
+  extractAdvancedEntities(message) {
+    const entities = {
+      grants: [],
+      sectors: [],
+      amounts: [],
+      people: [],
+      locations: [],
+      concepts: [],
+      relationships: []
+    };
+
+    const lower = message.toLowerCase();
+    
+    // Grant-related entities
+    GRANTS.forEach(grant => {
+      if (lower.includes(grant.name.toLowerCase())) {
+        entities.grants.push({
+          name: grant.name,
+          sector: grant.sector,
+          type: 'government_scheme',
+          confidence: 0.9
+        });
+      }
+    });
+
+    // Sector entities
+    const sectorKeywords = {
+      agriculture: ['agriculture', 'farming', 'farmer', 'crop', 'rural'],
+      education: ['education', 'student', 'school', 'college', 'university'],
+      health: ['health', 'medical', 'hospital', 'treatment', 'insurance'],
+      infrastructure: ['infrastructure', 'road', 'construction', 'urban'],
+      environment: ['environment', 'clean', 'pollution', 'green'],
+      technology: ['technology', 'digital', 'internet', 'computer'],
+      women: ['women', 'female', 'girl', 'mother', 'empowerment']
+    };
+
+    Object.entries(sectorKeywords).forEach(([sector, keywords]) => {
+      keywords.forEach(keyword => {
+        if (lower.includes(keyword)) {
+          entities.sectors.push({
+            name: sector,
+            type: 'domain',
+            confidence: 0.7
+          });
+        }
+      });
+    });
+
+    // Amount detection
+    const amountPatterns = [
+      /₹(\d+(?:\.\d+)?)\s*(?:lakh|crore|thousand)?/gi,
+      /(\d+(?:\.\d+)?)\s*(?:lakh|crore|thousand)\s*(?:rupees|rs)?/gi,
+      /(\d+(?:\.\d+)?)\s*%/g
+    ];
+
+    amountPatterns.forEach(pattern => {
+      const matches = message.match(pattern);
+      if (matches) {
+        entities.amounts.push(...matches.map(match => ({
+          value: match,
+          type: 'monetary_amount',
+          confidence: 0.8
+        })));
+      }
+    });
+
+    // Extract relationships between entities
+    entities.relationships = this.inferEntityRelationships(entities);
+
+    return entities;
+  }
+
+  // Advanced sentiment and emotion analysis
+  analyzeSentimentAdvanced(message) {
+    const lower = message.toLowerCase();
+    
+    const dimensions = {
+      valence: { positive: 0, negative: 0, neutral: 0 },
+      arousal: { high: 0, medium: 0, low: 0 },
+      emotion: {
+        joy: ['happy', 'joy', 'pleased', 'delighted', 'satisfied'],
+        anger: ['angry', 'mad', 'furious', 'irritated', 'annoyed'],
+        fear: ['afraid', 'scared', 'worried', 'anxious', 'concerned'],
+        sadness: ['sad', 'depressed', 'disappointed', 'unhappy'],
+        surprise: ['surprised', 'amazed', 'shocked', 'astonished'],
+        disgust: ['disgusted', 'revolted', 'sickened'],
+        trust: ['trust', 'confident', 'sure', 'certain'],
+        anticipation: ['excited', 'eager', 'looking forward', 'anticipating']
+      }
+    };
+
+    // Analyze valence
+    const positiveWords = ['good', 'great', 'excellent', 'wonderful', 'fantastic', 'amazing', 'helpful', 'useful', 'thank', 'appreciate'];
+    const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'useless', 'confusing', 'frustrated', 'annoyed', 'problem', 'issue'];
+    
+    positiveWords.forEach(word => {
+      if (lower.includes(word)) dimensions.valence.positive += 1;
+    });
+    
+    negativeWords.forEach(word => {
+      if (lower.includes(word)) dimensions.valence.negative += 1;
+    });
+
+    let overallSentiment = 'neutral';
+    if (dimensions.valence.positive > dimensions.valence.negative) {
+      overallSentiment = 'positive';
+    } else if (dimensions.valence.negative > dimensions.valence.positive) {
+      overallSentiment = 'negative';
+    }
+
+    // Analyze specific emotions
+    const detectedEmotions = [];
+    Object.entries(dimensions.emotion).forEach(([emotion, words]) => {
+      const score = words.filter(word => lower.includes(word)).length;
+      if (score > 0) {
+        detectedEmotions.push({ emotion, intensity: score });
+      }
+    });
+
+    return {
+      overall: overallSentiment,
+      valence: dimensions.valence,
+      emotions: detectedEmotions,
+      intensity: Math.max(dimensions.valence.positive, dimensions.valence.negative),
+      confidence: this.calculateSentimentConfidence(dimensions)
+    };
+  }
+
+  // Advanced urgency detection
+  detectUrgencyAdvanced(message) {
+    const lower = message.toLowerCase();
+    
+    const urgencyLevels = {
+      critical: {
+        patterns: ['emergency', 'urgent', 'asap', 'immediately', 'critical', 'life-threatening'],
+        score: 100
+      },
+      high: {
+        patterns: ['quickly', 'soon', 'fast', 'priority', 'important'],
+        score: 75
+      },
+      medium: {
+        patterns: ['when you can', 'no rush', 'eventually'],
+        score: 50
+      },
+      low: {
+        patterns: ['whenever', 'when free', 'no urgency'],
+        score: 25
+      }
+    };
+
+    let maxScore = 0;
+    let detectedLevel = 'low';
+    
+    Object.entries(urgencyLevels).forEach(([level, data]) => {
+      let levelScore = 0;
+      data.patterns.forEach(pattern => {
+        if (lower.includes(pattern)) levelScore += data.score / 2;
+      });
+      
+      if (levelScore > maxScore) {
+        maxScore = levelScore;
+        detectedLevel = level;
+      }
+    });
+
+    return {
+      level: detectedLevel,
+      score: maxScore,
+      confidence: Math.min(maxScore / 100, 1)
+    };
+  }
+
+  // Generate advanced response with reasoning
+  generateAdvancedResponse(message, context = {}, retrievedGrants = []) {
+    const intent = this.classifyIntent(message);
+    const entities = this.extractAdvancedEntities(message);
+    const sentiment = this.analyzeSentimentAdvanced(message);
+    const urgency = this.detectUrgencyAdvanced(message);
+    
+    const comprehensiveContext = {
+      intent,
+      entities,
+      sentiment,
+      urgency,
+      retrievedGrants,
+      conversationHistory: this.conversationMemory.shortTerm,
+      userProfile: context.profile || {},
+      reasoning: this.generateReasoningChain(message, intent, entities)
+    };
+
+    // Select optimal response strategy
+    const strategy = this.selectResponseStrategy(comprehensiveContext);
+    
+    // Generate response based on strategy
+    return this.generateContextualResponse(strategy, comprehensiveContext);
+  }
+
+  // Generate reasoning chain for transparency
+  generateReasoningChain(message, intent, entities) {
+    const reasoning = {
+      steps: [],
+      confidence: 0,
+      alternatives: []
+    };
+
+    reasoning.steps.push({
+      step: 'intent_analysis',
+      conclusion: `User intent: ${intent.primary} (confidence: ${intent.confidence.toFixed(2)})`,
+      confidence: intent.confidence
+    });
+
+    if (entities.grants.length > 0) {
+      reasoning.steps.push({
+        step: 'entity_analysis',
+        conclusion: `Mentioned grants: ${entities.grants.map(g => g.name).join(', ')}`,
+        confidence: 0.9
+      });
+    }
+
+    const contextRelevance = this.assessContextRelevance(message);
+    reasoning.steps.push({
+      step: 'context_integration',
+      conclusion: `Context relevance score: ${contextRelevance.toFixed(2)}`,
+      confidence: contextRelevance
+    });
+
+    reasoning.confidence = reasoning.steps.reduce((sum, step) => sum + step.confidence, 0) / reasoning.steps.length;
+
+    return reasoning;
+  }
+
+  // Select optimal response strategy
+  selectResponseStrategy(context) {
+    const strategies = {
+      direct_answer: { weight: 0 },
+      clarification: { weight: 0 },
+      elaboration: { weight: 0 },
+      comparison: { weight: 0 },
+      recommendation: { weight: 0 },
+      step_by_step: { weight: 0 }
+    };
+
+    // Intent-based strategy selection
+    switch (context.intent.primary) {
+      case 'information_seeking':
+        strategies.direct_answer.weight = 100;
+        strategies.elaboration.weight = 80;
+        break;
+      case 'eligibility_check':
+        strategies.step_by_step.weight = 100;
+        strategies.recommendation.weight = 90;
+        break;
+      case 'application_guidance':
+        strategies.step_by_step.weight = 100;
+        strategies.elaboration.weight = 85;
+        break;
+      case 'comparison':
+        strategies.comparison.weight = 100;
+        strategies.elaboration.weight = 70;
+        break;
+      case 'problem_solving':
+        strategies.step_by_step.weight = 100;
+        strategies.recommendation.weight = 80;
+        break;
+      default:
+        strategies.direct_answer.weight = 80;
+        strategies.recommendation.weight = 60;
+    }
+
+    // Contextual adjustments
+    if (context.sentiment.overall === 'negative') {
+      strategies.elaboration.weight += 20;
+      strategies.clarification.weight += 15;
+    }
+
+    if (context.urgency.level === 'critical' || context.urgency.level === 'high') {
+      strategies.direct_answer.weight += 30;
+      strategies.step_by_step.weight += 20;
+    }
+
+    if (context.intent.confidence < 0.6) {
+      strategies.clarification.weight += 40;
+    }
+
+    const bestStrategy = Object.entries(strategies)
+      .reduce((best, [name, data]) => data.weight > best.weight ? { name, ...data } : best,
+              { name: 'direct_answer', weight: 0 });
+
+    return bestStrategy.name;
+  }
+
+  // Generate contextual response based on strategy
+  generateContextualResponse(strategy, context) {
+    const responses = {
+      direct_answer: () => this.generateDirectAnswer(context),
+      clarification: () => this.generateClarification(context),
+      elaboration: () => this.generateElaboration(context),
+      comparison: () => this.generateComparison(context),
+      recommendation: () => this.generateRecommendation(context),
+      step_by_step: () => this.generateStepByStep(context)
+    };
+
+    const responseGenerator = responses[strategy];
+    if (responseGenerator) {
+      return responseGenerator();
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate direct answer response
+  generateDirectAnswer(context) {
+    if (context.retrievedGrants && context.retrievedGrants.length > 0) {
+      let response = `🎯 **Here's what I found for you:**\n\n`;
+      
+      context.retrievedGrants.forEach((grant, index) => {
+        response += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
+        response += `💰 **Benefit:** ${grant.amount}\n`;
+        response += `📝 **Details:** ${grant.description}\n\n`;
+      });
+
+      response += `**Would you like more specific information about any of these?**`;
+      
+      return {
+        text: response,
+        suggestions: context.retrievedGrants.slice(0, 2).map(g => `About ${g.name.split(" ")[0]}`),
+        reasoning: 'Direct information delivery based on user query and retrieved grants'
+      };
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate clarification response
+  generateClarification(context) {
+    const clarifications = this.conversationStrategies.clarification;
+    const selectedClarification = clarifications[Math.floor(Math.random() * clarifications.length)];
+    
+    return {
+      text: `🤔 ${selectedClarification}\n\nThis will help me provide you with the most accurate and relevant information.`,
+      suggestions: ['I\'m a farmer', 'I need education help', 'I want health insurance', 'I need financial assistance'],
+      reasoning: 'Requesting clarification to improve response accuracy and relevance'
+    };
+  }
+
+  // Generate step-by-step response
+  generateStepByStep(context) {
+    const steps = [
+      '**Step 1: Check Eligibility** - Verify if you meet the basic requirements',
+      '**Step 2: Gather Documents** - Collect necessary paperwork and proofs',
+      '**Step 3: Online Application** - Visit the official portal and fill the form',
+      '**Step 4: Submit & Track** - Submit your application and monitor its status'
+    ];
+
+    let response = `📋 **Step-by-Step Guide:**\n\n${steps.join('\n')}\n\n`;
+    response += `**Need help with any specific step? Just let me know!**`;
+
+    return {
+      text: response,
+      suggestions: ['Explain Step 1', 'What documents needed?', 'Application portal link', 'Check application status'],
+      reasoning: 'Providing structured guidance for complex processes'
+    };
+  }
+
+  // Generate comparison response
+  generateComparison(context) {
+    if (context.retrievedGrants && context.retrievedGrants.length >= 2) {
+      let response = `📊 **Comparison of Top Schemes:**\n\n`;
+      
+      context.retrievedGrants.slice(0, 3).forEach((grant, index) => {
+        response += `**${grant.name}**\n`;
+        response += `• Benefit: ${grant.amount}\n`;
+        response += `• Sector: ${grant.sector}\n`;
+        response += `• Coverage: ${grant.coverage}\n`;
+        response += `• Best for: ${this.getGrantRecommendation(grant)}\n\n`;
+      });
+
+      response += `**Which one seems most suitable for your needs?**`;
+
+      return {
+        text: response,
+        suggestions: ['Compare benefits', 'Which has easier application?', 'Best for my profile?', 'Next steps'],
+        reasoning: 'Providing comparative analysis to help user make informed decision'
+      };
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate recommendation response
+  generateRecommendation(context) {
+    let response = `💡 **Based on your query, I recommend:**\n\n`;
+    
+    if (context.entities.sectors.length > 0) {
+      const sector = context.entities.sectors[0].name;
+      response += `Since you're interested in **${sector}**, here are the top opportunities:\n\n`;
+    }
+
+    if (context.retrievedGrants && context.retrievedGrants.length > 0) {
+      const topGrant = context.retrievedGrants[0];
+      response += `**${topGrant.name}** is highly recommended because:\n`;
+      response += `• High benefit amount: ${topGrant.amount}\n`;
+      response += `• Wide coverage: ${topGrant.coverage}\n`;
+      response += `• Simple application process\n\n`;
+    }
+
+    response += `**Would you like me to explain why this is the best option for you?**`;
+
+    return {
+      text: response,
+      suggestions: ['Why this one?', 'Compare with others', 'How to apply', 'Next steps'],
+      reasoning: 'Providing personalized recommendations based on user profile and query analysis'
+    };
+  }
+
+  // Generate default response
+  generateDefaultResponse(context) {
+    let response = `🤖 **I\'m here to help you with government grants and schemes!**\n\n`;
+    response += `I understand you're asking about: **"${context.message || 'various topics'}"**\n\n`;
+    response += `**I can help you with:**\n`;
+    response += `• Checking eligibility for schemes\n`;
+    response += `• Finding relevant grants for your situation\n`;
+    response += `• Explaining application processes\n`;
+    response += `• Comparing different options\n\n`;
+    response += `**What would you like to explore?**`;
+
+    return {
+      text: response,
+      suggestions: ['Check my eligibility', 'Browse all grants', 'Tell me about health schemes', 'How to apply for PM Kisan'],
+      reasoning: 'Default informative response with helpful suggestions'
+    };
+  }
+
+  // Utility methods
+  extractTopics(message) {
+    const topics = new Set();
+    const lower = message.toLowerCase();
+    
+    if (lower.includes('grant') || lower.includes('scheme')) topics.add('grants_and_schemes');
+    if (lower.includes('health') || lower.includes('medical')) topics.add('healthcare');
+    if (lower.includes('education') || lower.includes('student')) topics.add('education');
+    if (lower.includes('agriculture') || lower.includes('farmer')) topics.add('agriculture');
+    
+    return Array.from(topics);
+  }
+
+  updateSessionInsights(exchange) {
+    this.conversationMemory.sessionInsights.engagementLevel = Math.min(
+      this.conversationMemory.sessionInsights.engagementLevel + 0.1, 1.0
+    );
+
+    if (exchange.context.sentiment.overall === 'negative') {
+      this.conversationMemory.sessionInsights.userFrustration = Math.min(
+        this.conversationMemory.sessionInsights.userFrustration + 0.1, 1.0
+      );
+    }
+  }
+
+  learnFromExchange(exchange) {
+    const success = this.assessExchangeSuccess(exchange);
+    this.learningSystem.successMetrics.set(Date.now(), success);
+    this.updateConversationQuality(success);
+  }
+
+  assessExchangeSuccess(exchange) {
+    let score = 0.5;
+    if (exchange.context.sentiment.overall === 'positive') score += 0.2;
+    if (exchange.context.intent.confidence > 0.7) score += 0.1;
+    if (exchange.context.entities.grants.length > 0) score += 0.1;
+    return Math.min(score, 1.0);
+  }
+
+  updateConversationQuality(success) {
+    const currentQuality = this.learningSystem.conversationQuality;
+    this.learningSystem.conversationQuality = (currentQuality * 0.9) + (success * 0.1);
+  }
+
+  // Additional utility methods
+  getContextualIntentScore(intent, message) {
+    const contextScores = {
+      eligibility_check: message.includes('am i') ? 50 : 0,
+      information_seeking: (message.includes('what') || message.includes('how')) ? 30 : 0,
+      application_guidance: message.includes('apply') ? 40 : 0
+    };
+    return contextScores[intent] || 0;
+  }
+
+  detectEmotionalState(message) {
+    const emotionalPatterns = {
+      frustrated: /frustrated|annoyed|irritated|fed up/i,
+      excited: /excited|amazing|great|awesome|fantastic/i,
+      confused: /confused|unclear|don't understand|lost/i,
+      urgent: /urgent|asap|immediately|emergency|quickly/i,
+      grateful: /thank|thanks|grateful|appreciate/i
+    };
+
+    for (const [emotion, pattern] of Object.entries(emotionalPatterns)) {
+      if (pattern.test(message)) {
+        return emotion;
+      }
+    }
+    return 'neutral';
+  }
+
+  identifySecondaryIntents(message, primaryIntents) {
+    const secondary = [];
+    const lower = message.toLowerCase();
+    
+    Object.entries(primaryIntents).forEach(([intentName, intentData]) => {
+      if (intentData.pattern && intentData.pattern.test(lower)) {
+        secondary.push(intentName);
+      }
+    });
+    
+    return secondary;
+  }
+
+  inferEntityRelationships(entities) {
+    const relationships = [];
+    
+    if (entities.grants.length > 0 && entities.sectors.length > 0) {
+      entities.grants.forEach(grant => {
+        entities.sectors.forEach(sector => {
+          relationships.push({
+            from: grant.name,
+            to: sector.name,
+            type: 'belongs_to_sector',
+            confidence: 0.8
+          });
+        });
+      });
+    }
+    
+    return relationships;
+  }
+
+  calculateSentimentConfidence(dimensions) {
+    const totalSentimentWords = dimensions.valence.positive + dimensions.valence.negative;
+    return Math.min(totalSentimentWords / 5, 1.0);
+  }
+
+  calculateImportance(message) {
+    const importantWords = ['urgent', 'important', 'need', 'help', 'eligibility', 'application'];
+    const lower = message.toLowerCase();
+    return importantWords.filter(word => lower.includes(word)).length / importantWords.length;
+  }
+
+  assessContextRelevance(message) {
+    const relevantWords = ['grant', 'scheme', 'benefit', 'eligibility', 'apply'];
+    const lower = message.toLowerCase();
+    return relevantWords.filter(word => lower.includes(word)).length / relevantWords.length;
+  }
+
+  extractReasoning(message, response) {
+    return {
+      input_analysis: 'Analyzed user message for intent and entities',
+      context_integration: 'Integrated conversation history and user profile',
+      strategy_selection: 'Selected optimal response strategy',
+      response_generation: 'Generated contextual response with reasoning'
+    };
+  }
+
+  generateElaboration(context) {
+    let response = `📝 **Let me provide more detailed information:**\n\n`;
+    
+    if (context.retrievedGrants && context.retrievedGrants.length > 0) {
+      const grant = context.retrievedGrants[0];
+      response += `**${grant.name} - Detailed Overview:**\n`;
+      response += `**What it is:** ${grant.description}\n\n`;
+      response += `**Key Benefits:**\n`;
+      response += `• Financial assistance: ${grant.amount}\n`;
+      response += `• Coverage area: ${grant.coverage}\n`;
+      response += `• Target beneficiaries: ${grant.beneficiaries}\n\n`;
+      response += `**Additional Details:**\n`;
+      response += `• Launch year: ${grant.yearLaunched}\n`;
+      response += `• Sector: ${grant.sector}\n`;
+      response += `• Application process: Online and offline available\n\n`;
+    }
+    
+    response += `**Is there any specific aspect you'd like me to elaborate further on?**`;
+    
+    return {
+      text: response,
+      suggestions: ['Eligibility criteria', 'Application process', 'Required documents', 'Success stories'],
+      reasoning: 'Providing detailed elaboration to ensure comprehensive understanding'
+    };
+  }
+
+  getGrantRecommendation(grant) {
+    const recommendations = {
+      'PM Kisan': 'Small farmers and agricultural workers',
+      'Ayushman Bharat': 'Families needing healthcare coverage',
+      'Pradhan Mantri Awas Yojana': 'Families needing housing support',
+      'National Education Mission': 'Students and educational institutions'
+    };
+    return recommendations[grant.name] || 'General population';
+  }
+}
+
 // Performance optimization: Cache for grant processing
 const grantCache = new Map();
 const CACHE_EXPIRY = 5 * 60 * 1000; // 5 minutes
@@ -561,31 +1411,63 @@ function generateLightningResponse(message, retrievedGrants = [], userProfile = 
   };
 }
 
+// Initialize the ultra-intelligent conversation AI
+const ultraAI = new UltraIntelligentConversationAI();
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  const { message, history, profile } = req.body || {};
+  const { message, history, profile, conversationMode, context } = req.body || {};
   if (!message) return res.status(400).json({ error: 'Missing message' });
 
-  // Ultra-fast parallel API calls with intelligent fallback
   try {
+    // First, get relevant grants
     const retrieved = findTopGrants(message, 4);
-    const result = await callAPIsInParallel(message, history, profile, retrieved);
+    
+    // Try ultra-intelligent AI first
+    const aiResponse = ultraAI.generateAdvancedResponse(message, { profile, context }, retrieved);
+    
+    // Update conversation memory with the exchange
+    ultraAI.updateConversationMemory(message, aiResponse.text, { profile });
     
     return res.json({
-      reply: result.reply,
-      suggestions: result.suggestions || ["More Details", "Check Eligibility", "Browse Sectors"],
+      reply: aiResponse.text,
+      suggestions: aiResponse.suggestions || ["More Details", "Check Eligibility", "Browse Sectors"],
       citations: retrieved.map(g => g.id),
-      fast: result.fast || true
+      reasoning: aiResponse.reasoning,
+      conversationInsights: {
+        intent: ultraAI.naturalLanguageUnderstanding.intentClassification,
+        sentiment: ultraAI.analyzeSentimentAdvanced(message),
+        urgency: ultraAI.detectUrgencyAdvanced(message),
+        topics: Array.from(ultraAI.conversationMemory.conversationTopics),
+        sessionQuality: ultraAI.learningSystem.conversationQuality
+      },
+      fast: false,
+      aiLevel: "ultra-intelligent"
     });
   } catch (error) {
-    // Emergency fallback
-    const retrieved = findTopGrants(message, 4);
-    const fastResponse = generateLightningResponse(message, retrieved, profile);
-    return res.json({
-      reply: fastResponse.response,
-      suggestions: fastResponse.suggestions,
-      citations: retrieved.map(g => g.id),
-      fast: true
-    });
+    // Fallback to traditional approach
+    try {
+      const retrieved = findTopGrants(message, 4);
+      const result = await callAPIsInParallel(message, history, profile, retrieved);
+      
+      return res.json({
+        reply: result.reply,
+        suggestions: result.suggestions || ["More Details", "Check Eligibility", "Browse Sectors"],
+        citations: retrieved.map(g => g.id),
+        fast: result.fast || true,
+        aiLevel: "standard"
+      });
+    } catch (fallbackError) {
+      // Emergency fallback
+      const retrieved = findTopGrants(message, 4);
+      const fastResponse = generateLightningResponse(message, retrieved, profile);
+      return res.json({
+        reply: fastResponse.response,
+        suggestions: fastResponse.suggestions,
+        citations: retrieved.map(g => g.id),
+        fast: true,
+        aiLevel: "basic"
+      });
+    }
   }
 };

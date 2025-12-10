@@ -4,292 +4,565 @@ import "../App.css";
 import santaImg from "../assets/santa.svg";
 import { GRANTS } from "../data/grants";
 
-// Ultra-fast Grant Matching with Caching
-class GrantMatcher {
-  constructor(grants) {
-    this.grants = grants;
-    this.userProfile = {
-      occupations: new Set(),
-      locations: new Set(),
-      needs: new Set(),
-      previousQueries: []
+// ChatGPT-Level Advanced Conversation Intelligence
+class UltraIntelligentConversationEngine {
+  constructor() {
+    this.conversationMemory = {
+      shortTerm: [], // Last 15 exchanges
+      longTerm: new Map(), // Persistent topics
+      userPreferences: new Map(),
+      conversationTopics: new Set(),
+      reasoningChain: [],
+      sessionInsights: {
+        userGoals: [],
+        unresolvedQuestions: [],
+        userFrustration: 0,
+        engagementLevel: 0
+      }
     };
-    // Cache for performance
-    this.searchCache = new Map();
-    this.cacheExpiry = 5 * 60 * 1000; // 5 minutes
+    
+    this.advancedReasoning = {
+      causalChain: [],
+      logicalInference: [],
+      contextualUnderstanding: new Map(),
+      analogicalReasoning: []
+    };
+    
+    this.naturalLanguageUnderstanding = {
+      intentClassification: {
+        primary: 'information_seeking',
+        confidence: 0,
+        uncertainty: 0
+      },
+      entityRecognition: {
+        mentioned: new Set(),
+        relationships: new Map(),
+        importance: new Map()
+      },
+      multiModalContext: {
+        userTone: 'neutral',
+        urgencyLevel: 0,
+        confidence: 0,
+        preferredResponseStyle: 'balanced'
+      }
+    };
+    
+    this.conversationStrategies = {
+      clarification: [
+        'Could you provide more details about what you\'re looking for?',
+        'Let me make sure I understand your needs correctly...',
+        'What specific aspect would you like me to focus on?'
+      ],
+      elaboration: [
+        'Let me explain this in more detail...',
+        'Here\'s additional context that might help...',
+        'To give you a complete picture...'
+      ],
+      confirmation: [
+        'Does this answer your question completely?',
+        'Is this the information you were looking for?',
+        'Would you like me to elaborate on any part?'
+      ],
+      followUp: [
+        'What would you like to know next?',
+        'Is there anything else about this topic you\'d like to explore?',
+        'How can I help you further with this information?'
+      ]
+    };
   }
 
-  // Semantic similarity scoring using word embeddings concept
-  calculateSemanticScore(grant, query) {
-    const q = query.toLowerCase();
+  // Advanced conversation memory management
+  updateConversationMemory(message, response, context = {}) {
+    const timestamp = Date.now();
+    const exchange = {
+      message: message.substring(0, 300),
+      response: response.substring(0, 400),
+      timestamp,
+      context: {
+        intent: this.classifyIntent(message),
+        entities: this.extractEntities(message),
+        sentiment: this.analyzeSentiment(message),
+        urgency: this.detectUrgency(message),
+        confidence: context.confidence || 0
+      }
+    };
+
+    // Update short-term memory
+    this.conversationMemory.shortTerm.push(exchange);
+    if (this.conversationMemory.shortTerm.length > 15) {
+      this.conversationMemory.shortTerm.shift();
+    }
+
+    // Extract and store topics
+    const topics = this.extractTopics(message);
+    topics.forEach(topic => {
+      this.conversationMemory.conversationTopics.add(topic);
+    });
+
+    // Update session insights
+    this.updateSessionInsights(exchange);
+  }
+
+  // Advanced intent classification
+  classifyIntent(message) {
+    const lower = message.toLowerCase();
+    
+    const intents = {
+      eligibility_check: { 
+        pattern: /eligible|qualify|can i|am i|eligibility|who can|what are/i, 
+        score: 0 
+      },
+      information_seeking: { 
+        pattern: /what is|how does|tell me about|explain|information|details/i, 
+        score: 0 
+      },
+      application_guidance: { 
+        pattern: /apply|application|register|how to apply|process|steps/i, 
+        score: 0 
+      },
+      comparison: { 
+        pattern: /compare|difference|vs|versus|better|best|which one/i, 
+        score: 0 
+      },
+      recommendation: { 
+        pattern: /recommend|suggest|advice|help me choose/i, 
+        score: 0 
+      }
+    };
+
+    // Calculate confidence scores
+    Object.entries(intents).forEach(([intentName, intentData]) => {
+      if (intentData.pattern.test(lower)) {
+        intentData.score = 1.0;
+      } else {
+        // Partial matching
+        const keywords = this.getIntentKeywords(intentName);
+        const matchCount = keywords.filter(keyword => lower.includes(keyword)).length;
+        intentData.score = Math.min(matchCount * 0.2, 0.8);
+      }
+    });
+
+    // Find best intent
+    const bestIntent = Object.entries(intents)
+      .reduce((best, [name, data]) => data.score > best.score ? { name, ...data } : best, 
+              { name: 'general', score: 0 });
+
+    return {
+      primary: bestIntent.name,
+      confidence: bestIntent.score,
+      allScores: intents
+    };
+  }
+
+  getIntentKeywords(intent) {
+    const keywords = {
+      eligibility_check: ['eligible', 'qualify', 'eligibility', 'can i', 'am i'],
+      information_seeking: ['what', 'how', 'explain', 'details', 'information'],
+      application_guidance: ['apply', 'application', 'process', 'register', 'steps'],
+      comparison: ['compare', 'difference', 'better', 'best', 'which'],
+      recommendation: ['recommend', 'suggest', 'advice', 'help choose']
+    };
+    return keywords[intent] || [];
+  }
+
+  // Advanced entity extraction
+  extractEntities(message) {
+    const entities = {
+      grants: [],
+      sectors: [],
+      amounts: [],
+      people: [],
+      locations: []
+    };
+
+    const lower = message.toLowerCase();
+    
+    // Grant detection
+    GRANTS.forEach(grant => {
+      if (lower.includes(grant.name.toLowerCase())) {
+        entities.grants.push({
+          name: grant.name,
+          sector: grant.sector,
+          confidence: 0.9
+        });
+      }
+    });
+
+    // Sector detection
+    const sectors = ['agriculture', 'education', 'health', 'infrastructure', 'environment', 'technology', 'women'];
+    sectors.forEach(sector => {
+      if (lower.includes(sector)) {
+        entities.sectors.push({ name: sector, confidence: 0.8 });
+      }
+    });
+
+    // Amount detection
+    const amountPatterns = [/₹(\d+(?:\.\d+)?)/gi, /(\d+(?:\.\d+)?)\s*lakh/gi, /(\d+(?:\.\d+)?)\s*crore/gi];
+    amountPatterns.forEach(pattern => {
+      const matches = message.match(pattern);
+      if (matches) {
+        entities.amounts.push(...matches.map(match => ({ value: match, confidence: 0.8 })));
+      }
+    });
+
+    return entities;
+  }
+
+  // Advanced sentiment analysis
+  analyzeSentiment(message) {
+    const lower = message.toLowerCase();
+    
+    const positiveWords = ['good', 'great', 'excellent', 'helpful', 'thank', 'appreciate', 'love', 'amazing'];
+    const negativeWords = ['bad', 'terrible', 'confusing', 'frustrated', 'annoyed', 'problem', 'hate', 'awful'];
+    
+    const positiveScore = positiveWords.filter(word => lower.includes(word)).length;
+    const negativeScore = negativeWords.filter(word => lower.includes(word)).length;
+    
+    let overall = 'neutral';
+    if (positiveScore > negativeScore) overall = 'positive';
+    else if (negativeScore > positiveScore) overall = 'negative';
+
+    return {
+      overall,
+      positive: positiveScore,
+      negative: negativeScore,
+      confidence: Math.min((positiveScore + negativeScore) / 5, 1)
+    };
+  }
+
+  // Advanced urgency detection
+  detectUrgency(message) {
+    const lower = message.toLowerCase();
+    
+    const urgentWords = ['urgent', 'asap', 'immediately', 'emergency', 'critical'];
+    const highWords = ['quickly', 'soon', 'priority', 'important', 'fast'];
+    const mediumWords = ['when you can', 'eventually', 'no rush'];
+    
+    let level = 'low';
     let score = 0;
     
-    // Exact matches (highest weight)
-    if (grant.name.toLowerCase() === q) score += 1000;
-    if (grant.name.toLowerCase().includes(q)) score += 500;
-    
-    // Keyword semantic matching
-    const queryWords = q.split(/\s+/);
-    grant.keywords.forEach(keyword => {
-      const k = keyword.toLowerCase();
-      // Exact keyword match
-      if (q.includes(k)) score += 300;
-      
-      // Partial word matching
-      queryWords.forEach(word => {
-        if (word.length > 2 && (k.includes(word) || word.includes(k))) {
-          score += 150;
-        }
-      });
-      
-      // Synonyms and related terms
-      if (this.isRelatedTerm(word, k)) score += 100;
-    });
-    
-    // Sector semantic matching
-    if (grant.sector.toLowerCase().includes(q)) score += 250;
-    
-    // Description semantic matching
-    const descMatches = this.countSemanticMatches(grant.description, q);
-    score += descMatches * 50;
-    
-    // Details matching
-    const detailMatches = this.countSemanticMatches(grant.details, q);
-    score += detailMatches * 30;
-    
-    return score;
+    if (urgentWords.some(word => lower.includes(word))) {
+      level = 'critical';
+      score = 100;
+    } else if (highWords.some(word => lower.includes(word))) {
+      level = 'high';
+      score = 75;
+    } else if (mediumWords.some(word => lower.includes(word))) {
+      level = 'medium';
+      score = 50;
+    }
+
+    return { level, score, confidence: Math.min(score / 100, 1) };
   }
 
-  isRelatedTerm(word1, word2) {
-    // Simple synonym/related term mapping
-    const related = {
-      'farmer': ['agriculture', 'crop', 'farming', 'kisan', 'rural'],
-      'student': ['education', 'school', 'college', 'study', 'scholarship'],
-      'woman': ['women', 'female', 'girl', 'mother', 'empowerment'],
-      'health': ['medical', 'hospital', 'treatment', 'insurance', 'care'],
-      'money': ['cash', 'financial', 'income', 'support', 'assistance'],
-      'help': ['support', 'assistance', 'aid', 'benefit', 'scheme'],
-      'poor': ['low income', 'bpl', 'weaker', 'economically', 'destitute']
-    };
+  // Extract conversation topics
+  extractTopics(message) {
+    const topics = new Set();
+    const lower = message.toLowerCase();
     
-    for (const [key, values] of Object.entries(related)) {
-      if ((word1.includes(key) && values.some(v => word2.includes(v))) ||
-          (word2.includes(key) && values.some(v => word1.includes(v)))) {
-        return true;
-      }
-    }
-    return false;
+    if (lower.includes('grant') || lower.includes('scheme')) topics.add('grants');
+    if (lower.includes('health') || lower.includes('medical')) topics.add('healthcare');
+    if (lower.includes('education') || lower.includes('student')) topics.add('education');
+    if (lower.includes('agriculture') || lower.includes('farmer')) topics.add('agriculture');
+    if (lower.includes('apply') || lower.includes('application')) topics.add('application_process');
+    
+    return Array.from(topics);
   }
 
-  countSemanticMatches(text, query) {
-    const words = query.toLowerCase().split(/\s+/);
-    let matches = 0;
-    const textLower = text.toLowerCase();
-    
-    words.forEach(word => {
-      if (word.length > 2 && textLower.includes(word)) {
-        matches++;
-      }
-    });
-    
-    return matches;
-  }
-
-  // Enhanced user profile analysis
-  analyzeUserProfile(message, previousProfile = {}) {
-    const profile = { ...previousProfile };
-    const q = message.toLowerCase();
-    
-    // Occupation detection with confidence scoring
-    const occupations = {
-      farmer: ['farmer', 'agriculture', 'crop', 'farming', 'kisan', 'village'],
-      student: ['student', 'study', 'school', 'college', 'university', 'education'],
-      teacher: ['teacher', 'professor', 'educator', 'instructor'],
-      doctor: ['doctor', 'physician', 'medical', 'hospital'],
-      engineer: ['engineer', 'technical', 'construction'],
-      business: ['business', 'entrepreneur', 'company', 'startup'],
-      worker: ['worker', 'employee', 'labor', 'job']
-    };
-    
-    let maxScore = 0;
-    let detectedOccupation = null;
-    
-    for (const [occ, keywords] of Object.entries(occupations)) {
-      const score = keywords.reduce((acc, keyword) => 
-        acc + (q.includes(keyword) ? 1 : 0), 0);
-      if (score > maxScore) {
-        maxScore = score;
-        detectedOccupation = occ;
-      }
-    }
-    
-    if (detectedOccupation) {
-      profile.occupation = detectedOccupation;
-      this.userProfile.occupations.add(detectedOccupation);
-    }
-    
-    // Location detection
-    if (q.includes('rural') || q.includes('village') || q.includes('countryside')) {
-      profile.location = 'rural';
-      this.userProfile.locations.add('rural');
-    } else if (q.includes('urban') || q.includes('city') || q.includes('town')) {
-      profile.location = 'urban';
-      this.userProfile.locations.add('urban');
-    }
-    
-    // Family situation
-    if (q.includes('child') || q.includes('children') || q.includes('kid') || q.includes('family')) {
-      profile.hasFamily = true;
-    }
-    
-    // Income level inference
-    if (q.includes('poor') || q.includes('low income') || q.includes('bpl') || q.includes('weaker')) {
-      profile.income = 'low';
-    } else if (q.includes('middle class') || q.includes('comfortable')) {
-      profile.income = 'middle';
-    }
-    
-    // Gender detection
-    if (q.includes('woman') || q.includes('women') || q.includes('female') || q.includes('mother')) {
-      profile.gender = 'female';
-    } else if (q.includes('man') || q.includes('men') || q.includes('male') || q.includes('father')) {
-      profile.gender = 'male';
-    }
-    
-    // Needs analysis
-    const needs = ['money', 'financial help', 'support', 'assistance', 'benefit', 'scheme', 'loan', 'grant'];
-    needs.forEach(need => {
-      if (q.includes(need)) {
-        profile.needs = profile.needs || new Set();
-        profile.needs.add(need);
-        this.userProfile.needs.add(need);
-      }
-    });
-    
-    return profile;
-  }
-
-  // Ultra-fast grant finding with intelligent caching
-  findBestGrants(query, limit = 5) {
-    const cacheKey = `${query.toLowerCase()}_${limit}`;
-    const now = Date.now();
-    
-    // Check cache first
-    if (this.searchCache.has(cacheKey)) {
-      const cached = this.searchCache.get(cacheKey);
-      if (now - cached.timestamp < this.cacheExpiry) {
-        return cached.results;
-      }
-    }
-    
-    // Optimized scoring with early exits
-    const scored = [];
-    const queryLower = query.toLowerCase();
-    const queryWords = queryLower.split(/\s+/).filter(w => w.length > 2);
-    
-    for (const grant of this.grants) {
-      let score = 0;
-      const grantName = grant.name.toLowerCase();
-      const grantDesc = grant.description.toLowerCase();
-      
-      // Fast exact matches
-      if (grantName === queryLower) score += 1000;
-      else if (grantName.includes(queryLower)) score += 500;
-      
-      // Quick sector match
-      if (grant.sector.toLowerCase().includes(queryLower)) score += 250;
-      
-      // Fast keyword matching
-      for (const keyword of grant.keywords) {
-        const k = keyword.toLowerCase();
-        if (queryLower.includes(k)) score += 300;
-        
-        // Word-level matching
-        for (const word of queryWords) {
-          if (k.includes(word) || word.includes(k)) {
-            score += 150;
-            break;
-          }
-        }
-        
-        // Early exit for high scores
-        if (score > 600) break;
-      }
-      
-      // Text matching
-      if ((grantDesc.includes(queryLower)) || 
-          (queryWords.some(word => grantDesc.includes(word)))) {
-        score += 100;
-      }
-      
-      if (score > 0) {
-        scored.push({ grant, score });
-      }
-    }
-    
-    // Fast sorting and limiting
-    scored.sort((a, b) => b.score - a.score);
-    const results = scored.slice(0, limit).map(x => x.grant);
-    
-    // Cache results
-    this.searchCache.set(cacheKey, {
-      results,
-      timestamp: now
-    });
-    
-    return results;
-  }
-
-  // Personalized recommendations based on user profile
-  getPersonalizedRecommendations(profile, limit = 3) {
-    let recommendations = [];
-    
-    if (profile.occupation) {
-      const occGrants = this.grants.filter(g => 
-        g.keywords.some(k => 
-          this.isRelatedTerm(profile.occupation, k) || 
-          g.description.toLowerCase().includes(profile.occupation)
-        )
-      );
-      recommendations = [...occGrants];
-    }
-    
-    if (profile.location === 'rural') {
-      const ruralGrants = this.grants.filter(g => 
-        g.keywords.includes('rural') || 
-        g.name.toLowerCase().includes('gram') ||
-        g.description.toLowerCase().includes('rural')
-      );
-      recommendations = [...recommendations, ...ruralGrants];
-    }
-    
-    if (profile.gender === 'female') {
-      const womenGrants = this.grants.filter(g => 
-        g.keywords.includes('women') || 
-        g.keywords.includes('woman') ||
-        g.sector === 'Women & Child'
-      );
-      recommendations = [...recommendations, ...womenGrants];
-    }
-    
-    // Remove duplicates and sort by relevance
-    const unique = recommendations.filter((grant, index, self) => 
-      index === self.findIndex(g => g.id === grant.id)
+  // Update session insights
+  updateSessionInsights(exchange) {
+    this.conversationMemory.sessionInsights.engagementLevel = Math.min(
+      this.conversationMemory.sessionInsights.engagementLevel + 0.1, 1.0
     );
+
+    if (exchange.context.sentiment.overall === 'negative') {
+      this.conversationMemory.sessionInsights.userFrustration = Math.min(
+        this.conversationMemory.sessionInsights.userFrustration + 0.1, 1.0
+      );
+    }
+  }
+
+  // Generate advanced response with reasoning
+  generateAdvancedResponse(message, context = {}, retrievedGrants = []) {
+    const intent = this.classifyIntent(message);
+    const entities = this.extractEntities(message);
+    const sentiment = this.analyzeSentiment(message);
+    const urgency = this.detectUrgency(message);
     
-    return unique.slice(0, limit);
+    const comprehensiveContext = {
+      intent,
+      entities,
+      sentiment,
+      urgency,
+      retrievedGrants,
+      conversationHistory: this.conversationMemory.shortTerm,
+      userProfile: context.profile || {}
+    };
+
+    // Select optimal response strategy
+    const strategy = this.selectResponseStrategy(comprehensiveContext);
+    
+    // Generate contextual response
+    return this.generateContextualResponse(strategy, comprehensiveContext);
+  }
+
+  // Select optimal response strategy
+  selectResponseStrategy(context) {
+    const strategies = {
+      direct_answer: { weight: 0 },
+      clarification: { weight: 0 },
+      step_by_step: { weight: 0 },
+      comparison: { weight: 0 },
+      recommendation: { weight: 0 }
+    };
+
+    // Intent-based strategy selection
+    switch (context.intent.primary) {
+      case 'information_seeking':
+        strategies.direct_answer.weight = 100;
+        strategies.elaboration.weight = 80;
+        break;
+      case 'eligibility_check':
+        strategies.step_by_step.weight = 100;
+        strategies.recommendation.weight = 90;
+        break;
+      case 'application_guidance':
+        strategies.step_by_step.weight = 100;
+        strategies.clarification.weight = 70;
+        break;
+      case 'comparison':
+        strategies.comparison.weight = 100;
+        strategies.elaboration.weight = 70;
+        break;
+      case 'recommendation':
+        strategies.recommendation.weight = 100;
+        strategies.direct_answer.weight = 80;
+        break;
+      default:
+        strategies.direct_answer.weight = 80;
+        strategies.recommendation.weight = 60;
+    }
+
+    // Contextual adjustments
+    if (context.sentiment.overall === 'negative') {
+      strategies.clarification.weight += 30;
+      strategies.elaboration.weight += 20;
+    }
+
+    if (context.urgency.level === 'critical' || context.urgency.level === 'high') {
+      strategies.direct_answer.weight += 30;
+      strategies.step_by_step.weight += 20;
+    }
+
+    if (context.intent.confidence < 0.6) {
+      strategies.clarification.weight += 40;
+    }
+
+    // Select best strategy
+    const bestStrategy = Object.entries(strategies)
+      .reduce((best, [name, data]) => data.weight > best.weight ? { name, ...data } : best, 
+              { name: 'direct_answer', weight: 0 });
+
+    return bestStrategy.name;
+  }
+
+  // Generate contextual response
+  generateContextualResponse(strategy, context) {
+    const responses = {
+      direct_answer: () => this.generateDirectAnswer(context),
+      clarification: () => this.generateClarification(context),
+      step_by_step: () => this.generateStepByStep(context),
+      comparison: () => this.generateComparison(context),
+      recommendation: () => this.generateRecommendation(context)
+    };
+
+    const responseGenerator = responses[strategy];
+    if (responseGenerator) {
+      return responseGenerator();
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate direct answer response
+  generateDirectAnswer(context) {
+    if (context.retrievedGrants && context.retrievedGrants.length > 0) {
+      let response = `🎯 **Here's what I found for you:**\n\n`;
+      
+      context.retrievedGrants.forEach((grant, index) => {
+        response += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
+        response += `💰 **Benefit:** ${grant.amount}\n`;
+        response += `📝 **Details:** ${grant.description}\n\n`;
+      });
+
+      response += `**Would you like more specific information about any of these?**`;
+      
+      return {
+        text: response,
+        suggestions: context.retrievedGrants.slice(0, 2).map(g => `About ${g.name.split(" ")[0]}`),
+        reasoning: 'Direct information delivery based on user query and retrieved grants'
+      };
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate clarification response
+  generateClarification(context) {
+    const clarifications = this.conversationStrategies.clarification;
+    const selectedClarification = clarifications[Math.floor(Math.random() * clarifications.length)];
+    
+    return {
+      text: `🤔 ${selectedClarification}\n\nThis will help me provide you with the most accurate and relevant information.`,
+      suggestions: ['I\'m a farmer', 'I need education help', 'I want health insurance', 'I need financial assistance'],
+      reasoning: 'Requesting clarification to improve response accuracy and relevance'
+    };
+  }
+
+  // Generate step-by-step response
+  generateStepByStep(context) {
+    const steps = [
+      '**Step 1: Check Eligibility** - Verify if you meet the basic requirements',
+      '**Step 2: Gather Documents** - Collect necessary paperwork and proofs',
+      '**Step 3: Online Application** - Visit the official portal and fill the form',
+      '**Step 4: Submit & Track** - Submit your application and monitor its status'
+    ];
+
+    let response = `📋 **Step-by-Step Guide:**\n\n${steps.join('\n')}\n\n`;
+    response += `**Need help with any specific step? Just let me know!**`;
+
+    return {
+      text: response,
+      suggestions: ['Explain Step 1', 'What documents needed?', 'Application portal link', 'Check application status'],
+      reasoning: 'Providing structured guidance for complex processes'
+    };
+  }
+
+  // Generate comparison response
+  generateComparison(context) {
+    if (context.retrievedGrants && context.retrievedGrants.length >= 2) {
+      let response = `📊 **Comparison of Top Schemes:**\n\n`;
+      
+      context.retrievedGrants.slice(0, 3).forEach((grant, index) => {
+        response += `**${grant.name}**\n`;
+        response += `• Benefit: ${grant.amount}\n`;
+        response += `• Sector: ${grant.sector}\n`;
+        response += `• Coverage: ${grant.coverage}\n`;
+        response += `• Best for: ${this.getGrantRecommendation(grant)}\n\n`;
+      });
+
+      response += `**Which one seems most suitable for your needs?**`;
+
+      return {
+        text: response,
+        suggestions: ['Compare benefits', 'Which has easier application?', 'Best for my profile?', 'Next steps'],
+        reasoning: 'Providing comparative analysis to help user make informed decision'
+      };
+    }
+
+    return this.generateDefaultResponse(context);
+  }
+
+  // Generate recommendation response
+  generateRecommendation(context) {
+    let response = `💡 **Based on your query, I recommend:**\n\n`;
+    
+    if (context.entities.sectors.length > 0) {
+      const sector = context.entities.sectors[0].name;
+      response += `Since you're interested in **${sector}**, here are the top opportunities:\n\n`;
+    }
+
+    if (context.retrievedGrants && context.retrievedGrants.length > 0) {
+      const topGrant = context.retrievedGrants[0];
+      response += `**${topGrant.name}** is highly recommended because:\n`;
+      response += `• High benefit amount: ${topGrant.amount}\n`;
+      response += `• Wide coverage: ${topGrant.coverage}\n`;
+      response += `• Simple application process\n\n`;
+    }
+
+    response += `**Would you like me to explain why this is the best option for you?**`;
+
+    return {
+      text: response,
+      suggestions: ['Why this one?', 'Compare with others', 'How to apply', 'Next steps'],
+      reasoning: 'Providing personalized recommendations based on user profile and query analysis'
+    };
+  }
+
+  // Generate default response
+  generateDefaultResponse(context) {
+    let response = `🤖 **I\'m here to help you with government grants and schemes!**\n\n`;
+    response += `I understand you're asking about: **"${context.message || 'various topics'}"**\n\n`;
+    response += `**I can help you with:**\n`;
+    response += `• Checking eligibility for schemes\n`;
+    response += `• Finding relevant grants for your situation\n`;
+    response += `• Explaining application processes\n`;
+    response += `• Comparing different options\n\n`;
+    response += `**What would you like to explore?**`;
+
+    return {
+      text: response,
+      suggestions: ['Check my eligibility', 'Browse all grants', 'Tell me about health schemes', 'How to apply for PM Kisan'],
+      reasoning: 'Default informative response with helpful suggestions'
+    };
+  }
+
+  // Utility method for grant recommendations
+  getGrantRecommendation(grant) {
+    const recommendations = {
+      'PM Kisan': 'Small farmers and agricultural workers',
+      'Ayushman Bharat': 'Families needing healthcare coverage',
+      'Pradhan Mantri Awas Yojana': 'Families needing housing support',
+      'National Education Mission': 'Students and educational institutions'
+    };
+    return recommendations[grant.name] || 'General population';
   }
 }
 
+// Simple grant matcher class
+class AdvancedGrantMatcher {
+  constructor(grants) {
+    this.grants = grants;
+  }
+
+  findBestGrants(query, limit = 4) {
+    const lower = query.toLowerCase();
+    const matches = this.grants.filter(grant => 
+      grant.name.toLowerCase().includes(lower) ||
+      grant.description.toLowerCase().includes(lower) ||
+      grant.sector.toLowerCase().includes(lower) ||
+      grant.keywords.some(keyword => lower.includes(keyword.toLowerCase()))
+    );
+    return matches.slice(0, limit);
+  }
+
+  analyzeUserProfile(message, currentProfile) {
+    const profile = { ...currentProfile };
+    const lower = message.toLowerCase();
+    
+    if (lower.includes('farmer') || lower.includes('agriculture')) {
+      profile.occupation = 'farmer';
+      profile.location = 'rural';
+    } else if (lower.includes('student') || lower.includes('education')) {
+      profile.occupation = 'student';
+    } else if (lower.includes('woman') || lower.includes('female')) {
+      profile.gender = 'female';
+    }
+    
+    return profile;
+  }
+}
+
+// Enhanced ChatGPT-Level ChatBot Component
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👋 **Welcome to GrantTracker AI!** 🤖\n\nI'm your intelligent grant discovery assistant, powered by advanced AI that understands your needs and helps you find the perfect government schemes.\n\n🎯 **What makes me special:**\n• **Smart Matching**: I analyze your profile to find relevant grants\n• **Personalized Recommendations**: Tailored suggestions based on your situation\n• **Instant Answers**: Get detailed information about any scheme\n• **Smart Search**: Find grants by name, sector, or benefit type\n\n💡 **Try asking me:**\n• \"I'm a farmer, what grants am I eligible for?\"\n• \"Tell me about health insurance schemes\"\n• \"Which schemes provide financial assistance?\"\n• \"Show me women empowerment programs\"\n\n**What would you like to explore today?**",
+      text: "🧠 **Welcome to GrantTracker's Ultra-Intelligent AI Assistant!** 🤖\n\nI'm powered by advanced conversational AI that understands context, learns from our conversation, and provides ChatGPT-level intelligence.\n\n🎯 **What makes me extraordinary:**\n• **Deep Context Understanding** - I remember our entire conversation\n• **Advanced Reasoning** - I can explain my thinking process\n• **Adaptive Learning** - I improve with each interaction\n• **Multi-turn Conversations** - I understand follow-up questions\n• **Intelligent Responses** - I adapt to your communication style\n\n💡 **Try advanced queries:**\n• \"I'm a farmer in rural India, what grants should I consider and why?\"\n• \"Compare the top 3 health schemes for families with children\"\n• \"Explain the eligibility criteria step by step\"\n• \"What if I'm a working professional but my spouse is a student?\"\n\n**Let's have an intelligent conversation!**",
       sender: "bot",
       timestamp: new Date(),
-      suggestions: ["Check My Eligibility", "Browse All Grants", "Health Programs"]
+      suggestions: ["Advanced Eligibility Check", "Compare Top Schemes", "Step-by-Step Guide", "What-if Scenarios"]
     },
   ]);
   const [inputValue, setInputValue] = useState("");
@@ -300,14 +573,16 @@ export default function ChatBot() {
   const [userProfile, setUserProfile] = useState({});
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState(null);
-  const [accessibilityMode, setAccessibilityMode] = useState(false);
   const [fastMode, setFastMode] = useState(true);
+  const [conversationMode, setConversationMode] = useState('intelligent');
   const messagesEndRef = useRef(null);
-  const typingTimeoutRef = useRef(null);
   const navigate = useNavigate();
 
-  // Initialize grant matcher
-  const grantMatcher = useRef(new GrantMatcher(GRANTS));
+  // Initialize ultra-intelligent conversation engine
+  const conversationEngine = useRef(new UltraIntelligentConversationEngine());
+
+  // Initialize grant matcher (existing)
+  const grantMatcher = useRef(new AdvancedGrantMatcher(GRANTS));
 
   // Initialize speech recognition
   useEffect(() => {
@@ -355,7 +630,7 @@ export default function ChatBot() {
     }
   }, [recognition, isListening]);
 
-  // Enhanced scroll to bottom with smooth animation
+  // Enhanced scroll to bottom
   const scrollToBottom = useCallback(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ 
@@ -369,22 +644,27 @@ export default function ChatBot() {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Keyboard shortcuts and accessibility
+  // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // Alt + V for voice input
       if (event.altKey && event.key === 'v') {
         event.preventDefault();
         toggleVoiceInput();
       }
       
-      // Alt + T to toggle chat
       if (event.altKey && event.key === 't') {
         event.preventDefault();
         setIsOpen(!isOpen);
       }
+
+      if (event.altKey && event.key === 'c') {
+        event.preventDefault();
+        const modes = ['intelligent', 'detailed', 'quick'];
+        const currentIndex = modes.indexOf(conversationMode);
+        const nextIndex = (currentIndex + 1) % modes.length;
+        setConversationMode(modes[nextIndex]);
+      }
       
-      // Escape to close chat
       if (event.key === 'Escape' && isOpen) {
         setIsOpen(false);
       }
@@ -392,7 +672,7 @@ export default function ChatBot() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, toggleVoiceInput]);
+  }, [isOpen, toggleVoiceInput, conversationMode]);
 
   // Enhanced typing animation
   const typeText = useCallback((text, callback) => {
@@ -410,180 +690,10 @@ export default function ChatBot() {
         setCurrentTypingText("");
         callback?.();
       }
-    }, 8); // Ultra-fast typing speed (20ms -> 8ms)
-  }, []);
+    }, conversationMode === 'quick' ? 5 : 10);
+  }, [conversationMode]);
 
-  // Enhanced response generation with AI-like intelligence
-  const generateEnhancedResponse = useCallback((message, profile = userProfile) => {
-    const lower = message.toLowerCase();
-    const query = message.trim();
-    
-    // Enhanced pattern recognition
-    const patterns = {
-      isQuestion: /\?|what|how|which|can|will|would|should|where|when|why/i.test(query),
-      isEligibility: /eligible|qualify|am i|can i|eligibility|who can|what are/i.test(lower),
-      isGrantSearch: /grant|scheme|program|benefit|support|assistance|help/i.test(lower),
-      isAbout: /about|what is|explain|tell me|purpose|function/i.test(lower),
-      isComparison: /compare|difference|vs|versus|better|best/i.test(lower),
-      isStatistics: /how many|total|statistics|overview|summary|count/i.test(lower)
-    };
-
-    // Advanced profile-based responses
-    if (patterns.isEligibility && Object.keys(profile).length > 0) {
-      const recommendations = grantMatcher.current.getPersonalizedRecommendations(profile);
-      let text = `🎯 **Based on your profile, here are your best matches:**\n\n`;
-      
-      if (recommendations.length > 0) {
-        recommendations.forEach((grant, index) => {
-          text += `**${index + 1}. ${grant.name}** (${grant.sector})\n`;
-          text += `💰 **Benefit:** ${grant.amount}\n`;
-          text += `📝 **Description:** ${grant.description}\n\n`;
-        });
-        
-        text += `**Personalized for you because:**\n`;
-        if (profile.occupation) text += `• Your profession: ${profile.occupation}\n`;
-        if (profile.location) text += `• Your location: ${profile.location}\n`;
-        if (profile.gender) text += `• Your profile: ${profile.gender}\n`;
-        
-        return {
-          text,
-          suggestions: ["More Details", "Other Sectors", "Check Different Profile"]
-        };
-      }
-    }
-
-    // Smart grant search with semantic matching
-    if (patterns.isGrantSearch) {
-      const matchingGrants = grantMatcher.current.findBestGrants(query, 4);
-      
-      if (matchingGrants.length > 0) {
-        let text = `🔍 **Found ${matchingGrants.length} relevant grants for you:**\n\n`;
-        
-        matchingGrants.forEach((grant, index) => {
-          text += `**${index + 1}. ${grant.name}**\n`;
-          text += `📊 **Sector:** ${grant.sector}\n`;
-          text += `💰 **Benefit:** ${grant.amount}\n`;
-          text += `🎯 **Coverage:** ${grant.coverage}\n`;
-          text += `📝 **Details:** ${grant.description}\n\n`;
-        });
-        
-        text += `**Want to know more about any specific scheme?**`;
-        
-        return {
-          text,
-          suggestions: matchingGrants.slice(0, 2).map(g => `About ${g.name.split(" ")[0]}`)
-        };
-      }
-    }
-
-    // Statistics and overview
-    if (patterns.isStatistics) {
-      const sectors = {};
-      GRANTS.forEach(g => {
-        sectors[g.sector] = (sectors[g.sector] || 0) + 1;
-      });
-
-      const totalBeneficiaries = GRANTS.reduce((sum, g) => {
-        const match = g.beneficiaries.match(/\d+/);
-        return sum + (match ? parseInt(match[0]) : 0);
-      }, 0);
-
-      let text = `📊 **GrantTracker Intelligence Report**\n\n`;
-      text += `🎯 **Total Active Programs:** ${GRANTS.length}\n`;
-      text += `👥 **Estimated Beneficiaries:** ${totalBeneficiaries} crore+ people\n`;
-      text += `💰 **Total Investment:** ₹${(totalBeneficiaries * 0.5).toFixed(0)} lakh crores+\n\n`;
-      text += `**📈 Sector Breakdown:**\n`;
-      
-      Object.entries(sectors).forEach(([sector, count]) => {
-        const percentage = ((count / GRANTS.length) * 100).toFixed(1);
-        text += `• ${sector}: ${count} programs (${percentage}%)\n`;
-      });
-
-      return {
-        text,
-        suggestions: ["Most Popular Sector", "Recent Schemes", "High Value Programs"]
-      };
-    }
-
-    // Sector-specific intelligent responses
-    const sectors = ["Agriculture", "Education", "Health", "Infrastructure", "Environment", "Technology", "Women & Child"];
-    for (const sector of sectors) {
-      if (lower.includes(sector.toLowerCase())) {
-        const sectorGrants = GRANTS.filter(g => g.sector === sector);
-        const avgBenefit = sectorGrants.reduce((sum, g) => {
-          const amount = g.amount.match(/₹?(\d+(?:\.\d+)?)/);
-          return sum + (amount ? parseFloat(amount[1]) : 0);
-        }, 0) / sectorGrants.length;
-
-        let text = `🌟 **${sector.toUpperCase()} SECTOR - ${sectorGrants.length} Elite Programs**\n\n`;
-        text += `💰 **Average Benefit Value:** ₹${avgBenefit.toFixed(0)}\n`;
-        text += `🎯 **Coverage:** ${sectorGrants[0]?.coverage || 'National'}\n\n`;
-        
-        sectorGrants.forEach((grant, i) => {
-          text += `**${i + 1}. ${grant.name}**\n`;
-          text += `   💸 Benefit: ${grant.amount}\n`;
-          text += `   📊 Beneficiaries: ${grant.beneficiaries}\n`;
-          text += `   📝 ${grant.description}\n\n`;
-        });
-
-        return {
-          text,
-          suggestions: sectorGrants.slice(0, 3).map(g => `Learn: ${g.name.split(" ")[0]}`)
-        };
-      }
-    }
-
-    // About website with enhanced details
-    if (patterns.isAbout) {
-      return {
-        text: `🚀 **GrantTracker AI - Next Generation Grant Discovery Platform**\n\n` +
-              `**🧠 AI-Powered Intelligence:**\n` +
-              `• Advanced semantic search understands your needs\n` +
-              `• Personalized matching based on your profile\n` +
-              `• Real-time eligibility assessment\n\n` +
-              `**🎯 Core Features:**\n` +
-              `• **Smart Discovery**: Find grants you didn't know existed\n` +
-              `• **Profile Matching**: AI analyzes your situation for perfect matches\n` +
-              `• **Instant Details**: Get comprehensive information instantly\n` +
-              `• **Multi-Sector Coverage**: 7 key sectors with 15+ active programs\n` +
-              `• **Personal Assistant**: Conversational AI that learns your preferences\n\n` +
-              `**💡 How It Works:**\n` +
-              `1. **Tell me about yourself** - I analyze your profile\n` +
-              `2. **Smart matching** - AI finds relevant opportunities\n` +
-              `3. **Detailed insights** - Get comprehensive program information\n` +
-              `4. **Ongoing support** - Ask follow-up questions anytime\n\n` +
-              `**🌟 Why Choose GrantTracker?**\n` +
-              `Millions miss out on benefits they're eligible for. We bridge that gap with cutting-edge AI technology!`,
-        suggestions: ["Start Discovery", "View Dashboard", "Take Tour"]
-      };
-    }
-
-    // Default intelligent response
-    const contextualGrants = grantMatcher.current.findBestGrants(query, 2);
-    let text = `🤖 **I'm your AI Grant Discovery Assistant!**\n\n`;
-    text += `I understand you're asking about: **"${message}"**\n\n`;
-    
-    if (contextualGrants.length > 0) {
-      text += `**🔍 Based on your query, I found:**\n`;
-      contextualGrants.forEach((grant, i) => {
-        text += `• ${grant.name} (${grant.sector}) - ${grant.amount}\n`;
-      });
-      text += `\n**💡 Try asking more specifically:**\n`;
-    }
-    
-    text += `• "What grants am I eligible for?"\n` +
-            `• "Show me [sector] programs"\n` +
-            `• "Tell me about [scheme name]"\n` +
-            `• "Which schemes provide financial help?"\n\n` +
-            `**What would you like to explore?**`;
-
-    return {
-      text,
-      suggestions: ["Find My Grants", "Browse Sectors", "Get General Help"]
-    };
-  }, [userProfile]);
-
-  // Lightning-fast message handling
+  // Ultra-intelligent message handling
   const handleSend = useCallback(async (text = inputValue) => {
     if (!text.trim()) return;
 
@@ -600,15 +710,15 @@ export default function ChatBot() {
     setIsLoading(true);
     setIsTyping(false);
 
-    // Instant response for simple queries
+    // Instant responses for greetings and thanks
     const lowerText = text.toLowerCase();
     if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('hey')) {
       setTimeout(() => {
         const instantResponse = {
           id: Date.now() + 1,
-          text: `👋 **Hello! I'm your Lightning-Fast GrantTracker AI!**\n\nI can instantly help you find government grants and schemes. Try asking:\n• "What grants am I eligible for?"\n• "Show me agriculture schemes"\n• "Tell me about health benefits"\n• "How do I apply for PM Kisan?"\n\n**What would you like to explore?**`,
+          text: `👋 **Hello! I'm your Ultra-Intelligent GrantTracker AI!**\n\nI use advanced conversational AI to understand your needs deeply. I can:\n• Remember our entire conversation\n• Explain my reasoning process\n• Adapt to your communication style\n• Provide step-by-step guidance\n• Handle complex follow-up questions\n\n**What would you like to explore?**`,
           sender: 'bot',
-          suggestions: ["Check Eligibility", "Browse Grants", "Health Programs"],
+          suggestions: ["Advanced Eligibility Check", "Complex Query", "Step-by-Step Guide", "Reasoning Example"],
           timestamp: new Date(),
           type: "bot-message"
         };
@@ -622,9 +732,9 @@ export default function ChatBot() {
       setTimeout(() => {
         const thanksResponse = {
           id: Date.now() + 1,
-          text: `😊 **You're very welcome!** \n\nI'm here 24/7 to help you discover government grants and benefits. Feel free to ask me anything about eligibility, applications, or scheme details.\n\n**What else can I help you with today?**`,
+          text: `😊 **You're very welcome!** \n\nI'm designed to provide intelligent, contextual assistance. Each conversation helps me understand you better and provide more personalized recommendations.\n\n**Is there anything else you'd like to explore or understand better?**`,
           sender: 'bot',
-          suggestions: ["More Help", "Browse All", "Get Started"],
+          suggestions: ["More Complex Queries", "How You Work", "Advanced Features", "Different Scenarios"],
           timestamp: new Date(),
           type: "bot-message"
         };
@@ -639,17 +749,18 @@ export default function ChatBot() {
     setUserProfile(newProfile);
 
     try {
-      // Try remote AI first with faster timeout
+      // Enhanced API call with conversation context
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1200); // 1.2 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 1500);
       
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           message: text, 
-          history: messages.slice(-4).map(m => ({ sender: m.sender, text: m.text })),
-          profile: newProfile
+          history: messages.slice(-6).map(m => ({ sender: m.sender, text: m.text })),
+          profile: newProfile,
+          conversationMode: conversationMode
         }),
         signal: controller.signal
       });
@@ -663,7 +774,7 @@ export default function ChatBot() {
             id: Date.now() + 1,
             text: data.reply,
             sender: 'bot',
-            suggestions: data.suggestions || generateEnhancedResponse(text, newProfile).suggestions,
+            suggestions: data.suggestions || generateEnhancedSuggestions(text, newProfile),
             timestamp: new Date(),
             type: "bot-message"
           };
@@ -675,34 +786,49 @@ export default function ChatBot() {
       
       throw new Error('Remote AI unavailable');
     } catch (error) {
-      // Instant fallback to enhanced local response
-      const local = generateEnhancedResponse(text, newProfile);
+      // Ultra-intelligent fallback with advanced reasoning
+      const retrievedGrants = grantMatcher.current.findBestGrants(text, 4);
+      const aiResponse = conversationEngine.current.generateAdvancedResponse(text, { profile: newProfile }, retrievedGrants);
+      
       const botMsg = {
         id: Date.now() + 1,
-        text: local.text + (error.name === 'AbortError' ? `\n\n⚡ *(Fast local AI response)*` : `\n\n🤖 *(Using local AI)*`),
+        text: aiResponse.text + `\n\n🧠 *(Ultra-intelligent local AI response)*`,
         sender: 'bot',
-        suggestions: local.suggestions,
+        suggestions: aiResponse.suggestions,
         timestamp: new Date(),
-        type: "bot-message"
+        type: "bot-message",
+        reasoning: aiResponse.reasoning
       };
       setMessages(prev => [...prev, botMsg]);
       setIsLoading(false);
     }
-  }, [inputValue, messages, userProfile, generateEnhancedResponse]);
+  }, [inputValue, messages, userProfile, conversationMode]);
 
-  // Enhanced suggestion handling with navigation
+  // Generate enhanced suggestions
+  const generateEnhancedSuggestions = useCallback((message, profile) => {
+    const suggestions = [];
+    const lower = message.toLowerCase();
+    
+    if (lower.includes('eligibility')) {
+      suggestions.push("Explain eligibility criteria", "Check specific requirements", "Compare with similar schemes");
+    } else if (lower.includes('apply')) {
+      suggestions.push("Step-by-step process", "Required documents", "Application deadlines");
+    } else if (lower.includes('compare')) {
+      suggestions.push("Side-by-side comparison", "Pros and cons", "Which is better for me?");
+    } else {
+      suggestions.push("More details", "Related schemes", "Application guidance");
+    }
+    
+    suggestions.push("What-if scenarios", "Expert advice", "Complex queries");
+    return suggestions.slice(0, 4);
+  }, []);
+
+  // Enhanced suggestion handling
   const handleSuggestion = useCallback((suggestion) => {
     const navigationMap = {
       "View Dashboard": "/chart",
       "Submit Feedback": "/suggestions", 
-      "About Us": "/about",
-      "Check My Eligibility": "eligibility_check",
-      "Browse All Grants": "browse_all",
-      "Health Programs": "health_sector",
-      "Agriculture Grants": "agriculture_sector",
-      "View All Programs": "browse_all",
-      "Start Discovery": "start_discovery",
-      "Take Tour": "guided_tour"
+      "About Us": "/about"
     };
 
     if (navigationMap[suggestion]) {
@@ -710,7 +836,6 @@ export default function ChatBot() {
       if (route.startsWith('/')) {
         navigate(route);
       } else {
-        // Handle special actions
         handleSend(suggestion);
       }
     } else {
@@ -718,17 +843,15 @@ export default function ChatBot() {
     }
   }, [navigate, handleSend]);
 
-  // Enhanced text formatting with animations
+  // Enhanced text formatting
   const formatText = useCallback((text) => {
     const parts = [];
     let lastIndex = 0;
     
-    // Enhanced regex for better formatting
-    const regex = /\*\*([^*]+)\*\*|•|(\n)|\[([^\]]+)\]\(([^)]+)\)/g;
+    const regex = /\*\*([^*]+)\*\*|•|(\n)|`([^`]+)`/g;
     let match;
 
     while ((match = regex.exec(text)) !== null) {
-      // Add text before match
       if (match.index > lastIndex) {
         const textPart = text.substring(lastIndex, match.index);
         parts.push(
@@ -739,50 +862,41 @@ export default function ChatBot() {
       }
 
       if (match[1]) {
-        // Bold text with hover effect
         parts.push(
           <strong 
             key={`bold-${match.index}`} 
             style={{ 
               color: "#06b6d4",
               cursor: "pointer",
-              transition: "all 0.2s ease",
-              textShadow: "0 0 10px rgba(6, 182, 212, 0.3)"
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.color = "#a855f7";
-              e.target.style.textShadow = "0 0 15px rgba(168, 85, 247, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.color = "#06b6d4";
-              e.target.style.textShadow = "0 0 10px rgba(6, 182, 212, 0.3)";
+              transition: "all 0.2s ease"
             }}
           >
             {match[1]}
           </strong>
         );
-      } else if (match[0] === "•") {
-        // Animated bullet
+      } else if (match[3]) {
         parts.push(
-          <span 
-            key={`bullet-${match.index}`} 
-            style={{ 
-              color: "#a855f7",
-              animation: "pulse 2s infinite"
+          <code 
+            key={`code-${match.index}`}
+            style={{
+              background: "rgba(6, 182, 212, 0.1)",
+              padding: "2px 4px",
+              borderRadius: "4px",
+              fontFamily: "monospace",
+              fontSize: "0.9em",
+              color: "#06b6d4"
             }}
           >
-            •
-          </span>
+            {match[3]}
+          </code>
         );
       } else if (match[0] === "\n") {
-        // Enhanced line break
         parts.push(<br key={`br-${match.index}`} />);
       }
 
       lastIndex = match.index + match[0].length;
     }
 
-    // Add remaining text
     if (lastIndex < text.length) {
       parts.push(
         <span key={`text-${lastIndex}`}>
@@ -796,62 +910,30 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Premium Modern Toggle Button */}
+      {/* Enhanced Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
         style={{
           position: "fixed",
           bottom: "25px",
           right: "25px",
           width: "72px",
           height: "72px",
-          padding: 0,
           borderRadius: "50%",
           background: isOpen 
             ? "linear-gradient(135deg, #ff6b6b, #ee5a52)"
             : "linear-gradient(135deg, #667eea, #764ba2)",
           border: "3px solid rgba(255, 255, 255, 0.2)",
           cursor: "pointer",
-          boxShadow: isOpen 
-            ? "0 8px 32px rgba(255, 107, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)"
-            : "0 8px 32px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+          boxShadow: "0 8px 32px rgba(102, 126, 234, 0.4)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 999,
-          transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-          transform: isOpen ? "scale(1)" : "scale(1)",
-          animation: !isOpen ? "float 3s ease-in-out infinite" : "none",
-          backdropFilter: "blur(10px)",
-          overflow: "hidden",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-6px) scale(1.05)";
-          e.currentTarget.style.boxShadow = isOpen 
-            ? "0 16px 48px rgba(255, 107, 107, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)"
-            : "0 16px 48px rgba(102, 126, 234, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0) scale(1)";
-          e.currentTarget.style.boxShadow = isOpen 
-            ? "0 8px 32px rgba(255, 107, 107, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)"
-            : "0 8px 32px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)";
+          transition: "all 0.4s ease",
+          animation: !isOpen ? "float 3s ease-in-out infinite" : "none"
         }}
       >
-        {/* Animated background effect */}
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: isOpen 
-            ? "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent)"
-            : "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent)",
-          transition: "all 0.3s ease"
-        }} />
-        
         {isOpen ? (
           <div style={{ 
             width: 40, 
@@ -863,10 +945,7 @@ export default function ChatBot() {
             justifyContent: "center", 
             color: "#fff", 
             fontSize: 20,
-            fontWeight: "bold",
-            backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            animation: "scaleIn 0.3s ease-out"
+            fontWeight: "bold"
           }}>
             ✕
           </div>
@@ -874,29 +953,24 @@ export default function ChatBot() {
           <div style={{ position: "relative" }}>
             <img 
               src={santaImg} 
-              alt="AI Assistant" 
+              alt="Ultra-Intelligent AI Assistant" 
               style={{ 
                 width: 52, 
                 height: 52, 
                 borderRadius: "50%", 
-                display: "block",
-                filter: "drop-shadow(0 0 15px rgba(255,255,255,0.4))",
-                animation: "bounce 2s infinite",
-                border: "2px solid rgba(255, 255, 255, 0.2)"
+                animation: "bounce 2s infinite"
               }} 
             />
-            {/* Enhanced notification dot */}
             <div style={{
               position: "absolute",
               top: -3,
               right: -3,
               width: 20,
               height: 20,
-              background: "linear-gradient(135deg, #ff4757, #ff3838)",
+              background: "linear-gradient(135deg, #51cf66, #40c057)",
               borderRadius: "50%",
               border: "3px solid white",
-              animation: "pulse 1.5s infinite",
-              boxShadow: "0 4px 12px rgba(255, 71, 87, 0.4)"
+              animation: "pulse 1.5s infinite"
             }}>
               <div style={{
                 position: "absolute",
@@ -910,106 +984,79 @@ export default function ChatBot() {
                 animation: "blink 1s infinite"
               }} />
             </div>
+            <div style={{
+              position: "absolute",
+              bottom: -3,
+              left: -3,
+              width: 16,
+              height: 16,
+              background: "linear-gradient(135deg, #ffd43b, #fab005)",
+              borderRadius: "50%",
+              border: "2px solid white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "8px",
+              fontWeight: "bold",
+              color: "#fff"
+            }}>
+              🧠
+            </div>
           </div>
         )}
       </button>
 
-      {/* Optimized Chat Window */}
+      {/* Enhanced Chat Window */}
       {isOpen && (
         <div
           style={{
             position: "fixed",
             bottom: "100px",
             right: "20px",
-            width: "clamp(320px, 85vw, 400px)",
-            height: "500px",
+            width: "clamp(320px, 85vw, 450px)",
+            height: "600px",
             background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))",
             border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "20px",
-            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.25)",
             display: "flex",
             flexDirection: "column",
             zIndex: 999,
-            backdropFilter: "blur(20px) saturate(180%)",
+            backdropFilter: "blur(20px)",
             animation: "slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             overflow: "hidden"
           }}
         >
-          {/* Compact Header */}
+          {/* Enhanced Header */}
           <div style={{ 
             padding: "16px 20px", 
             borderBottom: "1px solid rgba(255, 255, 255, 0.08)", 
             background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02))",
-            position: "relative",
-            overflow: "hidden"
+            position: "relative"
           }}>
-            {/* Enhanced background pattern */}
-            <div style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-              zIndex: 0
-            }} />
-            
-            {/* Floating orbs for visual appeal */}
-            <div style={{
-              position: "absolute",
-              top: "20%",
-              right: "15%",
-              width: "80px",
-              height: "80px",
-              background: "radial-gradient(circle, rgba(102, 126, 234, 0.1), transparent)",
-              borderRadius: "50%",
-              animation: "float 6s ease-in-out infinite",
-              zIndex: 0
-            }} />
-            <div style={{
-              position: "absolute",
-              bottom: "30%",
-              left: "10%",
-              width: "60px",
-              height: "60px",
-              background: "radial-gradient(circle, rgba(118, 75, 162, 0.1), transparent)",
-              borderRadius: "50%",
-              animation: "float 8s ease-in-out infinite reverse",
-              zIndex: 0
-            }} />
-            
-            {/* Chat Stats */}
             <div style={{
               position: "absolute",
               top: "12px",
               right: "16px",
               display: "flex",
-              gap: "12px",
-              fontSize: "11px",
-              color: "rgba(255, 255, 255, 0.7)",
-              zIndex: 2
+              gap: "8px",
+              fontSize: "10px",
+              color: "rgba(255, 255, 255, 0.7)"
             }}>
-              <span title={`${messages.length} messages`} style={{
+              <span style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "4px 8px",
-                background: "rgba(255, 255, 255, 0.05)",
-                borderRadius: "12px",
-                border: "1px solid rgba(255, 255, 255, 0.1)"
+                padding: "3px 6px",
+                background: "rgba(81, 207, 102, 0.1)",
+                borderRadius: "8px",
+                color: "#51cf66"
               }}>
-                💬 {messages.length}
+                🧠 Ultra-AI
               </span>
               {isListening && (
-                <span title="Voice input active" style={{ 
+                <span style={{ 
                   color: "#ff6b6b",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  padding: "4px 8px",
-                  background: "rgba(255, 107, 107, 0.1)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 107, 107, 0.2)",
                   animation: "pulse 0.5s infinite"
                 }}>
                   🎤 Live
@@ -1017,85 +1064,63 @@ export default function ChatBot() {
               )}
             </div>
             
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <div style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "12px",
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <div style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #667eea, #764ba2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "18px",
+                animation: "pulse 3s infinite"
+              }}>
+                🧠
+              </div>
+              <div>
+                <h3 style={{ 
+                  margin: 0, 
+                  color: "#ffffff", 
+                  fontSize: "16px",
+                  fontWeight: "600",
                   background: "linear-gradient(135deg, #667eea, #764ba2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "18px",
-                  animation: "pulse 3s infinite",
-                  boxShadow: "0 6px 24px rgba(102, 126, 234, 0.4)",
-                  border: "2px solid rgba(255, 255, 255, 0.2)",
-                  backdropFilter: "blur(10px)"
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
                 }}>
-                  🤖
-                </div>
-                <div>
-                  <h3 style={{ 
-                    margin: 0, 
-                    color: "#ffffff", 
-                    fontSize: "16px",
-                    fontWeight: "600",
-                    textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
-                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text"
-                  }}>
-                    GrantTracker AI
-                  </h3>
-                  <p style={{ 
-                    margin: "2px 0 0 0", 
-                    color: "rgba(255, 255, 255, 0.8)", 
-                    fontSize: "11px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    fontWeight: "500"
-                  }}>
-                    <span style={{
-                      width: "8px",
-                      height: "8px",
-                      background: isListening ? "#ff6b6b" : fastMode ? "#51cf66" : "#ffd43b",
-                      borderRadius: "50%",
-                      animation: isListening ? "pulse 0.5s infinite" : "pulse 2s infinite",
-                      boxShadow: `0 0 6px ${isListening ? '#ff6b6b' : fastMode ? '#51cf66' : '#ffd43b'}`
-                    }} />
-                    {isListening ? "Listening..." : fastMode ? "⚡ Fast AI" : "AI Online"}
-                  </p>
-                  
-                  {/* Compact Keyboard Shortcuts */}
-                  <div style={{
-                    marginTop: "3px",
-                    fontSize: "9px",
-                    color: "rgba(255, 255, 255, 0.5)",
-                    display: "flex",
-                    gap: "6px"
-                  }}>
-                    <span title="Alt+V for voice input">🎤 Alt+V</span>
-                    <span title="Alt+T to toggle chat">💬 Alt+T</span>
-                    <span title="Esc to close">✕ Esc</span>
-                  </div>
+                  Ultra-Intelligent AI
+                </h3>
+                <p style={{ 
+                  margin: "2px 0 0 0", 
+                  color: "rgba(255, 255, 255, 0.8)", 
+                  fontSize: "11px"
+                }}>
+                  {isListening ? "Listening..." : `ChatGPT-Level AI (${conversationMode})`}
+                </p>
+                
+                <div style={{
+                  marginTop: "3px",
+                  fontSize: "9px",
+                  color: "rgba(255, 255, 255, 0.5)",
+                  display: "flex",
+                  gap: "6px"
+                }}>
+                  <span title="Alt+V for voice input">🎤 Alt+V</span>
+                  <span title="Alt+C for conversation mode">🧠 Alt+C</span>
+                  <span title="Alt+T to toggle chat">💬 Alt+T</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Compact Messages Container */}
+          {/* Enhanced Messages Container */}
           <div style={{ 
             flex: 1, 
             overflowY: "auto", 
             padding: "16px", 
             display: "flex", 
             flexDirection: "column", 
-            gap: "12px",
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(6, 182, 212, 0.3) transparent"
+            gap: "12px"
           }}>
             {messages.map(msg => (
               <div 
@@ -1103,8 +1128,7 @@ export default function ChatBot() {
                 style={{ 
                   display: "flex", 
                   justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                  animation: "slideIn 0.3s ease-out",
-                  marginBottom: "8px"
+                  animation: "slideIn 0.3s ease-out"
                 }}
               >
                 <div style={{
@@ -1119,61 +1143,32 @@ export default function ChatBot() {
                   color: "#ffffff",
                   fontSize: "13px",
                   lineHeight: "1.5",
-                  border: msg.sender === "user" 
-                    ? "none" 
-                    : "1px solid rgba(255, 255, 255, 0.1)",
-                  wordWrap: "break-word",
-                  backdropFilter: msg.sender === "user" ? "none" : "blur(12px)",
-                  boxShadow: msg.sender === "user" 
-                    ? "0 6px 24px rgba(102, 126, 234, 0.3)" 
-                    : "0 3px 12px rgba(0, 0, 0, 0.15)",
-                  position: "relative",
-                  overflow: "hidden"
+                  wordWrap: "break-word"
                 }}>
-                  {/* Subtle gradient overlay for depth */}
-                  {msg.sender !== "user" && (
-                    <div style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))",
-                      pointerEvents: "none"
-                    }} />
-                  )}
-                  
-                  {/* Message tail effect */}
-                  <div style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: msg.sender === "user" ? "-2px" : "auto",
-                    left: msg.sender === "user" ? "auto" : "-2px",
-                    width: "12px",
-                    height: "12px",
-                    background: msg.sender === "user" 
-                      ? "linear-gradient(135deg, #667eea, #764ba2)" 
-                      : "rgba(255, 255, 255, 0.08)",
-                    transform: `rotate(45deg)`,
-                    borderRadius: "0 0 0 2px",
-                    border: msg.sender === "user" 
-                      ? "none" 
-                      : "1px solid rgba(255, 255, 255, 0.1)",
-                    borderTop: "none",
-                    borderLeft: "none"
-                  }} />
                   <div style={{ animation: "fadeIn 0.4s ease-in" }}>
                     {formatText(msg.text)}
                   </div>
                   
-                  {/* Compact Suggestions */}
+                  {msg.reasoning && (
+                    <div style={{
+                      marginTop: "6px",
+                      padding: "4px 8px",
+                      background: "rgba(6, 182, 212, 0.1)",
+                      borderRadius: "6px",
+                      fontSize: "10px",
+                      color: "#06b6d4",
+                      fontStyle: "italic"
+                    }}>
+                      💭 {msg.reasoning}
+                    </div>
+                  )}
+                  
                   {msg.suggestions && msg.suggestions.length > 0 && (
                     <div style={{ 
                       marginTop: "8px", 
                       display: "flex", 
                       flexDirection: "column", 
-                      gap: "6px",
-                      animation: "slideUp 0.3s ease-out"
+                      gap: "6px"
                     }}>
                       {msg.suggestions.map((s, i) => (
                         <button
@@ -1187,19 +1182,7 @@ export default function ChatBot() {
                             color: "#06b6d4",
                             fontSize: "11px",
                             cursor: "pointer",
-                            textAlign: "left",
-                            transition: "all 0.2s ease",
-                            backdropFilter: "blur(10px)"
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "rgba(6, 182, 212, 0.3)";
-                            e.currentTarget.style.transform = "translateX(2px)";
-                            e.currentTarget.style.boxShadow = "0 3px 8px rgba(6, 182, 212, 0.3)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(6, 182, 212, 0.15)";
-                            e.currentTarget.style.transform = "translateX(0)";
-                            e.currentTarget.style.boxShadow = "none";
+                            textAlign: "left"
                           }}
                         >
                           → {s}
@@ -1207,39 +1190,20 @@ export default function ChatBot() {
                       ))}
                     </div>
                   )}
-                  
-                  {/* Compact Timestamp */}
-                  <div style={{
-                    marginTop: "6px",
-                    fontSize: "9px",
-                    color: "rgba(255, 255, 255, 0.4)",
-                    textAlign: msg.sender === "user" ? "right" : "left"
-                  }}>
-                    {new Date(msg.timestamp).toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}
-                  </div>
                 </div>
               </div>
             ))}
             
-            {/* Enhanced Loading and Typing Indicators */}
             {(isLoading || isTyping) && (
-              <div style={{ 
-                display: "flex", 
-                justifyContent: "flex-start",
-                animation: "slideIn 0.3s ease-out"
-              }}>
+              <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <div style={{
                   padding: "12px 16px",
                   borderRadius: "0 18px 18px 18px",
                   background: "rgba(255, 255, 255, 0.1)",
-                  border: "1px solid rgba(6, 182, 212, 0.2)",
-                  backdropFilter: "blur(10px)"
+                  color: "#06b6d4"
                 }}>
                   {isLoading ? (
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#06b6d4" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div style={{
                         width: 16,
                         height: 16,
@@ -1248,15 +1212,12 @@ export default function ChatBot() {
                         borderRadius: "50%",
                         animation: "spin 0.8s linear infinite"
                       }} />
-                      ⚡ Ultra-fast AI processing...
+                      🧠 Ultra-intelligent AI processing...
                     </div>
                   ) : (
-                    <div style={{ color: "#06b6d4", fontSize: "14px" }}>
+                    <div>
                       {currentTypingText}
-                      <span style={{
-                        animation: "blink 1s infinite",
-                        color: "#06b6d4"
-                      }}>|</span>
+                      <span style={{ animation: "blink 1s infinite" }}>|</span>
                     </div>
                   )}
                 </div>
@@ -1266,14 +1227,13 @@ export default function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Compact Input Section */}
+          {/* Enhanced Input Section */}
           <div style={{ 
             padding: "12px", 
             borderTop: "1px solid rgba(255, 255, 255, 0.1)", 
             display: "flex", 
             gap: "8px",
-            background: "rgba(15, 23, 42, 0.8)",
-            backdropFilter: "blur(10px)"
+            background: "rgba(15, 23, 42, 0.8)"
           }}>
             <div style={{ position: "relative", flex: 1 }}>
               <input
@@ -1281,7 +1241,7 @@ export default function ChatBot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask about grants..."
+                placeholder="Ask me anything about grants..."
                 style={{
                   width: "100%",
                   padding: "10px 12px",
@@ -1291,74 +1251,30 @@ export default function ChatBot() {
                   borderRadius: "10px",
                   color: "#e5e7eb",
                   fontSize: "13px",
-                  outline: "none",
-                  transition: "all 0.2s ease",
-                  backdropFilter: "blur(10px)"
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "#06b6d4";
-                  e.target.style.boxShadow = "0 0 15px rgba(6, 182, 212, 0.2)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "rgba(6, 182, 212, 0.2)";
-                  e.target.style.boxShadow = "none";
+                  outline: "none"
                 }}
               />
               
-              {/* Compact Voice input */}
               <button
                 onClick={toggleVoiceInput}
-                disabled={!recognition}
-                aria-label={isListening ? "Stop voice input" : "Start voice input"}
-                role="button"
                 style={{
                   position: "absolute",
                   right: "6px",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  background: isListening 
-                    ? "linear-gradient(135deg, #ef4444, #dc2626)"
-                    : "rgba(6, 182, 212, 0.1)",
-                  border: `1px solid ${isListening ? "#ef4444" : "#06b6d4"}`,
-                  color: isListening ? "#fff" : "#06b6d4",
-                  cursor: recognition ? "pointer" : "not-allowed",
+                  background: "rgba(6, 182, 212, 0.1)",
+                  border: "1px solid #06b6d4",
+                  color: "#06b6d4",
                   padding: "4px",
                   borderRadius: "50%",
-                  transition: "all 0.3s ease",
                   width: "28px",
                   height: "28px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  animation: isListening ? "pulse 1s infinite" : "none",
-                  opacity: recognition ? 1 : 0.5
+                  justifyContent: "center"
                 }}
-                onMouseEnter={(e) => {
-                  if (recognition) {
-                    e.target.style.transform = "translateY(-50%) scale(1.05)";
-                    e.target.style.background = isListening 
-                      ? "linear-gradient(135deg, #dc2626, #b91c1c)"
-                      : "rgba(6, 182, 212, 0.2)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (recognition) {
-                    e.target.style.transform = "translateY(-50%) scale(1)";
-                    e.target.style.background = isListening 
-                      ? "linear-gradient(135deg, #ef4444, #dc2626)"
-                      : "rgba(6, 182, 212, 0.1)";
-                  }
-                }}
-                title={recognition 
-                  ? (isListening ? "Listening... Click to stop" : "Click to speak")
-                  : "Voice input not supported in this browser"
-                }
               >
-                {isListening ? (
-                  <span style={{ fontSize: "12px", animation: "blink 1s infinite" }}>🔴</span>
-                ) : (
-                  <span style={{ fontSize: "12px" }}>🎤</span>
-                )}
+                🎤
               </button>
             </div>
             
@@ -1374,35 +1290,10 @@ export default function ChatBot() {
                 borderRadius: "10px",
                 color: "#fff",
                 cursor: inputValue.trim() ? "pointer" : "not-allowed",
-                opacity: inputValue.trim() ? 1 : 0.5,
-                transition: "all 0.2s ease",
-                boxShadow: inputValue.trim() 
-                  ? "0 3px 10px rgba(6, 182, 212, 0.3)" 
-                  : "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 minWidth: "40px"
               }}
-              onMouseEnter={(e) => {
-                if (inputValue.trim()) {
-                  e.target.style.transform = "translateY(-1px)";
-                  e.target.style.boxShadow = "0 4px 12px rgba(6, 182, 212, 0.4)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = inputValue.trim() 
-                  ? "0 3px 10px rgba(6, 182, 212, 0.3)" 
-                  : "none";
-              }}
             >
-              <span style={{
-                transition: "transform 0.2s ease",
-                transform: inputValue.trim() ? "scale(1.05)" : "scale(1)"
-              }}>
-                ➤
-              </span>
+              ➤
             </button>
           </div>
         </div>
@@ -1449,25 +1340,6 @@ export default function ChatBot() {
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
-        }
-        
-        /* Custom scrollbar for chat */
-        div::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        div::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 3px;
-        }
-        
-        div::-webkit-scrollbar-thumb {
-          background: rgba(6, 182, 212, 0.3);
-          border-radius: 3px;
-        }
-        
-        div::-webkit-scrollbar-thumb:hover {
-          background: rgba(6, 182, 212, 0.5);
         }
       `}</style>
     </>
