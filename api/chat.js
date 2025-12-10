@@ -2067,6 +2067,63 @@ function generateLightningResponse(message, retrievedGrants = [], userProfile = 
     };
   }
 
+  // Basic query handling - Fundamental questions
+  if (lower.includes('what is a grant') || lower.includes('what are grants') || lower.includes('define grant') || lower.includes('explain grant') ||
+      lower.includes('grant meaning') || lower.includes('grant definition') || lower.includes('tell me about grants')) {
+    return {
+      response: `**What is a Grant?**\n\nA grant is a financial award given by the government, organizations, or institutions to support specific projects, programs, or individuals. Unlike loans, grants do not need to be repaid.\n\n**Key Characteristics of Grants:**\n• **Non-repayable**: You don't have to pay back the money\n• **Purpose-specific**: Must be used for the intended purpose\n• **Competitive**: Often require applications and meet eligibility criteria\n• **Government-funded**: Many grants come from government programs\n\n**Types of Grants Available:**\n• **Government Schemes**: Programs like PM Kisan, Ayushman Bharat\n• **Education Grants**: Scholarships and student support\n• **Business Grants**: Funding for startups and entrepreneurs\n• **Research Grants**: Support for scientific and academic research\n\nWould you like to know about specific types of grants or how to apply for them?`,
+      suggestions: ["Types of government grants", "How to apply for grants", "Eligibility criteria", "Grant application process"]
+    };
+  }
+
+  if (lower.includes('what is a scheme') || lower.includes('define scheme') || lower.includes('explain scheme')) {
+    return {
+      response: `**What is a Government Scheme?**\n\nA government scheme is a structured program designed by the government to provide benefits, support, or services to specific groups of people or sectors. These schemes aim to address social, economic, or developmental challenges.\n\n**Key Features of Government Schemes:**\n• **Targeted Benefits**: Focus on specific groups (farmers, students, women, etc.)\n• **Structured Process**: Have defined eligibility and application procedures\n• **Government Funded**: Financed by government budgets\n• **Social Impact**: Designed to improve lives and communities\n\n**Examples of Popular Schemes:**\n• **PM Kisan**: Financial support for farmers\n• **Ayushman Bharat**: Health insurance for families\n• **Pradhan Mantri Awas Yojana**: Housing for all\n• **National Education Mission**: Education support\n\nThese schemes help millions of people access essential services and improve their quality of life.`,
+      suggestions: ["List all government schemes", "How to benefit from schemes", "Scheme eligibility", "Popular schemes"]
+    };
+  }
+
+  if (lower.includes('what is a subsidy') || lower.includes('define subsidy') || lower.includes('explain subsidy')) {
+    return {
+      response: `**What is a Subsidy?**\n\nA subsidy is a form of financial assistance or support provided by the government to individuals, businesses, or economic sectors. Subsidies help reduce costs and make essential goods and services more affordable.\n\n**Types of Subsidies:**\n• **Direct Subsidies**: Cash payments or direct financial support\n• **Indirect Subsidies**: Tax breaks, reduced interest rates, or price controls\n• **Sector-specific**: Agriculture, education, healthcare, housing\n• **Consumer Subsidies**: Lower prices for essential goods\n\n**Examples of Subsidies:**\n• **Fertilizer Subsidies**: Reduced cost for farmers\n• **LPG Subsidies**: Affordable cooking gas\n• **Education Subsidies**: Reduced tuition fees\n• **Housing Subsidies**: Lower interest rates on loans\n\nSubsidies play a crucial role in making essential services accessible to all citizens.`,
+      suggestions: ["Available subsidies", "How to get subsidies", "Subsidy benefits", "Eligibility for subsidies"]
+    };
+  }
+
+  if (lower.includes('what is a benefit') || lower.includes('define benefit') || lower.includes('explain benefit') ||
+      lower.includes('benefit meaning') || lower.includes('benefit definition') || lower.includes('tell me about benefits')) {
+    return {
+      response: `**What is a Government Benefit?**\n\nA government benefit refers to any form of assistance, support, or advantage provided by government programs to eligible individuals or groups. These benefits aim to improve quality of life and provide essential services.\n\n**Common Types of Benefits:**\n• **Financial Benefits**: Direct cash transfers, pensions\n• **Health Benefits**: Insurance, medical coverage, free treatments\n• **Education Benefits**: Scholarships, free schooling, skill development\n• **Housing Benefits**: Subsidized housing, rent assistance\n• **Employment Benefits**: Job training, unemployment support\n\n**How Benefits Help:**\n• Reduce financial burden on citizens\n• Provide access to essential services\n• Improve overall quality of life\n• Support vulnerable populations\n• Promote social and economic development\n\nGovernment benefits are designed to create a more equitable society where everyone has access to basic necessities.`,
+      suggestions: ["Available government benefits", "Benefit eligibility", "How to apply for benefits", "Most popular benefits"]
+    };
+  }
+
+  // Handle simple "what is" queries with comprehensive responses
+  if (lower.startsWith('what is ') || lower.startsWith('what are ') ||
+      lower.includes(' define ') || lower.includes(' explain ') ||
+      lower.includes(' meaning of ') || lower.includes(' tell me about ')) {
+
+    // Extract the main subject of the query
+    const subjectMatch = lower.match(/(?:what is|what are|define|explain|meaning of|tell me about)\s+(.+)/i);
+    const subject = subjectMatch ? subjectMatch[1].trim() : '';
+
+    if (subject.includes('grant') || subject.includes('scheme') || subject.includes('subsidy') || subject.includes('benefit')) {
+      // These are already handled above, but provide a fallback
+      return {
+        response: `I can provide detailed information about government grants, schemes, subsidies, and benefits. These programs are designed to support citizens with financial assistance, services, and opportunities.\n\n**Key Programs Include:**\n• **Grants**: Financial awards that don't need repayment\n• **Schemes**: Structured programs with specific benefits\n• **Subsidies**: Cost reductions for essential goods/services\n• **Benefits**: Various forms of government assistance\n\nWhat specific aspect would you like to know more about?`,
+        suggestions: ["What is a grant", "What is a scheme", "Types of government support", "How these programs help"]
+      };
+    }
+
+    // Handle other common queries
+    if (subject.includes('government') || subject.includes('program') || subject.includes('assistance')) {
+      return {
+        response: `Government assistance programs are initiatives designed to support citizens in various aspects of life. These programs provide financial aid, services, and opportunities to improve quality of life and promote social welfare.\n\n**Main Categories:**\n• **Financial Assistance**: Direct support and subsidies\n• **Social Services**: Healthcare, education, housing\n• **Economic Development**: Business support, employment programs\n• **Special Programs**: For vulnerable groups and specific needs\n\nThese programs aim to create a more equitable society where all citizens can access essential services and opportunities.`,
+        suggestions: ["Types of government programs", "How to access assistance", "Eligibility for programs", "Popular government initiatives"]
+      };
+    }
+  }
+
   // About website
   if (patterns.isAbout) {
     return {
