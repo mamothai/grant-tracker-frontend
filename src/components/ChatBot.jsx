@@ -1181,7 +1181,11 @@ export default function ChatBot() {
                   background: msg.sender === "user"
                     ? "linear-gradient(135deg, #667eea, #764ba2)"
                     : "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))",
-                  color: msg.sender === "user" ? "#ffffff" : "#1e293b",
+                  color: msg.sender === "user" ? "#ffffff" : "transparent",
+                  background: msg.sender === "user" ? "none" : "linear-gradient(135deg, #667eea, #764ba2, #f093fb)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
                   fontSize: "14px",
                   lineHeight: "1.6",
                   wordWrap: "break-word",
