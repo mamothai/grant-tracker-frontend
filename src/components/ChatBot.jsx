@@ -1186,7 +1186,8 @@ export default function ChatBot() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  textShadow: "0 0 10px rgba(102, 126, 234, 0.5), 0 0 20px rgba(118, 75, 162, 0.3), 0 0 30px rgba(240, 147, 251, 0.2)",
+                  textShadow: "0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff",
+                  animation: "lightningGlow 2s ease-in-out infinite alternate",
                   fontSize: "14px",
                   lineHeight: "1.6",
                   wordWrap: "break-word",
@@ -1414,6 +1415,15 @@ export default function ChatBot() {
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes lightningGlow {
+          0%, 100% {
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff;
+          }
+          50% {
+            text-shadow: 0 0 2px #00ffff, 0 0 5px #00ffff, 0 0 8px #00ffff, 0 0 12px #00ffff, 0 0 20px #00ffff, 0 0 25px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
+          }
         }
 
         /* Mobile-specific styles */
