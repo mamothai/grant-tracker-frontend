@@ -902,11 +902,12 @@ export default function ChatBot() {
       }
 
       if (match[1]) {
+
         parts.push(
           <strong 
             key={`bold-${match.index}`} 
             style={{ 
-              color: "#06b6d4",
+              color: "#667eea",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
@@ -915,16 +916,17 @@ export default function ChatBot() {
           </strong>
         );
       } else if (match[3]) {
+
         parts.push(
           <code 
             key={`code-${match.index}`}
             style={{
-              background: "rgba(6, 182, 212, 0.1)",
+              background: "linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15))",
               padding: "2px 4px",
               borderRadius: "4px",
               fontFamily: "monospace",
               fontSize: "0.9em",
-              color: "#06b6d4"
+              color: "#667eea"
             }}
           >
             {match[3]}
@@ -961,8 +963,9 @@ export default function ChatBot() {
           width: "clamp(56px, 12vw, 72px)",
           height: "clamp(56px, 12vw, 72px)",
           borderRadius: "50%",
+
           background: isOpen
-            ? "linear-gradient(135deg, #ff6b6b, #ee5a52)"
+            ? "linear-gradient(135deg, #667eea, #764ba2, #f093fb)"
             : "linear-gradient(135deg, #667eea, #764ba2)",
           border: "3px solid rgba(255, 255, 255, 0.2)",
           cursor: "pointer",
@@ -1088,32 +1091,35 @@ export default function ChatBot() {
           <div style={{
             padding: "16px 20px",
             borderBottom: "1px solid rgba(148, 163, 184, 0.1)",
-            background: "linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))",
+
+            background: "linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08), rgba(240, 147, 251, 0.05))",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between"
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+
               <div style={{
                 width: "40px",
                 height: "40px",
                 borderRadius: "12px",
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                background: "linear-gradient(135deg, #667eea, #764ba2, #f093fb)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "18px",
-                boxShadow: "0 4px 12px rgba(99, 102, 241, 0.3)"
+                boxShadow: "0 4px 12px rgba(102, 126, 234, 0.3)"
               }}>
                 🤖
               </div>
               <div>
+
                 <h3 style={{
                   margin: 0,
                   color: "#1e293b",
                   fontSize: "16px",
                   fontWeight: "600",
-                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  background: "linear-gradient(135deg, #667eea, #764ba2, #f093fb)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent"
                 }}>
@@ -1171,9 +1177,10 @@ export default function ChatBot() {
                   borderRadius: msg.sender === "user"
                     ? "20px 4px 20px 20px"
                     : "4px 20px 20px 20px",
+
                   background: msg.sender === "user"
-                    ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
-                    : "linear-gradient(135deg, rgba(241, 245, 249, 0.9), rgba(241, 245, 249, 0.7))",
+                    ? "linear-gradient(135deg, #667eea, #764ba2)"
+                    : "linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.85))",
                   color: msg.sender === "user" ? "#ffffff" : "#1e293b",
                   fontSize: "14px",
                   lineHeight: "1.6",
@@ -1189,14 +1196,15 @@ export default function ChatBot() {
                     {formatText(msg.text)}
                   </div>
                   
+
                   {msg.reasoning && (
                     <div style={{
                       marginTop: "6px",
                       padding: "4px 8px",
-                      background: "rgba(6, 182, 212, 0.1)",
+                      background: "linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))",
                       borderRadius: "6px",
                       fontSize: "10px",
-                      color: "#06b6d4",
+                      color: "#667eea",
                       fontStyle: "italic"
                     }}>
                       💭 {msg.reasoning}
@@ -1214,12 +1222,13 @@ export default function ChatBot() {
                         <button
                           key={i}
                           onClick={() => handleSuggestion(s)}
+
                           style={{
                             padding: "6px 10px",
-                            background: "rgba(6, 182, 212, 0.15)",
-                            border: "1px solid rgba(6, 182, 212, 0.4)",
+                            background: "linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15))",
+                            border: "1px solid rgba(102, 126, 234, 0.4)",
                             borderRadius: "6px",
-                            color: "#06b6d4",
+                            color: "#667eea",
                             fontSize: "11px",
                             cursor: "pointer",
                             textAlign: "left",
@@ -1237,11 +1246,12 @@ export default function ChatBot() {
             
             {(isLoading || isTyping) && (
               <div style={{ display: "flex", justifyContent: "flex-start" }}>
+
                 <div style={{
                   padding: "12px 16px",
                   borderRadius: "0 18px 18px 18px",
                   background: "rgba(255, 255, 255, 0.1)",
-                  color: "#06b6d4"
+                  color: "#667eea"
                 }}>
                   {isLoading ? (
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -1333,10 +1343,11 @@ export default function ChatBot() {
               onClick={() => handleSend()}
               disabled={!inputValue.trim()}
               aria-label="Send message"
+
               style={{
                 padding: isMobile ? "12px 16px" : "10px 16px",
                 background: inputValue.trim() 
-                  ? "linear-gradient(135deg, #06b6d4, #a855f7)" 
+                  ? "linear-gradient(135deg, #667eea, #764ba2, #f093fb)" 
                   : "rgba(6, 182, 212, 0.2)",
                 border: "none",
                 borderRadius: isMobile ? "12px" : "10px",
