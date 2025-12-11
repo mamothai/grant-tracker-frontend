@@ -1186,6 +1186,7 @@ export default function ChatBot() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
+                  textShadow: "0 0 10px rgba(102, 126, 234, 0.5), 0 0 20px rgba(118, 75, 162, 0.3), 0 0 30px rgba(240, 147, 251, 0.2)",
                   fontSize: "14px",
                   lineHeight: "1.6",
                   wordWrap: "break-word",
