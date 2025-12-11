@@ -1180,7 +1180,7 @@ export default function ChatBot() {
 
                   background: msg.sender === "user"
                     ? "linear-gradient(135deg, #667eea, #764ba2)"
-                    : "linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(239, 246, 255, 0.95), rgba(224, 242, 254, 0.92))",
+                    : "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08))",
                   color: msg.sender === "user" ? "#ffffff" : "#1e293b",
                   fontSize: "14px",
                   lineHeight: "1.6",
@@ -1190,7 +1190,7 @@ export default function ChatBot() {
                     : "0 2px 8px rgba(0, 0, 0, 0.08)",
                   border: msg.sender === "user"
                     ? "none"
-                    : "1px solid rgba(102, 126, 234, 0.15)"
+                    : "1px solid rgba(255, 255, 255, 0.2)"
                 }}>
                   <div style={{ animation: "fadeIn 0.4s ease-in" }}>
                     {formatText(msg.text)}
