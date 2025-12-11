@@ -1186,8 +1186,8 @@ export default function ChatBot() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  textShadow: "0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff",
-                  animation: "lightningGlow 2s ease-in-out infinite alternate",
+                  textShadow: "0 0 3px rgba(102, 126, 234, 0.3), 0 0 6px rgba(118, 75, 162, 0.2), 0 0 9px rgba(240, 147, 251, 0.1)",
+                  animation: "softGlow 4s ease-in-out infinite",
                   fontSize: "14px",
                   lineHeight: "1.6",
                   wordWrap: "break-word",
@@ -1417,12 +1417,12 @@ export default function ChatBot() {
           51%, 100% { opacity: 0; }
         }
         
-        @keyframes lightningGlow {
+        @keyframes softGlow {
           0%, 100% {
-            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff, 0 0 35px #00ffff, 0 0 40px #00ffff, 0 0 50px #00ffff, 0 0 75px #00ffff;
+            text-shadow: 0 0 3px rgba(102, 126, 234, 0.3), 0 0 6px rgba(118, 75, 162, 0.2), 0 0 9px rgba(240, 147, 251, 0.1);
           }
           50% {
-            text-shadow: 0 0 2px #00ffff, 0 0 5px #00ffff, 0 0 8px #00ffff, 0 0 12px #00ffff, 0 0 20px #00ffff, 0 0 25px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
+            text-shadow: 0 0 1px rgba(102, 126, 234, 0.2), 0 0 3px rgba(118, 75, 162, 0.15), 0 0 5px rgba(240, 147, 251, 0.08);
           }
         }
 
